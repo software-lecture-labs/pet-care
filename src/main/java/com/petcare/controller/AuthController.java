@@ -2,6 +2,7 @@ package com.petcare.controller;
 
 import com.petcare.entity.User;
 import com.petcare.service.AuthService;
+import com.petcare.service.LoginAttemptService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -14,7 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.GET;
-import com.petcare.repository.UserRepository;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Map;
 
@@ -23,15 +29,26 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthController {
 
-    @Inject
-    private AuthService authService;
+    private final AuthService authService;
+    private final LoginAttemptService loginAttemptService;
 
     @Inject
-    private UserRepository userRepository;
+    public AuthController(
+            AuthService authService,
+            LoginAttemptService loginAttemptService
+    ) {
+        this.authService = authService;
+        this.loginAttemptService = loginAttemptService;
+    }
+
+    protected AuthController() {
+        this.authService = null;
+        this.loginAttemptService = null;
+    }
 
     @POST
     @Path("/register")
-    public Response register(RegisterRequest request) {
+    public Response register(@Valid @NotNull RegisterRequest request) {
 
         if (request == null) {
             return Response.status(Response.Status.BAD_REQUEST)
@@ -64,10 +81,10 @@ public class AuthController {
     }
 
     public record RegisterRequest(
-            String firstName,
-            String lastName,
-            String email,
-            String password
+            @NotBlank @Size(max = 50) String firstName,
+            @NotBlank @Size(max = 50) String lastName,
+            @NotBlank @Email @Size(max = 254) String email,
+            @NotBlank @Size(min = 8, max = 128) String password
     ) {
     }
 
@@ -87,14 +104,29 @@ public class AuthController {
                     .build();
         }
 
+        String email = request.email();
+
+        // Önce giriş sınırını kontrol et
+        if (loginAttemptService.isBlocked(email)) {
+            return Response.status(429)
+                    .entity(Map.of(
+                            "message",
+                            "Çok fazla başarısız giriş denemesi. Lütfen daha sonra tekrar deneyin."
+                    ))
+                    .build();
+        }
+
         try {
-            // E-posta ve şifreyi doğrula
+            // Kullanıcı bilgilerini doğrula
             User user = authService.login(
-                    request.email(),
+                    email,
                     request.password()
             );
 
-            // Varsa önceki oturumu geçersiz kıl
+            // Başarılı girişte sayacı sıfırla
+            loginAttemptService.resetAttempts(email);
+
+            // Önceki oturumu geçersiz kıl
             HttpSession oldSession = httpRequest.getSession(false);
 
             if (oldSession != null) {
@@ -104,11 +136,7 @@ public class AuthController {
             // Yeni oturum oluştur
             HttpSession session = httpRequest.getSession(true);
 
-            // Kullanıcı kimliğini oturumda sakla
             session.setAttribute("userId", user.getId());
-
-            // Oturumun 30 dakika işlem yapılmadığında sona ermesini sağla
-            session.setMaxInactiveInterval(30 * 60);
 
             return Response.ok(Map.of(
                     "message", "Giriş başarılı.",
@@ -117,6 +145,9 @@ public class AuthController {
             )).build();
 
         } catch (IllegalArgumentException exception) {
+
+            // Başarısız giriş denemesini kaydet
+            loginAttemptService.recordFailedAttempt(email);
 
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(Map.of(
@@ -146,7 +177,7 @@ public class AuthController {
                     .build();
         }
 
-        return userRepository.findById(userId)
+        return authService.currentUser(userId)
                 .map(user -> Response.ok(Map.of(
                         "userId", user.getId(),
                         "firstName", user.getFirstName(),
@@ -175,4 +206,5 @@ public class AuthController {
                 "message", "Başarıyla çıkış yapıldı."
         )).build();
     }
+
 }

@@ -17,6 +17,7 @@ public class UserRepository {
     // Yeni kullanıcıyı veritabanına kaydeder.
     public void save(User user) {
         entityManager.persist(user);
+        entityManager.flush();
     }
 
     // E-posta adresine göre kullanıcı arar.
