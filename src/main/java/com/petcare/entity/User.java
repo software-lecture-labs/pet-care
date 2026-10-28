@@ -1,7 +1,7 @@
 package com.petcare.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +24,7 @@ public class User {
     private String passwordHash;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     public User(){
     }
@@ -64,14 +64,14 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public Instant getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
     @PrePersist
     public void onCreate() {
         if (createdAt == null) {
-            createdAt = Instant.now();
+            createdAt = OffsetDateTime.now(java.time.ZoneOffset.UTC);
         }
     }
 }

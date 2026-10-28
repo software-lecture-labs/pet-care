@@ -26,18 +26,15 @@ public class AuthService {
     @PostConstruct
     public void initializePasswordHash() {
 
-        synchronized (passwordHash) {
+        passwordHash.initialize(Map.of(
+                "Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256",
+                "Pbkdf2PasswordHash.Iterations", "600000"
+        ));
 
-            passwordHash.initialize(Map.of(
-                    "Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256",
-                    "Pbkdf2PasswordHash.Iterations", "600000"
-            ));
-
-            // Kayıtlı olmayan kullanıcılar için sahte hash oluştur
-            dummyPasswordHash = passwordHash.generate(
-                    "PetCareDummyPassword2026!".toCharArray()
-            );
-        }
+        // Kayıtlı olmayan kullanıcılar için sahte hash oluştur
+        dummyPasswordHash = passwordHash.generate(
+                "PetCareDummyPassword2026!".toCharArray()
+        );
     }
 
     @Transactional
@@ -100,11 +97,7 @@ public class AuthService {
             );
         }
 
-        String hashedPassword;
-
-        synchronized (passwordHash) {
-            hashedPassword = passwordHash.generate(password.toCharArray());
-        }
+        String hashedPassword = passwordHash.generate(password.toCharArray());
 
         // 8. Kullanıcı nesnesini oluştur
         User user = new User();
@@ -153,12 +146,10 @@ public class AuthService {
         // Kullanıcı bulunamadığında da PBKDF2 doğrulaması yap
         if (user == null) {
 
-            synchronized (passwordHash) {
-                passwordHash.verify(
-                        password.toCharArray(),
-                        dummyPasswordHash
-                );
-            }
+            passwordHash.verify(
+                    password.toCharArray(),
+                    dummyPasswordHash
+            );
 
             throw new IllegalArgumentException(
                     "E-posta adresi veya şifre hatalı."
@@ -166,14 +157,10 @@ public class AuthService {
         }
 
         // Girilen şifreyi kayıtlı hash ile doğrula
-        boolean passwordCorrect;
-
-        synchronized (passwordHash) {
-            passwordCorrect = passwordHash.verify(
-                    password.toCharArray(),
-                    user.getPasswordHash()
-            );
-        }
+        boolean passwordCorrect = passwordHash.verify(
+                password.toCharArray(),
+                user.getPasswordHash()
+        );
 
         if (!passwordCorrect) {
             throw new IllegalArgumentException(
