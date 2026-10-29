@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PetCare | Kayıt Ol</title>
+
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-container">
+
+    <!-- SOL TARAF: PETCARE TANITIM ALANI -->
+    <section class="auth-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-logo">🐾 PetCare</div>
+
+            <h1>
+                Patili dostların için<br>
+                güzel bir başlangıç!
+            </h1>
+
+            <p>
+                PetCare ailesine katıl!
+                Evcil hayvanlarının sağlık kayıtlarını takip et,
+                veteriner randevularını yönet ve
+                minik dostlarının ihtiyaçlarını tek yerden karşıla.
+            </p>
+
+            <div class="hero-animals">
+                🐶 🐱 🐰
+            </div>
+
+            <div class="hero-footer">
+                Birlikte daha mutlu patiler! 💜
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAĞ TARAF: KAYIT FORMU -->
+    <section class="auth-form-section">
+
+        <div class="auth-card">
+
+            <div class="mobile-logo">🐾 PetCare</div>
+
+            <div class="auth-header">
+
+                <h2>Aramıza Hoş Geldin! 💜</h2>
+
+                <p>
+                    PetCare hesabını oluştur ve
+                    patili dostlarının dünyasına katıl.
+                </p>
+
+            </div>
+
+            <form id="register-form">
+
+                <!-- AD -->
+                <div class="form-group">
+
+                    <label for="firstName">Ad</label>
+
+                    <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="Adını gir"
+                            autocomplete="given-name"
+                            maxlength="50"
+                            required
+                    >
+
+                </div>
+
+                <!-- SOYAD -->
+                <div class="form-group">
+
+                    <label for="lastName">Soyad</label>
+
+                    <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            placeholder="Soyadını gir"
+                            autocomplete="family-name"
+                            maxlength="50"
+                            required
+                    >
+
+                </div>
+
+                <!-- E-POSTA -->
+                <div class="form-group">
+
+                    <label for="email">E-posta Adresi</label>
+
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="ornek@eposta.com"
+                            autocomplete="email"
+                            maxlength="254"
+                            required
+                    >
+
+                </div>
+
+                <!-- ŞİFRE -->
+                <div class="form-group">
+
+                    <label for="password">Şifre</label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="En az 8 karakter"
+                                autocomplete="new-password"
+                                minlength="8"
+                                maxlength="128"
+                                required
+                        >
+
+                        <button
+                                type="button"
+                                class="toggle-password"
+                                aria-label="Şifreyi göster"
+                                aria-pressed="false"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- ŞİFRE TEKRARI -->
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Şifre Tekrarı
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Şifreni tekrar gir"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                        >
+
+                        <button
+                                type="button"
+                                class="toggle-password"
+                                aria-label="Şifreyi göster"
+                                aria-pressed="false"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- KAYIT BUTONU -->
+                <button
+                        type="submit"
+                        class="auth-button"
+                >
+                    Hesap Oluştur →
+                </button>
+
+                <!-- HATA VE BAŞARI MESAJLARI -->
+                <p
+                        id="register-message"
+                        class="form-message"
+                        role="status"
+                        aria-live="polite"
+                ></p>
+
+            </form>
+
+            <!-- GİRİŞ SAYFASINA DÖN -->
+            <div class="auth-divider">
+                <span>Zaten hesabın var mı?</span>
+            </div>
+
+            <a href="login.html" class="register-link">
+                Giriş Yap
+            </a>
+
+            <div class="auth-bottom">
+                <p>🐾 Minik dostların için sevgi dolu bir dünya!</p>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="auth.js"></script>
+
+</body>
+</html>

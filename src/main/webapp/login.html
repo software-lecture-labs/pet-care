@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PetCare | Giriş Yap</title>
+
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-container">
+
+    <!-- SOL TARAF: TANITIM ALANI -->
+    <section class="auth-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-logo">🐾 PetCare</div>
+
+            <h1>Minik dostların için<br>her şey bir arada!</h1>
+
+            <p>
+                Evcil hayvanlarının sağlığını takip et,
+                veteriner randevularını yönet ve
+                güvenilir bakıcıları keşfet.
+            </p>
+
+            <div class="hero-animals">
+                🐶 🐱 🐰
+            </div>
+
+            <div class="hero-footer">
+                Sevgiyle, patili dostlarımız için. 💜
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAĞ TARAF: GİRİŞ FORMU -->
+    <section class="auth-form-section">
+
+        <div class="auth-card">
+
+            <div class="mobile-logo">🐾 PetCare</div>
+
+            <div class="auth-header">
+                <h2>Hoş Geldin! 💜</h2>
+
+                <p>
+                    Hesabına giriş yaparak minik dostlarının
+                    dünyasına geri dön.
+                </p>
+            </div>
+
+            <form id="login-form">
+
+                <!-- E-POSTA -->
+                <div class="form-group">
+
+                    <label for="email">E-posta Adresi</label>
+
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="ornek@gmail.com"
+                            autocomplete="email"
+                            required
+                    >
+
+                </div>
+
+                <!-- ŞİFRE -->
+                <div class="form-group">
+
+                    <label for="password">Şifre</label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Şifreni gir"
+                                autocomplete="current-password"
+                                required
+                        >
+
+                        <button
+                                type="button"
+                                class="toggle-password"
+                                aria-label="Şifreyi göster"
+                                aria-pressed="false"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button type="submit" class="auth-button">
+                    Giriş Yap →
+                </button>
+
+                <p id="login-message" class="form-message" role="status" aria-live="polite"></p>
+
+            </form>
+
+            <div class="auth-divider">
+                <span>Henüz hesabın yok mu?</span>
+            </div>
+
+            <a href="register.html" class="register-link">
+                Hemen Kayıt Ol
+            </a>
+
+            <div class="auth-bottom">
+                <p>🐾 Patili dostların seni bekliyor!</p>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="auth.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare | Ana Sayfa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- SOL MENÜ -->
+    <aside class="sidebar">
+        <div class="logo">🐾 PetCare</div>
+
+        <nav class="sidebar-menu" aria-label="Ana menü">
+            <a href="#" class="menu-item active">🏠 Ana Sayfa</a>
+            <a href="#" class="menu-item">🐾 Hayvanlarım</a>
+            <a href="#" class="menu-item">📅 Randevularım</a>
+            <a href="#" class="menu-item">📋 Sağlık Kayıtları</a>
+            <a href="#" class="menu-item">💉 Aşı Takibi</a>
+            <a href="#" class="menu-item">🩺 Veteriner Ara</a>
+            <a href="#" class="menu-item">👤 Evcil Hayvan Bakıcısı</a>
+            <a href="#" class="menu-item">🔖 Rezervasyonlarım</a>
+            <a href="#" class="menu-item">🔔 Hatırlatıcılar</a>
+            <a href="#" class="menu-item">❤️ Favoriler</a>
+            <a href="#" class="menu-item">⚙️ Ayarlar</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>
+                Minik dostların daha mutlu yaşamları için
+                her zaman yanınızdayız!
+            </p>
+            <div class="footer-paw">🐶 🐱</div>
+        </div>
+    </aside>
+
+    <!-- ANA İÇERİK -->
+    <main class="main-content">
+
+        <!-- ÜST BAR -->
+        <header class="topbar">
+
+            <div class="search-box">
+                <span>🔍</span>
+                <input
+                        type="search"
+                        placeholder="Veteriner, bakıcı veya hizmet ara..."
+                        aria-label="Hizmet ara"
+                >
+            </div>
+
+            <div class="topbar-actions">
+
+                <button
+                        class="notification-btn"
+                        type="button"
+                        aria-label="Bildirimler"
+                >
+                    🔔
+                </button>
+
+                <div class="user-profile">
+                    <div class="avatar">👩</div>
+
+                    <div class="user-info">
+                        <strong id="profile-name">Kullanıcı</strong>
+                        <small>Evcil Hayvan Sahibi</small>
+                    </div>
+                </div>
+
+                <button
+                        id="logout-btn"
+                        class="logout-btn"
+                        type="button"
+                >
+                    🚪 Çıkış Yap
+                </button>
+
+            </div>
+        </header>
+
+        <!-- KARŞILAMA ALANI -->
+        <section class="welcome-banner">
+
+            <div class="welcome-text">
+                <p class="today-date" id="today-date"></p>
+
+                <h1 id="welcome-message">Merhaba! 💜</h1>
+
+                <p>Minik dostların bugün nasıl?</p>
+            </div>
+
+            <div class="welcome-animals">
+                🐶 🐱
+            </div>
+
+        </section>
+
+        <!-- HAYVANLARIM -->
+        <section class="section pets-section">
+
+            <div class="section-heading">
+                <h2>Hayvanlarım</h2>
+                <a href="#" class="view-all">Tümünü Gör →</a>
+            </div>
+
+            <div class="pet-grid">
+
+                <!-- PAMUK -->
+                <article class="pet-card">
+
+                    <div class="pet-image cat-image">
+                        🐱
+                    </div>
+
+                    <div class="pet-info">
+
+                        <div>
+                            <h3>Pamuk</h3>
+                            <p>Kedi • 2 yaşında</p>
+                        </div>
+
+                        <button
+                                class="round-arrow"
+                                type="button"
+                                aria-label="Pamuk'un detayları"
+                        >
+                            ❯
+                        </button>
+
+                    </div>
+                </article>
+
+                <!-- BONCUK -->
+                <article class="pet-card">
+
+                    <div class="pet-image dog-image">
+                        🐶
+                    </div>
+
+                    <div class="pet-info">
+
+                        <div>
+                            <h3>Boncuk</h3>
+                            <p>Köpek • 3 yaşında</p>
+                        </div>
+
+                        <button
+                                class="round-arrow"
+                                type="button"
+                                aria-label="Boncuk'un detayları"
+                        >
+                            ❯
+                        </button>
+
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- RANDEVULAR VE HATIRLATICILAR -->
+        <div class="dashboard-grid">
+
+            <!-- YAKLAŞAN RANDEVU -->
+            <section class="dashboard-card">
+
+                <div class="section-heading">
+                    <h2>📅 Yaklaşan Randevum</h2>
+                    <a href="#" class="view-all">Tümünü Gör →</a>
+                </div>
+
+                <div class="appointment-details">
+
+                    <div class="appointment-icon">
+                        🏥
+                    </div>
+
+                    <div class="appointment-info">
+
+                        <h3>Pati Dostu Veteriner Kliniği</h3>
+
+                        <p>📍 Kadıköy, İstanbul</p>
+
+                        <p>📅 30 Ekim 2026 • 10.00</p>
+
+                        <p>🐶 Boncuk — Genel kontrol</p>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- HATIRLATICILAR -->
+            <section class="dashboard-card">
+
+                <div class="section-heading">
+                    <h2>🔔 Hatırlatmalarım</h2>
+                    <a href="#" class="view-all">Tümünü Gör →</a>
+                </div>
+
+                <div class="reminder-item">
+
+                    <div class="reminder-icon">
+                        💉
+                    </div>
+
+                    <div>
+                        <h3>Pamuk — Kuduz Aşısı</h3>
+                        <p>5 Kasım 2026</p>
+                    </div>
+
+                </div>
+
+                <div class="reminder-item">
+
+                    <div class="reminder-icon">
+                        💊
+                    </div>
+
+                    <div>
+                        <h3>Boncuk — Vitamin Takviyesi</h3>
+                        <p>2 Kasım 2026</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- HIZLI İŞLEMLER -->
+        <section class="section quick-actions">
+
+            <h2>Hızlı İşlemler</h2>
+
+            <div class="action-grid">
+
+                <!-- VETERİNER ARA -->
+                <a href="#" class="action-card purple">
+
+                    <div class="action-icon">🩺</div>
+
+                    <h3>Veteriner Ara</h3>
+
+                    <p>Güvenilir veterinerleri keşfet.</p>
+
+                    <span>❯</span>
+
+                </a>
+
+                <!-- BAKICI ARA -->
+                <a href="#" class="action-card pink">
+
+                    <div class="action-icon">🐾</div>
+
+                    <h3>Bakıcı Ara</h3>
+
+                    <p>Minik dostların için güvenilir bakım.</p>
+
+                    <span>❯</span>
+
+                </a>
+
+                <!-- RANDEVU OLUŞTUR -->
+                <a href="#" class="action-card blue">
+
+                    <div class="action-icon">📅</div>
+
+                    <h3>Randevu Oluştur</h3>
+
+                    <p>Kolayca veteriner randevusu al.</p>
+
+                    <span>❯</span>
+
+                </a>
+
+                <!-- SAĞLIK KAYITLARI -->
+                <a href="#" class="action-card orange">
+
+                    <div class="action-icon">📋</div>
+
+                    <h3>Sağlık Kayıtları</h3>
+
+                    <p>Evcil hayvanlarının sağlık bilgilerini görüntüle.</p>
+
+                    <span>❯</span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
