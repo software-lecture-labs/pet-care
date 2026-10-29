@@ -424,4 +424,39 @@ a {
         outline: 2px solid #8564d8;
         outline-offset: 2px;
     }
+
+    /* ========================================
+   KAYIT FORMU - ALAN HATA MESAJLARI
+======================================== */
+
+    .field-error {
+        display: block;
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 6px;
+        line-height: 1.4;
+    }
+
+    .field-error:empty {
+        display: none;
+    }
+
+    .input-error {
+        border-color: #e74c3c !important;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.08) !important;
+    }
+
+    .input-error:focus {
+        border-color: #e74c3c !important;
+        outline: none;
+    }
+
+    /* Kayıt formu hata mesajları */
+    .auth-form-section .field-error {
+        color: #e74c3c !important;
+    }
+
+    .auth-form-section input.input-error {
+        border: 1px solid #e74c3c !important;
+    }
 }
