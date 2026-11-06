@@ -1,28 +1,25 @@
 package com.petcare.service;
 
-import org.junit.jupiter.api.Test;
-import com.petcare.repository.UserRepository;
-import org.mockito.Mockito;
 import com.petcare.entity.User;
+import com.petcare.repository.UserRepository;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
-
-import java.lang.reflect.Field;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 class AuthServiceTest {
 
     @Test
     void bosBilgilerleKayitYapilamaz() {
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mock(UserRepository.class),
+                mock(Pbkdf2PasswordHash.class)
+        );
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -38,7 +35,10 @@ class AuthServiceTest {
     @Test
     void kisaSifreyleKayitYapilamaz() {
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mock(UserRepository.class),
+                mock(Pbkdf2PasswordHash.class)
+        );
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
@@ -59,7 +59,10 @@ class AuthServiceTest {
     @Test
     void uzunSifreyleKayitYapilamaz() {
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mock(UserRepository.class),
+                mock(Pbkdf2PasswordHash.class)
+        );
 
         String uzunSifre = "a".repeat(129);
 
@@ -80,24 +83,20 @@ class AuthServiceTest {
     }
 
     @Test
-    void ayniEpostaIleKayitYapilamaz() throws Exception {
+    void ayniEpostaIleKayitYapilamaz() {
 
-        // Sahte repository oluştur
-        UserRepository mockRepository = Mockito.mock(UserRepository.class);
+        UserRepository mockRepository = mock(UserRepository.class);
+        Pbkdf2PasswordHash mockPasswordHash =
+                mock(Pbkdf2PasswordHash.class);
 
-        // E-posta zaten kayıtlıymış gibi davran
-        Mockito.when(mockRepository.existsByEmail("test@example.com"))
+        when(mockRepository.existsByEmail("test@example.com"))
                 .thenReturn(true);
 
-        // Test edilecek servisi oluştur
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        // Repository bağımlılığını test için yerleştir
-        Field field = AuthService.class.getDeclaredField("userRepository");
-        field.setAccessible(true);
-        field.set(authService, mockRepository);
-
-        // Aynı e-postayla kayıt dene
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> authService.register(
@@ -113,51 +112,34 @@ class AuthServiceTest {
                 exception.getMessage()
         );
 
-        // Repository kontrolünün çağrıldığını doğrula
-        Mockito.verify(mockRepository)
+        verify(mockRepository)
                 .existsByEmail("test@example.com");
     }
 
     @Test
-    void hataliSifreyleGirisYapilamaz() throws Exception {
+    void hataliSifreyleGirisYapilamaz() {
 
-        // Sahte bağımlılıkları oluştur
         UserRepository mockRepository = mock(UserRepository.class);
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
-        // Kayıtlı kullanıcı oluştur
         User user = new User();
         user.setEmail("test@example.com");
         user.setPasswordHash("kayitliHash");
 
-        // Repository kullanıcıyı bulsun
         when(mockRepository.findByEmail("test@example.com"))
                 .thenReturn(Optional.of(user));
 
-        // Şifre doğrulaması başarısız olsun
         when(mockPasswordHash.verify(
                 any(char[].class),
                 eq("kayitliHash")
         )).thenReturn(false);
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        // Sahte repository'yi servise yerleştir
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
-
-        // Sahte şifre doğrulayıcıyı servise yerleştir
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
-
-        // Hatalı şifreyle giriş dene
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> authService.login(
@@ -166,13 +148,11 @@ class AuthServiceTest {
                 )
         );
 
-        // Hata mesajını kontrol et
         assertEquals(
                 "E-posta adresi veya şifre hatalı.",
                 exception.getMessage()
         );
 
-        // Şifre doğrulamasının çağrıldığını kontrol et
         verify(mockPasswordHash).verify(
                 any(char[].class),
                 eq("kayitliHash")
@@ -180,57 +160,40 @@ class AuthServiceTest {
     }
 
     @Test
-    void dogruSifreyleGirisYapilabilir() throws Exception {
+    void dogruSifreyleGirisYapilabilir() {
 
-        // Sahte bağımlılıkları oluştur
         UserRepository mockRepository = mock(UserRepository.class);
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
-        // Kayıtlı kullanıcı oluştur
         User user = new User();
         user.setFirstName("Test");
         user.setLastName("Kullanici");
         user.setEmail("test@example.com");
         user.setPasswordHash("kayitliHash");
 
-        // Kullanıcı veritabanında bulunuyor
         when(mockRepository.findByEmail("test@example.com"))
                 .thenReturn(Optional.of(user));
 
-        // Şifre doğru kabul ediliyor
         when(mockPasswordHash.verify(
                 any(char[].class),
                 eq("kayitliHash")
         )).thenReturn(true);
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        // Repository bağımlılığını yerleştir
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
-
-        // Şifre doğrulayıcıyı yerleştir
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
-
-        // Giriş işlemini gerçekleştir
         User result = authService.login(
                 "test@example.com",
                 "DogruSifre123"
         );
 
-        // Doğru kullanıcının döndüğünü kontrol et
         assertSame(user, result);
 
-        // Repository ve şifre doğrulaması çağrıldı mı?
-        verify(mockRepository).findByEmail("test@example.com");
+        verify(mockRepository)
+                .findByEmail("test@example.com");
 
         verify(mockPasswordHash).verify(
                 any(char[].class),
@@ -239,37 +202,23 @@ class AuthServiceTest {
     }
 
     @Test
-    void gecerliBilgilerleKayitYapilabilir() throws Exception {
+    void gecerliBilgilerleKayitYapilabilir() {
 
         UserRepository mockRepository = mock(UserRepository.class);
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
-        // E-posta daha önce kullanılmamış
         when(mockRepository.existsByEmail("test@example.com"))
                 .thenReturn(false);
 
-        // Şifre hash işlemini taklit et
         when(mockPasswordHash.generate(any(char[].class)))
                 .thenReturn("guvenliTestHash");
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        // Sahte repository'yi yerleştir
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
-
-        // Sahte şifre doğrulayıcıyı yerleştir
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
-
-        // Kayıt işlemini gerçekleştir
         User result = authService.register(
                 "Test",
                 "Kullanici",
@@ -277,54 +226,36 @@ class AuthServiceTest {
                 "Test12345!"
         );
 
-        // Kullanıcı bilgilerini kontrol et
         assertNotNull(result);
         assertEquals("Test", result.getFirstName());
         assertEquals("Kullanici", result.getLastName());
         assertEquals("test@example.com", result.getEmail());
         assertEquals("guvenliTestHash", result.getPasswordHash());
 
-        // Kullanıcı repository'ye gönderildi mi?
         verify(mockRepository).save(same(result));
 
-        // Şifre hash işlemi çağrıldı mı?
-        verify(mockPasswordHash).generate(any(char[].class));
+        verify(mockPasswordHash)
+                .generate(any(char[].class));
     }
 
     @Test
-    void emailBuyukKucukHarfVeBosluklardanArindirilir() throws Exception {
+    void emailBuyukKucukHarfVeBosluklardanArindirilir() {
 
-        // Sahte bağımlılıkları oluştur
         UserRepository mockRepository = mock(UserRepository.class);
-
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
-        // E-posta veritabanında kayıtlı değil
         when(mockRepository.existsByEmail("ali@example.com"))
                 .thenReturn(false);
 
-        // Şifre hashleme işlemini taklit et
         when(mockPasswordHash.generate(any(char[].class)))
                 .thenReturn("testHash");
 
-        AuthService authService = new AuthService();
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        // Repository bağımlılığını yerleştir
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
-
-        // Şifre doğrulayıcıyı yerleştir
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
-
-        // Büyük harfli ve boşluklu e-posta ile kayıt ol
         User user = authService.register(
                 "Ali",
                 "Yılmaz",
@@ -332,18 +263,16 @@ class AuthServiceTest {
                 "Test12345!"
         );
 
-        // E-posta küçük harfe dönüştürülmüş olmalı
         assertEquals("ali@example.com", user.getEmail());
 
-        // Repository'de normalize edilmiş adres aranmalı
-        verify(mockRepository).existsByEmail("ali@example.com");
+        verify(mockRepository)
+                .existsByEmail("ali@example.com");
 
-        // Kullanıcı kaydedilmiş olmalı
         verify(mockRepository).save(same(user));
     }
 
     @Test
-    void farkliBuyukKucukHarflerleGirisYapilabilir() throws Exception {
+    void farkliBuyukKucukHarflerleGirisYapilabilir() {
 
         UserRepository mockRepository = mock(UserRepository.class);
         Pbkdf2PasswordHash mockPasswordHash =
@@ -360,17 +289,11 @@ class AuthServiceTest {
                 any(char[].class),
                 eq("testHash")
         )).thenReturn(true);
-        AuthService authService = new AuthService();
 
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
-
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
         User result = authService.login(
                 " ALI@Example.COM ",
@@ -379,14 +302,14 @@ class AuthServiceTest {
 
         assertEquals("ali@example.com", result.getEmail());
 
-        verify(mockRepository).findByEmail("ali@example.com");
+        verify(mockRepository)
+                .findByEmail("ali@example.com");
     }
 
     @Test
-    void bilinmeyenEmailVeYanlisSifreAyniHatayiVermeli() throws Exception {
+    void bilinmeyenEmailVeYanlisSifreAyniHatayiVermeli() {
 
         UserRepository mockRepository = mock(UserRepository.class);
-
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
@@ -394,7 +317,6 @@ class AuthServiceTest {
         user.setEmail("ali@example.com");
         user.setPasswordHash("testHash");
 
-        // Kayıtlı kullanıcı, yanlış şifre
         when(mockRepository.findByEmail("ali@example.com"))
                 .thenReturn(Optional.of(user));
 
@@ -403,48 +325,35 @@ class AuthServiceTest {
                 eq("testHash")
         )).thenReturn(false);
 
-        // Kayıtlı olmayan kullanıcı
         when(mockRepository.findByEmail("bilinmeyen@example.com"))
                 .thenReturn(Optional.empty());
 
-        AuthService authService = new AuthService();
-        Field dummyField =
-                AuthService.class.getDeclaredField("dummyPasswordHash");
+        when(mockPasswordHash.generate(any(char[].class)))
+                .thenReturn("dummyTestHash");
 
-        dummyField.setAccessible(true);
-        dummyField.set(authService, "dummyTestHash");
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
+        authService.initializePasswordHash();
 
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
+        IllegalArgumentException wrongPassword = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.login(
+                        "ali@example.com",
+                        "YanlisSifre123"
+                )
+        );
 
-        // Yanlış şifreyle giriş
-        IllegalArgumentException wrongPassword =
-                assertThrows(
-                        IllegalArgumentException.class,
-                        () -> authService.login(
-                                "ali@example.com",
-                                "YanlisSifre123"
-                        )
-                );
+        IllegalArgumentException unknownEmail = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.login(
+                        "bilinmeyen@example.com",
+                        "YanlisSifre123"
+                )
+        );
 
-        // Bilinmeyen e-postayla giriş
-        IllegalArgumentException unknownEmail =
-                assertThrows(
-                        IllegalArgumentException.class,
-                        () -> authService.login(
-                                "bilinmeyen@example.com",
-                                "YanlisSifre123"
-                        )
-                );
-
-        // İki hata mesajı aynı olmalı
         assertEquals(
                 wrongPassword.getMessage(),
                 unknownEmail.getMessage()
@@ -452,41 +361,25 @@ class AuthServiceTest {
     }
 
     @Test
-    void bilinmeyenEmailIcinSahteHashDogrulanmali() throws Exception {
+    void bilinmeyenEmailIcinSahteHashDogrulanmali() {
 
-        // Sahte bağımlılıkları oluştur
         UserRepository mockRepository = mock(UserRepository.class);
         Pbkdf2PasswordHash mockPasswordHash =
                 mock(Pbkdf2PasswordHash.class);
 
-        // Kullanıcı veritabanında bulunmuyor
         when(mockRepository.findByEmail("bilinmeyen@example.com"))
                 .thenReturn(Optional.empty());
 
-        AuthService authService = new AuthService();
+        when(mockPasswordHash.generate(any(char[].class)))
+                .thenReturn("dummyTestHash");
 
-        // Repository bağımlılığını yerleştir
-        Field repositoryField =
-                AuthService.class.getDeclaredField("userRepository");
+        AuthService authService = new AuthService(
+                mockRepository,
+                mockPasswordHash
+        );
 
-        repositoryField.setAccessible(true);
-        repositoryField.set(authService, mockRepository);
+        authService.initializePasswordHash();
 
-        // PBKDF2 bağımlılığını yerleştir
-        Field passwordField =
-                AuthService.class.getDeclaredField("passwordHash");
-
-        passwordField.setAccessible(true);
-        passwordField.set(authService, mockPasswordHash);
-
-        // Test için sahte hash değerini ayarla
-        Field dummyField =
-                AuthService.class.getDeclaredField("dummyPasswordHash");
-
-        dummyField.setAccessible(true);
-        dummyField.set(authService, "dummyTestHash");
-
-        // Bilinmeyen e-postayla giriş yapmayı dene
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> authService.login(
@@ -495,13 +388,11 @@ class AuthServiceTest {
                 )
         );
 
-        // Hata mesajını kontrol et
         assertEquals(
                 "E-posta adresi veya şifre hatalı.",
                 exception.getMessage()
         );
 
-        // Sahte PBKDF2 doğrulaması gerçekten çağrıldı mı?
         verify(mockPasswordHash).verify(
                 any(char[].class),
                 eq("dummyTestHash")

@@ -1,13 +1,20 @@
 package com.petcare.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Schedule;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
+import jakarta.inject.Inject;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-@ApplicationScoped
+@Singleton
+@Startup
 public class LoginAttemptService {
 
     private static final int MAX_ATTEMPTS = 5;
@@ -18,6 +25,18 @@ public class LoginAttemptService {
     private final ConcurrentHashMap<String, AttemptInfo> attempts =
             new ConcurrentHashMap<>();
 
+    private Clock clock;
+
+    // Payara tarafından kullanılır
+    public LoginAttemptService() {
+        this.clock = Clock.systemUTC();
+    }
+
+    // Testlerde zamanı kontrol etmek için kullanılır
+    public LoginAttemptService(Clock clock) {
+        this.clock = Objects.requireNonNull(clock);
+    }
+
     public boolean isBlocked(String email) {
         String key = normalizeEmail(email);
 
@@ -27,7 +46,7 @@ public class LoginAttemptService {
             return false;
         }
 
-        if (!Instant.now().isBefore(info.expiresAt())) {
+        if (!Instant.now(clock).isBefore(info.expiresAt())) {
             attempts.remove(key, info);
             return false;
         }
@@ -37,7 +56,7 @@ public class LoginAttemptService {
 
     public void recordFailedAttempt(String email) {
         String key = normalizeEmail(email);
-        Instant now = Instant.now();
+        Instant now = Instant.now(clock);
 
         attempts.compute(key, (k, info) -> {
 
@@ -59,6 +78,17 @@ public class LoginAttemptService {
 
     public void resetAttempts(String email) {
         attempts.remove(normalizeEmail(email));
+    }
+
+    // Her 5 dakikada bir süresi dolan kayıtları temizler
+    @Schedule(hour = "*", minute = "*/5", second = "0", persistent = false)
+    public void cleanupExpiredAttempts() {
+
+        Instant now = Instant.now(clock);
+
+        attempts.entrySet().removeIf(
+                entry -> !now.isBefore(entry.getValue().expiresAt())
+        );
     }
 
     private String normalizeEmail(String email) {

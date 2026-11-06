@@ -17,11 +17,25 @@ import java.util.Locale;
 @ApplicationScoped
 public class AuthService {
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final Pbkdf2PasswordHash passwordHash;
 
+    // Payara CDI için parametresiz constructor
+    protected AuthService() {
+        this.userRepository = null;
+        this.passwordHash = null;
+    }
+
+    // Constructor Injection
     @Inject
-    private Pbkdf2PasswordHash passwordHash;
+    public AuthService(
+            UserRepository userRepository,
+            Pbkdf2PasswordHash passwordHash
+    ) {
+        this.userRepository = userRepository;
+        this.passwordHash = passwordHash;
+    }
+
     private String dummyPasswordHash;
     @PostConstruct
     public void initializePasswordHash() {
