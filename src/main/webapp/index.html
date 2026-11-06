@@ -15,17 +15,17 @@
         <div class="logo">🐾 PetCare</div>
 
         <nav class="sidebar-menu" aria-label="Ana menü">
-            <a href="#" class="menu-item active">🏠 Ana Sayfa</a>
-            <a href="#" class="menu-item">🐾 Hayvanlarım</a>
-            <a href="#" class="menu-item">📅 Randevularım</a>
-            <a href="#" class="menu-item">📋 Sağlık Kayıtları</a>
-            <a href="#" class="menu-item">💉 Aşı Takibi</a>
-            <a href="#" class="menu-item">🩺 Veteriner Ara</a>
-            <a href="#" class="menu-item">👤 Evcil Hayvan Bakıcısı</a>
-            <a href="#" class="menu-item">🔖 Rezervasyonlarım</a>
-            <a href="#" class="menu-item">🔔 Hatırlatıcılar</a>
-            <a href="#" class="menu-item">❤️ Favoriler</a>
-            <a href="#" class="menu-item">⚙️ Ayarlar</a>
+            <a href="index.html" class="menu-item active">🏠 Ana Sayfa</a>
+            <a href="pets.html" class="menu-item">🐾 Hayvanlarım</a>
+            <a href="appointments.html" class="menu-item">📅 Randevularım</a>
+            <a href="health-records.html" class="menu-item">📋 Sağlık Kayıtları</a>
+            <a href="vaccinations.html" class="menu-item">💉 Aşı Takibi</a>
+            <a href="veterinarians.html" class="menu-item">🩺 Veteriner Ara</a>
+            <a href="pet-sitters.html" class="menu-item">👤 Evcil Hayvan Bakıcısı</a>
+            <a href="reservations.html" class="menu-item">🔖 Rezervasyonlarım</a>
+            <a href="reminders.html" class="menu-item">🔔 Hatırlatıcılar</a>
+            <a href="favorites.html" class="menu-item">❤️ Favoriler</a>
+            <a href="settings.html" class="menu-item">⚙️ Ayarlar</a>
         </nav>
 
         <div class="sidebar-footer">
@@ -54,22 +54,85 @@
 
             <div class="topbar-actions">
 
-                <button
-                        class="notification-btn"
-                        type="button"
-                        aria-label="Bildirimler"
-                >
-                    🔔
-                </button>
 
-                <div class="user-profile">
-                    <div class="avatar">👩</div>
+                <div class="notification-wrapper">
 
-                    <div class="user-info">
-                        <strong id="profile-name">Kullanıcı</strong>
-                        <small>Evcil Hayvan Sahibi</small>
+                    <button
+                            id="notification-btn"
+                            class="notification-btn"
+                            type="button"
+                            aria-label="Bildirimleri göster"
+                            aria-expanded="false"
+                            aria-controls="notification-panel">
+                        🔔
+                    </button>
+
+                    <div id="notification-panel"
+                         class="notification-panel"
+                         hidden>
+
+                        <h3>🔔 Bildirimler</h3>
+
+                        <div class="notification-item">
+                            <span>💉</span>
+                            <div>
+                                <strong>Pamuk — Kuduz Aşısı</strong>
+                                <small>5 Kasım 2026</small>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <span>💊</span>
+                            <div>
+                                <strong>Boncuk — Vitamin Takviyesi</strong>
+                                <small>2 Kasım 2026</small>
+                            </div>
+                        </div>
+
+                        <a href="reminders.html" class="notification-all">
+                            Tüm Hatırlatıcıları Gör →
+                        </a>
+
                     </div>
+
                 </div>
+
+
+                <div class="profile-wrapper">
+
+                    <button type="button"
+                            class="user-profile"
+                            id="profile-btn"
+                            aria-expanded="false"
+                            aria-controls="profile-panel">
+
+                        <div class="avatar">👩</div>
+
+                        <div class="user-info">
+                            <strong id="profile-name">Kullanıcı</strong>
+                            <small>Evcil Hayvan Sahibi</small>
+                        </div>
+
+                    </button>
+
+                    <div class="profile-panel" id="profile-panel" hidden>
+
+                        <h3>👤 Hesap Bilgilerim</h3>
+
+                        <div class="profile-detail">
+                            <small>Ad Soyad</small>
+                            <strong id="profile-fullname">-</strong>
+                        </div>
+
+                        <div class="profile-detail">
+                            <small>E-posta Adresi</small>
+                            <strong id="profile-email">-</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
 
                 <button
                         id="logout-btn"
@@ -104,7 +167,7 @@
 
             <div class="section-heading">
                 <h2>Hayvanlarım</h2>
-                <a href="#" class="view-all">Tümünü Gör →</a>
+                <a href="pets.html" class="view-all">Tümünü Gör →</a>
             </div>
 
             <div class="pet-grid">
@@ -122,14 +185,11 @@
                             <h3>Pamuk</h3>
                             <p>Kedi • 2 yaşında</p>
                         </div>
-
-                        <button
-                                class="round-arrow"
-                                type="button"
-                                aria-label="Pamuk'un detayları"
-                        >
+                        <a href="pets.html"
+                           class="round-arrow"
+                           aria-label="Hayvanlarım sayfasında Pamuk'u görüntüle">
                             ❯
-                        </button>
+                        </a>
 
                     </div>
                 </article>
@@ -148,13 +208,11 @@
                             <p>Köpek • 3 yaşında</p>
                         </div>
 
-                        <button
-                                class="round-arrow"
-                                type="button"
-                                aria-label="Boncuk'un detayları"
-                        >
+                        <a href="pets.html"
+                           class="round-arrow"
+                           aria-label="Hayvanlarım sayfasında Boncuk'u görüntüle">
                             ❯
-                        </button>
+                        </a>
 
                     </div>
                 </article>
@@ -170,7 +228,7 @@
 
                 <div class="section-heading">
                     <h2>📅 Yaklaşan Randevum</h2>
-                    <a href="#" class="view-all">Tümünü Gör →</a>
+                    <a href="appointments.html" class="view-all">Tümünü Gör →</a>
                 </div>
 
                 <div class="appointment-details">
@@ -199,7 +257,7 @@
 
                 <div class="section-heading">
                     <h2>🔔 Hatırlatmalarım</h2>
-                    <a href="#" class="view-all">Tümünü Gör →</a>
+                    <a href="reminders.html" class="view-all">Tümünü Gör →</a>
                 </div>
 
                 <div class="reminder-item">
@@ -240,7 +298,7 @@
             <div class="action-grid">
 
                 <!-- VETERİNER ARA -->
-                <a href="#" class="action-card purple">
+                <a href="veterinarians.html" class="action-card purple">
 
                     <div class="action-icon">🩺</div>
 
@@ -253,7 +311,7 @@
                 </a>
 
                 <!-- BAKICI ARA -->
-                <a href="#" class="action-card pink">
+                <a href="pet-sitters.html" class="action-card pink">
 
                     <div class="action-icon">🐾</div>
 
@@ -266,7 +324,7 @@
                 </a>
 
                 <!-- RANDEVU OLUŞTUR -->
-                <a href="#" class="action-card blue">
+                <a href="appointments.html" class="action-card blue">
 
                     <div class="action-icon">📅</div>
 
@@ -279,7 +337,7 @@
                 </a>
 
                 <!-- SAĞLIK KAYITLARI -->
-                <a href="#" class="action-card orange">
+                <a href="health-records.html" class="action-card orange">
 
                     <div class="action-icon">📋</div>
 
