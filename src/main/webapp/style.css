@@ -151,6 +151,10 @@ button {
     height: 43px;
     border-radius: 50%;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .user-profile {
@@ -298,14 +302,24 @@ h2 {
 }
 
 .round-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
     border: none;
     border-radius: 50%;
     width: 35px;
     height: 35px;
+
     color: var(--primary);
     background: var(--primary-light);
-}
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1;
 
+    cursor: pointer;
+}
 /* RANDEVULAR VE HATIRLATICILAR */
 .dashboard-grid {
     display: grid;
@@ -533,4 +547,160 @@ h2 {
 .logout-btn:hover {
     background: #e9d5ff;
     transform: translateY(-2px);
+}
+
+
+/* ========================================
+   BİLDİRİM PANELİ
+======================================== */
+
+.notification-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.notification-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 320px;
+    max-width: calc(100vw - 30px);
+    padding: 18px;
+
+    background: #ffffff;
+    border: 1px solid #eee6fa;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
+
+    z-index: 100;
+}
+
+.notification-panel[hidden] {
+    display: none;
+}
+
+.notification-panel h3 {
+    margin: 0 0 15px;
+    font-size: 16px;
+    color: #302b42;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #f0eaff;
+}
+
+.notification-item > span {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: #f0eaff;
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+.notification-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.notification-item strong {
+    font-size: 12px;
+    color: #302b42;
+}
+
+.notification-item small {
+    font-size: 11px;
+    color: #827c92;
+}
+
+.notification-all {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    color: #8564d8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.notification-all:hover {
+    text-decoration: underline;
+}
+
+
+/* ========================================
+   PROFİL BİLGİ PANELİ
+======================================== */
+
+.profile-wrapper {
+    position: relative;
+}
+
+.profile-wrapper .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.profile-panel {
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+
+    width: 290px;
+    max-width: calc(100vw - 30px);
+    padding: 20px;
+
+    background: #ffffff;
+    border: 1px solid #eee6fa;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
+
+    z-index: 100;
+}
+
+.profile-panel[hidden] {
+    display: none;
+}
+
+.profile-panel h3 {
+    margin: 0 0 18px;
+    font-size: 16px;
+    color: #302b42;
+}
+
+.profile-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0eaff;
+}
+
+.profile-detail:last-child {
+    border-bottom: none;
+}
+
+.profile-detail small {
+    font-size: 12px;
+    color: #827c92;
+}
+
+.profile-detail strong {
+    font-size: 13px;
+    color: #302b42;
+    overflow-wrap: anywhere;
 }
