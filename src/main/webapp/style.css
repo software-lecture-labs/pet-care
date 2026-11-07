@@ -704,3 +704,17 @@ h2 {
     color: #302b42;
     overflow-wrap: anywhere;
 }
+
+/* ===================================
+   ÖRNEK VERİ BİLGİLENDİRMELERİ
+=================================== */
+
+.demo-data-note {
+    margin: 10px 0 16px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background-color: #f5efff;
+    color: #745b9a;
+    font-size: 13px;
+    line-height: 1.5;
+}
