@@ -43,13 +43,25 @@
         <!-- ÜST BAR -->
         <header class="topbar">
 
-            <div class="search-box">
-                <span>🔍</span>
-                <input
-                        type="search"
-                        placeholder="Veteriner, bakıcı veya hizmet ara..."
-                        aria-label="Hizmet ara"
-                >
+            <div class="search-wrapper">
+
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input
+                            type="search"
+                            placeholder="Sayfa ara..."
+                            aria-label="Sayfa ara"
+                            aria-describedby="search-message"
+                    >
+                </div>
+
+                <p id="search-message"
+                   class="search-message"
+                   role="status"
+                   aria-live="polite"
+                   hidden>
+                </p>
+
             </div>
 
             <div class="topbar-actions">

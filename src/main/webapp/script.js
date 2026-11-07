@@ -128,11 +128,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ========================================
 
     const searchInput = document.querySelector(".search-box input");
+    const searchMessage = document.getElementById("search-message");
+
+    function hideSearchMessage() {
+        if (!searchMessage) return;
+        searchMessage.hidden = true;
+        searchMessage.textContent = "";
+    }
     if (searchInput) {
+        searchInput.addEventListener("input", hideSearchMessage);
         searchInput.addEventListener("keydown", function (event) {
             if (event.key !== "Enter") return;
 
             event.preventDefault();
+            hideSearchMessage();
 
             const searchText = searchInput.value
                 .trim()
@@ -183,7 +192,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 window.location.href = "settings.html";
 
             } else {
-                alert("Bu arama için henüz bir sayfa bulunmuyor. 💜");
+                if (searchMessage) {
+                    searchMessage.textContent =
+                        "Bu isimde bir sayfa bulunamadı. Lütfen menüdeki sayfa adlarından birini arayın. 💜";
+                    searchMessage.hidden = false;
+                }
             }
         });
     }
