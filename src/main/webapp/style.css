@@ -704,3 +704,50 @@ h2 {
     color: #302b42;
     overflow-wrap: anywhere;
 }
+
+/* ===================================
+   ÖRNEK VERİ BİLGİLENDİRMELERİ
+=================================== */
+
+.demo-data-note {
+    margin: 10px 0 16px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background-color: #f5efff;
+    color: #745b9a;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ===================================
+   ARAMA KUTUSU İYİLEŞTİRMELERİ
+=================================== */
+
+/* Arama kutusu ve mesaj alanı */
+.search-wrapper {
+    position: relative;
+    min-width: 0;
+}
+
+/* Arama sonucu bulunamadığında gösterilen mesaj */
+.search-message {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px 14px;
+    background-color: #f5efff;
+    color: #745b9a;
+    border: 1px solid #e4d5fa;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    z-index: 100;
+}
+
+/* Mesaj gizliyken yer kaplamasın */
+.search-message[hidden] {
+    display: none;
+}

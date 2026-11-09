@@ -12,29 +12,6 @@
 
     <!-- SOL MENÜ -->
     <aside class="sidebar">
-        <div class="logo">🐾 PetCare</div>
-
-        <nav class="sidebar-menu" aria-label="Ana menü">
-            <a href="index.html" class="menu-item active">🏠 Ana Sayfa</a>
-            <a href="pets.html" class="menu-item">🐾 Hayvanlarım</a>
-            <a href="appointments.html" class="menu-item">📅 Randevularım</a>
-            <a href="health-records.html" class="menu-item">📋 Sağlık Kayıtları</a>
-            <a href="vaccinations.html" class="menu-item">💉 Aşı Takibi</a>
-            <a href="veterinarians.html" class="menu-item">🩺 Veteriner Ara</a>
-            <a href="pet-sitters.html" class="menu-item">👤 Evcil Hayvan Bakıcısı</a>
-            <a href="reservations.html" class="menu-item">🔖 Rezervasyonlarım</a>
-            <a href="reminders.html" class="menu-item">🔔 Hatırlatıcılar</a>
-            <a href="favorites.html" class="menu-item">❤️ Favoriler</a>
-            <a href="settings.html" class="menu-item">⚙️ Ayarlar</a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <p>
-                Minik dostların daha mutlu yaşamları için
-                her zaman yanınızdayız!
-            </p>
-            <div class="footer-paw">🐶 🐱</div>
-        </div>
     </aside>
 
     <!-- ANA İÇERİK -->
@@ -43,13 +20,25 @@
         <!-- ÜST BAR -->
         <header class="topbar">
 
-            <div class="search-box">
-                <span>🔍</span>
-                <input
-                        type="search"
-                        placeholder="Veteriner, bakıcı veya hizmet ara..."
-                        aria-label="Hizmet ara"
-                >
+            <div class="search-wrapper">
+
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input
+                            type="search"
+                            placeholder="Sayfa ara..."
+                            aria-label="Sayfa ara"
+                            aria-describedby="search-message"
+                    >
+                </div>
+
+                <p id="search-message"
+                   class="search-message"
+                   role="status"
+                   aria-live="polite"
+                   hidden>
+                </p>
+
             </div>
 
             <div class="topbar-actions">
@@ -72,7 +61,9 @@
                          hidden>
 
                         <h3>🔔 Bildirimler</h3>
-
+                        <p class="demo-data-note">
+                            ℹ️ Bu bildirimler tanıtım amaçlı örnek verilerdir.
+                        </p>
                         <div class="notification-item">
                             <span>💉</span>
                             <div>
@@ -169,7 +160,10 @@
                 <h2>Hayvanlarım</h2>
                 <a href="pets.html" class="view-all">Tümünü Gör →</a>
             </div>
-
+            <p class="demo-data-note">
+                ℹ️ Pamuk ve Boncuk örnek hayvanlardır.
+                Kendi hayvanlarınızı eklediğinizde burada görüntülenecekler.
+            </p>
             <div class="pet-grid">
 
                 <!-- PAMUK -->
@@ -230,7 +224,10 @@
                     <h2>📅 Yaklaşan Randevum</h2>
                     <a href="appointments.html" class="view-all">Tümünü Gör →</a>
                 </div>
-
+                <!-- ÖRNEK RANDEVU BİLGİLENDİRMESİ -->
+                <p class="demo-data-note">
+                    ℹ️ Bu randevu örnek veridir.
+                </p>
                 <div class="appointment-details">
 
                     <div class="appointment-icon">
@@ -259,7 +256,10 @@
                     <h2>🔔 Hatırlatmalarım</h2>
                     <a href="reminders.html" class="view-all">Tümünü Gör →</a>
                 </div>
-
+                <!-- ÖRNEK HATIRLATICI BİLGİLENDİRMESİ -->
+                <p class="demo-data-note">
+                    ℹ️ Bu hatırlatıcılar örnek verilerdir.
+                </p>
                 <div class="reminder-item">
 
                     <div class="reminder-icon">
@@ -357,6 +357,7 @@
 
 </div>
 
+<script src="sidebar.js"></script>
 <script src="script.js"></script>
 
 </body>

@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         // 2. KULLANICI BİLGİLERİNİ GÖSTER
         // ========================================
 
-
         const profileName = document.getElementById("profile-name");
         const welcomeMessage = document.getElementById("welcome-message");
 
@@ -128,11 +127,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ========================================
 
     const searchInput = document.querySelector(".search-box input");
+    const searchMessage = document.getElementById("search-message");
+
+    function hideSearchMessage() {
+        if (!searchMessage) return;
+        searchMessage.hidden = true;
+        searchMessage.textContent = "";
+    }
     if (searchInput) {
+        searchInput.addEventListener("input", hideSearchMessage);
         searchInput.addEventListener("keydown", function (event) {
             if (event.key !== "Enter") return;
 
             event.preventDefault();
+            hideSearchMessage();
 
             const searchText = searchInput.value
                 .trim()
@@ -183,111 +191,79 @@ document.addEventListener("DOMContentLoaded", async function () {
                 window.location.href = "settings.html";
 
             } else {
-                alert("Bu arama için henüz bir sayfa bulunmuyor. 💜");
+                if (searchMessage) {
+                    searchMessage.textContent =
+                        "Bu isimde bir sayfa bulunamadı. Lütfen menüdeki sayfa adlarından birini arayın. 💜";
+                    searchMessage.hidden = false;
+                }
             }
         });
     }
 
     // ========================================
-    // 6. BİLDİRİM PANELİ
+    // 6. BİLDİRİM VE PROFİL PANELLERİ
     // ========================================
 
-    const notificationButton = document.getElementById("notification-btn");
-    const notificationPanel = document.getElementById("notification-panel");
+    const panels = [
+        {
+            button: document.getElementById("notification-btn"),
+            panel: document.getElementById("notification-panel")
+        },
+        {
+            button: document.getElementById("profile-btn"),
+            panel: document.getElementById("profile-panel")
+        }
+    ].filter(item => item.button && item.panel);
 
-    if (notificationButton && notificationPanel) {
-
-
-        notificationButton.addEventListener("click", function (event) {
-            event.stopPropagation();
-
-            const willOpen = notificationPanel.hidden;
-
-            // Önce iki paneli de kapat
-            notificationPanel.hidden = true;
-            notificationButton.setAttribute("aria-expanded", "false");
-
-            const otherPanel = document.getElementById("profile-panel");
-            const otherButton = document.getElementById("profile-btn");
-
-            if (otherPanel) otherPanel.hidden = true;
-            if (otherButton) otherButton.setAttribute("aria-expanded", "false");
-
-            // Sadece bildirim panelini aç
-            notificationPanel.hidden = !willOpen;
-            notificationButton.setAttribute("aria-expanded", String(willOpen));
-        });
-
-
-        // Panelin içine tıklanınca kapanmasın
-        notificationPanel.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-
-        // Panelin dışına tıklanınca kapansın
-        document.addEventListener("click", function () {
-            notificationPanel.hidden = true;
-            notificationButton.setAttribute("aria-expanded", "false");
-        });
-
-        // Escape tuşuyla kapansın
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                notificationPanel.hidden = true;
-                notificationButton.setAttribute("aria-expanded", "false");
-            }
+    // Bütün panelleri kapat
+    function closeAllPanels() {
+        panels.forEach(function (item) {
+            item.panel.hidden = true;
+            item.button.setAttribute("aria-expanded", "false");
         });
     }
 
+    // Panel açma ve kapatma işlemleri
+    panels.forEach(function (item) {
 
-    // ========================================
-    // PROFİL BİLGİ PANELİ
-    // ========================================
-
-    const profileButton = document.getElementById("profile-btn");
-    const profilePanel = document.getElementById("profile-panel");
-
-    if (profileButton && profilePanel) {
-
-        profileButton.addEventListener("click", function (event) {
+        item.button.addEventListener("click", function (event) {
             event.stopPropagation();
 
-            const willOpen = profilePanel.hidden;
+            const willOpen = item.panel.hidden;
 
-            // Önce iki paneli de kapat
-            profilePanel.hidden = true;
-            profileButton.setAttribute("aria-expanded", "false");
+            // Önce açık panelleri kapat
+            closeAllPanels();
 
-            const otherPanel = document.getElementById("notification-panel");
-            const otherButton = document.getElementById("notification-btn");
-
-            if (otherPanel) otherPanel.hidden = true;
-            if (otherButton) otherButton.setAttribute("aria-expanded", "false");
-
-            // Sadece profil panelini aç
-            profilePanel.hidden = !willOpen;
-            profileButton.setAttribute("aria-expanded", String(willOpen));
-        });
-
-
-        // Panelin içine tıklanınca açık kalsın
-        profilePanel.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-
-        // Panelin dışına tıklanınca kapansın
-        document.addEventListener("click", function () {
-            profilePanel.hidden = true;
-            profileButton.setAttribute("aria-expanded", "false");
-        });
-
-        // Escape tuşuna basınca kapansın
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                profilePanel.hidden = true;
-                profileButton.setAttribute("aria-expanded", "false");
+            // Tıklanan panel daha önce kapalıysa aç
+            if (willOpen) {
+                item.panel.hidden = false;
+                item.button.setAttribute("aria-expanded", "true");
             }
         });
 
-    }
+    });
+
+    // Panellerin dışına tıklanınca kapat
+    document.addEventListener("click", function (event) {
+
+        const clickedInside = panels.some(function (item) {
+            return item.panel.contains(event.target) ||
+                item.button.contains(event.target);
+        });
+
+        if (!clickedInside) {
+            closeAllPanels();
+        }
+    });
+// Escape tuşuna basınca paneli kapat ve odağı butona geri ver
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            const openPanel = panels.find(({ panel }) => !panel.hidden);
+
+            if (openPanel) {
+                closeAllPanels();
+                openPanel.button.focus();
+            }
+        }
+    });
 });
