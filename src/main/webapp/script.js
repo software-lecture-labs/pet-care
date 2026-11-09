@@ -255,11 +255,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             closeAllPanels();
         }
     });
-
-    // Escape tuşuna basınca kapat
+// Escape tuşuna basınca paneli kapat ve odağı butona geri ver
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
-            closeAllPanels();
+            const openPanel = panels.find(({ panel }) => !panel.hidden);
+
+            if (openPanel) {
+                closeAllPanels();
+                openPanel.button.focus();
+            }
         }
     });
 });
