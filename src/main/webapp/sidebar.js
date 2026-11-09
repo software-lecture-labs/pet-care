@@ -23,14 +23,15 @@ function renderSidebar() {
     sidebar.innerHTML = `
         <div class="logo">🐾 PetCare</div>
 
-        <nav class="sidebar-menu" aria-label="Ana menü">
-            ${sidebarItems.map(item => `
-                <a href="${item.href}"
-                   class="menu-item ${currentPage === item.href ? "active" : ""}">
-                    ${item.label}
-                </a>
-            `).join("")}
-        </nav>
+       <nav class="sidebar-menu" aria-label="Ana menü">
+    ${sidebarItems.map(item => `
+        <a href="${item.href}"
+           class="menu-item ${currentPage === item.href ? "active" : ""}"
+           ${currentPage === item.href ? 'aria-current="page"' : ""}>
+            ${item.label}
+        </a>
+    `).join("")}
+</nav>
     `;
 }
 
