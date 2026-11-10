@@ -229,4 +229,88 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
   });
+  // ========================================
+  // 7. ANASAYFA - HAYVANLARIM
+  // ========================================
+
+  async function loadHomePets() {
+    const grid = document.getElementById('home-pet-grid');
+    if (!grid) return;
+
+    try {
+      const response = await fetch('api/pets', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+
+      if (!response.ok) {
+        throw new Error('Hayvanlar yüklenemedi.');
+      }
+
+      const pets = await response.json();
+      grid.replaceChildren();
+
+      if (pets.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.className = 'pets-loading';
+        emptyMessage.textContent = 'Henüz hayvan eklemedin. 🐾';
+
+        grid.appendChild(emptyMessage);
+        return;
+      }
+
+      const avatars = {
+        Kedi: '🐱',
+        Köpek: '🐶',
+        Kuş: '🐦',
+        Diğer: '🐾',
+      };
+
+      pets.slice(0, 3).forEach((pet) => {
+        const card = document.createElement('article');
+        card.className = 'pet-card';
+
+        const image = document.createElement('div');
+        image.className = 'pet-image';
+
+        if (pet.photoPath) {
+          const photo = document.createElement('img');
+          photo.src = `api/pet-photos/${pet.id}`;
+          photo.alt = `${pet.name} profil fotoğrafı`;
+          photo.className = 'home-pet-photo';
+          image.appendChild(photo);
+        } else {
+          image.textContent = avatars[pet.type] || '🐾';
+        }
+
+        const info = document.createElement('div');
+        info.className = 'pet-info';
+
+        const details = document.createElement('div');
+
+        const name = document.createElement('h3');
+        name.textContent = pet.name;
+
+        const description = document.createElement('p');
+        description.textContent = pet.type || 'Tür belirtilmedi';
+
+        details.append(name, description);
+
+        const link = document.createElement('a');
+        link.href = 'pets.html';
+        link.className = 'round-arrow';
+        link.textContent = '❯';
+        link.setAttribute('aria-label', `${pet.name} için Hayvanlarım sayfasını aç`);
+
+        info.append(details, link);
+        card.append(image, info);
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Anasayfa hayvan yükleme hatası:', error);
+      grid.textContent = 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
+    }
+  }
+
+  await loadHomePets();
 });
