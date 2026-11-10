@@ -62,12 +62,12 @@ public class AppointmentService {
                                 "FROM vet_availability va " +
                                 "JOIN veterinarians v " +
                                 "ON v.id = va.veterinarian_id " +
-                                "WHERE va.id = :availabilityId " +
+                                "WHERE va.id = ?1 " +
                                 "AND va.is_active = TRUE " +
                                 "AND v.is_active = TRUE " +
                                 "AND va.start_time > CURRENT_TIMESTAMP"
                 )
-                .setParameter("availabilityId", availabilityId)
+                .setParameter(1, availabilityId)
                 .getSingleResult();
 
         if (available.longValue() == 0) {
@@ -79,10 +79,10 @@ public class AppointmentService {
         // Aynı saat daha önce alınmış mı?
         Number booked = (Number) em.createNativeQuery(
                         "SELECT COUNT(*) FROM appointments " +
-                                "WHERE availability_id = :availabilityId " +
+                                "WHERE availability_id = ?1 " +
                                 "AND status = 'scheduled'"
                 )
-                .setParameter("availabilityId", availabilityId)
+                .setParameter(1, availabilityId)
                 .getSingleResult();
 
         if (booked.longValue() > 0) {

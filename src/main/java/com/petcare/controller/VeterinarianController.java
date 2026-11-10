@@ -71,34 +71,36 @@ public class VeterinarianController {
                     .build();
         }
 
+
         List<?> rows = em.createNativeQuery("""
-                SELECT
-                    va.id,
-                    to_char(
-                        va.start_time AT TIME ZONE 'UTC',
-                        'YYYY-MM-DD"T"HH24:MI:SS"Z"'
-                    ),
-                    to_char(
-                        va.end_time AT TIME ZONE 'UTC',
-                        'YYYY-MM-DD"T"HH24:MI:SS"Z"'
-                    )
-                FROM vet_availability va
-                JOIN veterinarians v
-                    ON v.id = va.veterinarian_id
-                WHERE va.veterinarian_id = :vetId
-                  AND va.is_active = TRUE
-                  AND v.is_active = TRUE
-                  AND va.start_time > CURRENT_TIMESTAMP
-                  AND NOT EXISTS (
-                      SELECT 1
-                      FROM appointments a
-                      WHERE a.availability_id = va.id
-                        AND a.status = 'scheduled'
-                  )
-                ORDER BY va.start_time
-                """)
-                .setParameter("vetId", veterinarianId)
+        SELECT
+            va.id,
+            to_char(
+                va.start_time AT TIME ZONE 'UTC',
+                'YYYY-MM-DD"T"HH24":"MI":"SS"Z"'
+            ),
+            to_char(
+                va.end_time AT TIME ZONE 'UTC',
+                'YYYY-MM-DD"T"HH24":"MI":"SS"Z"'
+            )
+        FROM vet_availability va
+        JOIN veterinarians v
+            ON v.id = va.veterinarian_id
+        WHERE va.veterinarian_id = ?1
+          AND va.is_active = TRUE
+          AND v.is_active = TRUE
+          AND va.start_time > CURRENT_TIMESTAMP
+          AND NOT EXISTS (
+              SELECT 1
+              FROM appointments a
+              WHERE a.availability_id = va.id
+                AND a.status = 'scheduled'
+          )
+        ORDER BY va.start_time
+        """)
+                .setParameter(1, veterinarianId)
                 .getResultList();
+
 
         List<Map<String, Object>> availableSlots =
                 new ArrayList<>();

@@ -46,10 +46,10 @@ public class AppointmentRepository {
 
         Number count = (Number) em.createNativeQuery(
                         "SELECT COUNT(*) FROM pets " +
-                                "WHERE id = :petId AND user_id = :userId"
+                                "WHERE id = ?1 AND user_id = ?2"
                 )
-                .setParameter("petId", petId)
-                .setParameter("userId", userId)
+                .setParameter(1, petId)
+                .setParameter(2, userId)
                 .getSingleResult();
 
         return count.longValue() > 0;
