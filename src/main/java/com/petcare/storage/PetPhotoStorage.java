@@ -1,0 +1,226 @@
+
+package com.petcare.storage;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.UUID;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+
+@ApplicationScoped
+public class PetPhotoStorage {
+
+    // Fotoğrafların kaydedileceği klasör
+    private static final Path UPLOAD_DIRECTORY =
+            Path.of("C:", "PetCare", "uploads", "pets");
+
+    // Maksimum fotoğraf boyutu: 5 MB
+    private static final long MAX_FILE_SIZE = 5L * 1024 * 1024;
+
+    // Fotoğrafı sunucuya kaydet
+    public String savePhoto(InputStream inputStream) throws IOException {
+
+        if (inputStream == null) {
+            throw new IllegalArgumentException(
+                    "Fotoğraf dosyası gereklidir."
+            );
+        }
+
+        // En fazla 5 MB + 1 byte oku
+        byte[] fileBytes;
+        try (InputStream stream = inputStream) {
+            fileBytes = stream.readNBytes((int) MAX_FILE_SIZE + 1);
+        }
+
+        if (fileBytes.length == 0) {
+            throw new IllegalArgumentException(
+                    "Fotoğraf dosyası boş olamaz."
+            );
+        }
+
+        if (fileBytes.length > MAX_FILE_SIZE) {
+            throw new IllegalArgumentException(
+                    "Fotoğraf en fazla 5 MB olabilir."
+            );
+        }
+
+        // Dosya türünü içerikten kontrol et
+        String extension = detectExtension(fileBytes);
+        if (!".jpg".equals(extension) && !".png".equals(extension)) {
+            throw new IllegalArgumentException(
+                    "Yalnızca JPEG veya PNG fotoğrafları destekleniyor."
+            );
+        }
+
+        if (extension == null) {
+            throw new IllegalArgumentException(
+                    "Yalnızca JPEG, PNG veya WebP yükleyebilirsiniz."
+            );
+        }
+
+        // Dosyanın gerçekten okunabilir bir görüntü olduğunu doğrula
+        if (extension.equals(".jpg") || extension.equals(".png")) {
+
+            BufferedImage image = ImageIO.read(
+                    new ByteArrayInputStream(fileBytes)
+            );
+
+            if (image == null ||
+                    image.getWidth() <= 0 ||
+                    image.getHeight() <= 0) {
+                throw new IllegalArgumentException(
+                        "Geçersiz veya bozuk fotoğraf dosyası."
+                );
+            }
+        }
+
+
+        // Klasör yoksa oluştur
+        Files.createDirectories(UPLOAD_DIRECTORY);
+
+        // Benzersiz dosya adı oluştur
+        String fileName = UUID.randomUUID() + extension;
+
+        Path targetPath = UPLOAD_DIRECTORY.resolve(fileName);
+
+        Files.write(
+                targetPath,
+                fileBytes,
+                StandardOpenOption.CREATE_NEW
+        );
+
+        return fileName;
+    }
+
+    // Dosya imzasına göre formatı belirle
+    private String detectExtension(byte[] bytes) {
+
+        // JPEG
+        if (bytes.length >= 3 &&
+                (bytes[0] & 0xFF) == 0xFF &&
+                (bytes[1] & 0xFF) == 0xD8 &&
+                (bytes[2] & 0xFF) == 0xFF) {
+            return ".jpg";
+        }
+
+        // PNG
+        byte[] pngSignature = {
+                (byte) 0x89, 0x50, 0x4E, 0x47,
+                0x0D, 0x0A, 0x1A, 0x0A
+        };
+
+        if (startsWith(bytes, pngSignature)) {
+            return ".png";
+        }
+
+        // WebP: RIFF....WEBP
+        if (bytes.length >= 12 &&
+                matchesText(bytes, 0, "RIFF") &&
+                matchesText(bytes, 8, "WEBP")) {
+            return ".webp";
+        }
+
+        return null;
+    }
+
+    private boolean startsWith(byte[] bytes, byte[] prefix) {
+        if (bytes.length < prefix.length) {
+            return false;
+        }
+
+        for (int i = 0; i < prefix.length; i++) {
+            if (bytes[i] != prefix[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean matchesText(
+            byte[] bytes, int offset, String text) {
+
+        if (bytes.length < offset + text.length()) {
+            return false;
+        }
+
+        for (int i = 0; i < text.length(); i++) {
+            if (bytes[offset + i] != (byte) text.charAt(i)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Kaydedilen fotoğraf dosyasını sil
+    public void deletePhoto(String fileName) throws IOException {
+
+        if (fileName == null ||
+                !fileName.matches(
+                        "[0-9a-fA-F-]{36}\\.(jpg|png|webp)"
+                )) {
+            throw new IllegalArgumentException(
+                    "Geçersiz fotoğraf dosyası adı."
+            );
+        }
+
+        Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
+
+        Files.deleteIfExists(filePath);
+    }
+
+    // Kaydedilmiş fotoğrafı oku
+    public byte[] readPhoto(String fileName) throws IOException {
+
+        if (fileName == null ||
+                !fileName.matches(
+                        "[0-9a-fA-F-]{36}\\.(jpg|png|webp)"
+                )) {
+            throw new IllegalArgumentException(
+                    "Geçersiz fotoğraf dosyası adı."
+            );
+        }
+
+        Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
+
+
+        if (!Files.isRegularFile(filePath)) {
+            throw new java.nio.file.NoSuchFileException(fileName);
+        }
+
+// Dosya boyutunu okumadan önce kontrol et
+        long fileSize = Files.size(filePath);
+
+        if (fileSize == 0 || fileSize > MAX_FILE_SIZE) {
+            throw new IOException(
+                    "Fotoğraf dosyasının boyutu geçersiz."
+            );
+        }
+
+// Okuma sırasında dosya büyürse de sınırı koru
+        try (InputStream inputStream = Files.newInputStream(filePath)) {
+
+            byte[] photoBytes = inputStream.readNBytes(
+                    (int) MAX_FILE_SIZE + 1
+            );
+
+            if (photoBytes.length > MAX_FILE_SIZE) {
+                throw new IOException(
+                        "Fotoğraf dosyası boyut sınırını aşıyor."
+                );
+            }
+
+            return photoBytes;
+        }
+
+    }
+
+
+}
