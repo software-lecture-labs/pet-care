@@ -24,6 +24,112 @@ document.addEventListener('DOMContentLoaded', function () {
   const addForm = document.getElementById('pet-add-form');
 
   if (!dialog || !closeButton) return;
+  function showToast(message, type = 'success') {
+    let container = null;
+
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'pet-toast-container';
+      container.className = 'pet-toast-container';
+      container.setAttribute('aria-live', 'polite');
+      const activeDialog = document.querySelector('dialog[open]');
+
+      const toastParent = type === 'success' ? document.body : activeDialog || document.body;
+
+      toastParent.appendChild(container);
+    }
+
+    const titles = {
+      success: 'İşlem tamamlandı!',
+      error: 'Bir sorun oluştu',
+      warning: 'Küçük bir hatırlatma',
+    };
+
+    const icons = {
+      success: '✓',
+      error: '!',
+      warning: 'i',
+    };
+
+    const toastType = titles[type] ? type : 'success';
+
+    const toast = document.createElement('div');
+    toast.className = `pet-toast pet-toast--${toastType}`;
+    toast.setAttribute('role', toastType === 'error' ? 'alert' : 'status');
+
+    const icon = document.createElement('span');
+    icon.className = 'pet-toast-icon';
+    icon.textContent = icons[toastType];
+    icon.setAttribute('aria-hidden', 'true');
+
+    const content = document.createElement('div');
+    content.className = 'pet-toast-content';
+
+    const title = document.createElement('strong');
+    title.className = 'pet-toast-title';
+    title.textContent = titles[toastType];
+
+    const description = document.createElement('span');
+    description.className = 'pet-toast-message';
+    description.textContent = message;
+
+    content.append(title, description);
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'pet-toast-close';
+    closeButton.textContent = '×';
+    closeButton.setAttribute('aria-label', 'Bildirimi kapat');
+
+    toast.append(icon, content, closeButton);
+    container.appendChild(toast);
+
+    const removeToast = () => toast.remove();
+
+    closeButton.addEventListener('click', removeToast);
+    setTimeout(removeToast, 4000);
+  }
+  function setupFormValidation(form) {
+    if (!form) return;
+
+    form.addEventListener(
+      'invalid',
+      function (event) {
+        const field = event.target;
+
+        event.preventDefault();
+
+        // Aynı formda birden fazla hatalı alan varsa
+        // yalnızca ilk alanın mesajını göster.
+        if (form.querySelector(':invalid') !== field) return;
+
+        let message = 'Lütfen bu alanı kontrol edin.';
+
+        if (field.validity.valueMissing) {
+          if (field.id.endsWith('-name')) {
+            message = 'Hayvanının adını girmeyi unutma.';
+          } else if (field.id.endsWith('-type')) {
+            message = 'Hayvanının türünü seçmelisin.';
+          } else {
+            message = 'Bu alanı doldurmalısın.';
+          }
+        } else if (field.validity.rangeUnderflow) {
+          message = 'Kilo değeri sıfırdan küçük olamaz.';
+        } else if (field.validity.stepMismatch) {
+          message = 'Lütfen geçerli bir kilo değeri gir.';
+        } else if (field.validity.tooLong) {
+          message = 'Girdiğin metin izin verilen uzunluğu aşıyor.';
+        }
+
+        showToast(message, 'warning');
+        field.focus();
+      },
+      true,
+    );
+  }
+
+  setupFormValidation(editForm);
+  setupFormValidation(addForm);
 
   // Profil penceresini aç
   function openPetProfile(pet) {
@@ -169,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const petId = editingPet.id;
 
     if (!Number.isInteger(petId) || petId <= 0) {
-      alert('Hayvanın kayıt numarası bulunamadı.');
+      showToast('Hayvanın kayıt numarası bulunamadı.', 'error');
       return;
     }
 
@@ -182,19 +288,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const notes = document.getElementById('pet-edit-notes').value.trim();
 
     if (!name || !type) {
-      alert('Hayvanın adı ve türü boş olamaz.');
+      showToast('Hayvanın adı ve türü boş olamaz.', 'error');
       return;
     }
 
     if (birthDate && !calculatePetAge(birthDate)) {
-      alert('Lütfen geçerli bir doğum tarihi girin.');
+      showToast('Lütfen geçerli bir doğum tarihi girin.', 'error');
       return;
     }
 
     const weight = weightValue === '' ? null : Number(weightValue);
 
     if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
-      alert('Kilo sıfırdan büyük olmalıdır.');
+      showToast('Kilo sıfırdan büyük olmalıdır.', 'error');
       return;
     }
 
@@ -222,14 +328,14 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       if (response.status === 401) {
-        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        showToast('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.', 'error');
         return;
       }
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Güncelleme hatası:', errorText);
-        alert('Hayvan bilgileri güncellenemedi.');
+        showToast('Hayvan bilgileri güncellenemedi.', 'error');
         return;
       }
 
@@ -240,10 +346,10 @@ document.addEventListener('DOMContentLoaded', function () {
       editingPet = null;
       editingCard = null;
 
-      alert('Hayvan bilgileri başarıyla güncellendi!');
+      showToast('Hayvan bilgileri başarıyla güncellendi!', 'success');
     } catch (error) {
       console.error('Güncelleme sırasında hata:', error);
-      alert('Sunucuya bağlanırken bir hata oluştu.');
+      showToast('Sunucuya bağlanırken bir hata oluştu.', 'error');
     } finally {
       submitButton.disabled = false;
     }
@@ -294,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const petId = petToDelete.id;
 
     if (!Number.isInteger(petId) || petId <= 0) {
-      alert('Hayvanın kayıt numarası bulunamadı.');
+      showToast('Hayvanın kayıt numarası bulunamadı.', 'error');
       return;
     }
 
@@ -308,14 +414,14 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       if (response.status === 401) {
-        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        showToast('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.', 'error');
         return;
       }
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Hayvan silme hatası:', errorText);
-        alert('Hayvan silinemedi. Lütfen tekrar deneyin.');
+        showToast('Hayvan silinemedi. Lütfen tekrar deneyin.', 'error');
         return;
       }
 
@@ -327,10 +433,10 @@ document.addEventListener('DOMContentLoaded', function () {
       petToDelete = null;
       cardToDelete = null;
 
-      alert('Hayvan başarıyla silindi!');
+      showToast('Hayvan başarıyla silindi!');
     } catch (error) {
       console.error('Silme sırasında hata:', error);
-      alert('Sunucuya bağlanırken bir hata oluştu.');
+      showToast('Sunucuya bağlanırken bir hata oluştu.', 'error');
     } finally {
       deleteConfirm.disabled = false;
     }
@@ -424,13 +530,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const allowedTypes = ['image/jpeg', 'image/png'];
 
       if (!allowedTypes.includes(file.type)) {
-        alert('Lütfen JPG veya PNG fotoğraf seçin.');
+        showToast('Lütfen JPG veya PNG fotoğraf seçin.', 'error');
         photoInput.value = '';
         return;
       }
 
       if (file.size === 0 || file.size > 5 * 1024 * 1024) {
-        alert("Fotoğraf 5 MB'tan büyük veya boş olamaz.");
+        showToast("Fotoğraf 5 MB'tan büyük veya boş olamaz.", 'error');
         photoInput.value = '';
         return;
       }
@@ -455,17 +561,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = await response.json();
 
         if (!response.ok) {
-          alert(result.message || 'Fotoğraf yüklenemedi.');
+          showToast(result.message || 'Fotoğraf yüklenemedi.', 'error');
           return;
         }
 
         // Güncel fotoğrafı veritabanından yeniden getir
         await loadPetsFromApi();
 
-        alert('Profil fotoğrafı başarıyla yüklendi!');
+        showToast('Profil fotoğrafı başarıyla yüklendi!');
       } catch (error) {
         console.error('Fotoğraf yükleme hatası:', error);
-        alert('Fotoğraf yüklenirken bir hata oluştu.');
+        showToast('Fotoğraf yüklenirken bir hata oluştu.', 'error');
       } finally {
         photoButton.disabled = false;
         photoInput.value = '';
@@ -503,19 +609,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const notes = document.getElementById('pet-add-notes').value.trim();
 
     if (!name || !type) {
-      alert('Hayvanın adını ve türünü girin.');
+      showToast('Hayvanın adını ve türünü girin.', 'error');
       return;
     }
 
     if (birthDate && !calculatePetAge(birthDate)) {
-      alert('Lütfen geçerli bir doğum tarihi girin.');
+      showToast('Lütfen geçerli bir doğum tarihi girin.', 'error');
       return;
     }
 
     const weight = weightValue === '' ? null : Number(weightValue);
 
     if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
-      alert('Kilo sıfırdan büyük olmalıdır.');
+      showToast('Kilo sıfırdan büyük olmalıdır.', 'error');
       return;
     }
 
@@ -542,14 +648,14 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       if (response.status === 401) {
-        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        showToast('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.', 'error');
         return;
       }
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Hayvan ekleme hatası:', errorText);
-        alert('Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.');
+        showToast('Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.', 'error');
         return;
       }
 
@@ -559,10 +665,10 @@ document.addEventListener('DOMContentLoaded', function () {
       addDialog.close();
       addForm.reset();
 
-      alert('Hayvanınız başarıyla kaydedildi!');
+      showToast('Hayvanınız başarıyla kaydedildi!');
     } catch (error) {
       console.error('Hayvan eklenirken hata:', error);
-      alert('Sunucuya bağlanırken bir hata oluştu.');
+      showToast('Sunucuya bağlanırken bir hata oluştu.', 'error');
     } finally {
       submitButton.disabled = false;
     }
