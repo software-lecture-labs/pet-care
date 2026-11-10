@@ -2,13 +2,12 @@
 // PETCARE - ORTAK ÜST ÇUBUK
 // ========================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
+  const topbar = document.querySelector('.topbar');
 
-    const topbar = document.querySelector(".topbar");
+  if (!topbar) return;
 
-    if (!topbar) return;
-
-    topbar.innerHTML = `
+  topbar.innerHTML = `
         <div class="search-wrapper">
 
             <div class="search-box">

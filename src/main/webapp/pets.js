@@ -2,692 +2,645 @@
 // PETCARE - HAYVANLARIM SAYFASI
 // ========================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
+  const pets = {};
 
+  const dialog = document.getElementById('pet-profile-dialog');
+  const closeButton = document.getElementById('pet-profile-close');
+  const profileButtons = document.querySelectorAll('.pets-profile-btn');
+  const editDialog = document.getElementById('pet-edit-dialog');
+  const editCloseButton = document.getElementById('pet-edit-close');
+  const editCancelButton = document.getElementById('pet-edit-cancel');
+  const editButtons = document.querySelectorAll('.pets-edit-btn');
+  const deleteButtons = document.querySelectorAll('.pets-delete-btn');
+  const editForm = document.getElementById('pet-edit-form');
+  let editingPet = null;
+  let editingCard = null;
+  // Yeni hayvan ekleme elemanları
+  const addButton = document.getElementById('pet-add-btn');
+  const addDialog = document.getElementById('pet-add-dialog');
+  const addCloseButton = document.getElementById('pet-add-close');
+  const addCancelButton = document.getElementById('pet-add-cancel');
+  const addForm = document.getElementById('pet-add-form');
 
-    const pets = {};
+  if (!dialog || !closeButton) return;
 
-    const dialog = document.getElementById("pet-profile-dialog");
-    const closeButton = document.getElementById("pet-profile-close");
-    const profileButtons = document.querySelectorAll(".pets-profile-btn");
-    const editDialog = document.getElementById("pet-edit-dialog");
-    const editCloseButton = document.getElementById("pet-edit-close");
-    const editCancelButton = document.getElementById("pet-edit-cancel");
-    const editButtons = document.querySelectorAll(".pets-edit-btn");
-    const deleteButtons = document.querySelectorAll(".pets-delete-btn");
-    const editForm = document.getElementById("pet-edit-form");
-    let editingPet = null;
-    let editingCard = null;
-    // Yeni hayvan ekleme elemanları
-    const addButton = document.getElementById("pet-add-btn");
-    const addDialog = document.getElementById("pet-add-dialog");
-    const addCloseButton = document.getElementById("pet-add-close");
-    const addCancelButton = document.getElementById("pet-add-cancel");
-    const addForm = document.getElementById("pet-add-form");
+  // Profil penceresini aç
+  function openPetProfile(pet) {
+    document.getElementById('pet-profile-title').textContent = pet.name + ' 🐾';
 
-    if (!dialog || !closeButton) return;
+    const avatarContainer = document.getElementById('pet-profile-avatar');
 
-    // Profil penceresini aç
-    function openPetProfile(pet) {
-        document.getElementById("pet-profile-title").textContent =
-            pet.name + " 🐾";
+    avatarContainer.replaceChildren();
 
-        const avatarContainer = document.getElementById("pet-profile-avatar");
+    if (pet.photo) {
+      const img = document.createElement('img');
 
-        avatarContainer.replaceChildren();
+      img.src = pet.photo;
+      img.alt = pet.name + ' profil fotoğrafı';
+      img.className = 'pet-uploaded-photo';
 
-        if (pet.photo) {
-            const img = document.createElement("img");
-
-            img.src = pet.photo;
-            img.alt = pet.name + " profil fotoğrafı";
-            img.className = "pet-uploaded-photo";
-
-            avatarContainer.appendChild(img);
-        } else {
-            avatarContainer.textContent = pet.avatar;
-        }
-
-        document.getElementById("pet-profile-name").textContent =
-            pet.name;
-
-        document.getElementById("pet-profile-type").textContent =
-            pet.type;
-
-        document.getElementById("pet-profile-age").textContent =
-            pet.age;
-        document.getElementById("pet-profile-breed").textContent =
-            pet.breed ?? "Belirtilmedi";
-
-        document.getElementById("pet-profile-gender").textContent =
-            pet.gender ?? "Belirtilmedi";
-
-        document.getElementById("pet-profile-birthdate").textContent =
-            pet.birthdate ?? "Belirtilmedi";
-
-        document.getElementById("pet-profile-weight").textContent =
-            pet.weight ?? "Belirtilmedi";
-
-        document.getElementById("pet-profile-notes").textContent =
-            pet.notes ?? "Belirtilmedi";
-
-        dialog.showModal();
+      avatarContainer.appendChild(img);
+    } else {
+      avatarContainer.textContent = pet.avatar;
     }
 
-    // Hayvan kartlarındaki butonlar
-    profileButtons.forEach(function (button) {
+    document.getElementById('pet-profile-name').textContent = pet.name;
 
-        button.addEventListener("click", function () {
+    document.getElementById('pet-profile-type').textContent = pet.type;
 
-            const card = button.closest(".pets-profile-card");
-            if (!card) return;
+    document.getElementById('pet-profile-age').textContent = pet.age;
+    document.getElementById('pet-profile-breed').textContent = pet.breed ?? 'Belirtilmedi';
 
-            const petId = Number(card.dataset.petId);
-            const pet = pets[petId];
+    document.getElementById('pet-profile-gender').textContent = pet.gender ?? 'Belirtilmedi';
 
-            if (pet) {
-                openPetProfile(pet);
-            }
-        });
+    document.getElementById('pet-profile-birthdate').textContent = pet.birthdate ?? 'Belirtilmedi';
+
+    document.getElementById('pet-profile-weight').textContent = pet.weight ?? 'Belirtilmedi';
+
+    document.getElementById('pet-profile-notes').textContent = pet.notes ?? 'Belirtilmedi';
+
+    dialog.showModal();
+  }
+
+  // Hayvan kartlarındaki butonlar
+  profileButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      const card = button.closest('.pets-profile-card');
+      if (!card) return;
+
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+
+      if (pet) {
+        openPetProfile(pet);
+      }
     });
+  });
 
-    // Kapatma butonu
-    closeButton.addEventListener("click", function () {
-        dialog.close();
+  // Kapatma butonu
+  closeButton.addEventListener('click', function () {
+    dialog.close();
+  });
+
+  // Pencerenin dışına tıklayınca kapat
+  dialog.addEventListener('click', function (event) {
+    if (event.target === dialog) {
+      dialog.close();
+    }
+  });
+  // ========================================
+  // HAYVAN BİLGİLERİNİ DÜZENLEME
+  // ========================================
+
+  // Düzenleme penceresini aç
+  editButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      const card = button.closest('.pets-profile-card');
+      if (!card) return;
+
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+      if (!pet) return;
+      editingPet = pet;
+      editingCard = card;
+
+      // Mevcut bilgileri forma doldur
+      document.getElementById('pet-edit-name').value = pet.name;
+      document.getElementById('pet-edit-type').value = pet.type;
+      document.getElementById('pet-edit-breed').value = pet.breed ?? '';
+      document.getElementById('pet-edit-gender').value = pet.gender ?? '';
+      document.getElementById('pet-edit-birthdate').value = pet.birthdate ?? '';
+      document.getElementById('pet-edit-weight').value = pet.weight ?? '';
+      document.getElementById('pet-edit-notes').value = pet.notes ?? '';
+
+      editDialog.showModal();
     });
+  });
 
-    // Pencerenin dışına tıklayınca kapat
-    dialog.addEventListener("click", function (event) {
-        if (event.target === dialog) {
-            dialog.close();
-        }
-    });
-    // ========================================
-// HAYVAN BİLGİLERİNİ DÜZENLEME
-// ========================================
+  // Düzenleme penceresini kapat
+  editCloseButton.addEventListener('click', function () {
+    editDialog.close();
+  });
 
-// Düzenleme penceresini aç
-    editButtons.forEach(function (button) {
+  // Vazgeç butonu
+  editCancelButton.addEventListener('click', function () {
+    editDialog.close();
+  });
 
-        button.addEventListener("click", function () {
+  // Pencerenin dışına tıklayınca kapat
+  editDialog.addEventListener('click', function (event) {
+    if (event.target === editDialog) {
+      editDialog.close();
+    }
+  });
 
-            const card = button.closest(".pets-profile-card");
-            if (!card) return;
+  function calculatePetAge(birthdate) {
+    if (!birthdate) return null;
 
-            const petId = Number(card.dataset.petId);
-            const pet = pets[petId];
-            if (!pet) return;
-            editingPet = pet;
-            editingCard = card;
+    const today = new Date();
+    const birth = new Date(birthdate + 'T00:00:00');
 
-            // Mevcut bilgileri forma doldur
-            document.getElementById("pet-edit-name").value = pet.name;
-            document.getElementById("pet-edit-type").value = pet.type;
-            document.getElementById("pet-edit-breed").value = pet.breed ?? "";
-            document.getElementById("pet-edit-gender").value = pet.gender ?? "";
-            document.getElementById("pet-edit-birthdate").value = pet.birthdate ?? "";
-            document.getElementById("pet-edit-weight").value = pet.weight ?? "";
-            document.getElementById("pet-edit-notes").value = pet.notes ?? "";
-
-            editDialog.showModal();
-        });
-
-    });
-
-// Düzenleme penceresini kapat
-    editCloseButton.addEventListener("click", function () {
-        editDialog.close();
-    });
-
-// Vazgeç butonu
-    editCancelButton.addEventListener("click", function () {
-        editDialog.close();
-    });
-
-// Pencerenin dışına tıklayınca kapat
-    editDialog.addEventListener("click", function (event) {
-        if (event.target === editDialog) {
-            editDialog.close();
-        }
-    });
-
-    function calculatePetAge(birthdate) {
-        if (!birthdate) return null;
-
-        const today = new Date();
-        const birth = new Date(birthdate + "T00:00:00");
-
-        if (Number.isNaN(birth.getTime()) || birth > today) {
-            return null;
-        }
-
-        let age = today.getFullYear() - birth.getFullYear();
-
-        const monthDifference = today.getMonth() - birth.getMonth();
-
-        if (
-            monthDifference < 0 ||
-            (monthDifference === 0 && today.getDate() < birth.getDate())
-        ) {
-            age--;
-        }
-
-        return `${age} yaşında`;
+    if (Number.isNaN(birth.getTime()) || birth > today) {
+      return null;
     }
 
-// ========================================
-// HAYVAN BİLGİLERİNİ KAYDET
-// ========================================
+    let age = today.getFullYear() - birth.getFullYear();
 
+    const monthDifference = today.getMonth() - birth.getMonth();
 
-    editForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
 
-        if (!editingPet || !editingCard) return;
+    return `${age} yaşında`;
+  }
 
-        // Hayvanı ismine göre değil, veritabanındaki ID'sine göre bul.
-        const petId = editingPet.id;
+  // ========================================
+  // HAYVAN BİLGİLERİNİ KAYDET
+  // ========================================
 
-        if (!Number.isInteger(petId) || petId <= 0) {
-            alert("Hayvanın kayıt numarası bulunamadı.");
-            return;
+  editForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if (!editingPet || !editingCard) return;
+
+    // Hayvanı ismine göre değil, veritabanındaki ID'sine göre bul.
+    const petId = editingPet.id;
+
+    if (!Number.isInteger(petId) || petId <= 0) {
+      alert('Hayvanın kayıt numarası bulunamadı.');
+      return;
+    }
+
+    const name = document.getElementById('pet-edit-name').value.trim();
+    const type = document.getElementById('pet-edit-type').value;
+    const breed = document.getElementById('pet-edit-breed').value.trim();
+    const gender = document.getElementById('pet-edit-gender').value;
+    const birthDate = document.getElementById('pet-edit-birthdate').value;
+    const weightValue = document.getElementById('pet-edit-weight').value;
+    const notes = document.getElementById('pet-edit-notes').value.trim();
+
+    if (!name || !type) {
+      alert('Hayvanın adı ve türü boş olamaz.');
+      return;
+    }
+
+    if (birthDate && !calculatePetAge(birthDate)) {
+      alert('Lütfen geçerli bir doğum tarihi girin.');
+      return;
+    }
+
+    const weight = weightValue === '' ? null : Number(weightValue);
+
+    if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
+      alert('Kilo sıfırdan büyük olmalıdır.');
+      return;
+    }
+
+    const petData = {
+      name: name,
+      type: type,
+      breed: breed || null,
+      gender: gender || null,
+      birthDate: birthDate || null,
+      weight: weight,
+      notes: notes || null,
+    };
+
+    const submitButton = editForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    try {
+      const response = await fetch(`api/pets/${petId}`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(petData),
+      });
+
+      if (response.status === 401) {
+        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Güncelleme hatası:', errorText);
+        alert('Hayvan bilgileri güncellenemedi.');
+        return;
+      }
+
+      // Güncel bilgileri yeniden veritabanından getir.
+      await loadPetsFromApi();
+
+      editDialog.close();
+      editingPet = null;
+      editingCard = null;
+
+      alert('Hayvan bilgileri başarıyla güncellendi!');
+    } catch (error) {
+      console.error('Güncelleme sırasında hata:', error);
+      alert('Sunucuya bağlanırken bir hata oluştu.');
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  // ========================================
+  // HAYVAN SİLME İŞLEMİ
+  // ========================================
+
+  const deleteDialog = document.getElementById('pet-delete-dialog');
+  const deleteName = document.getElementById('pet-delete-name');
+  const deleteCancel = document.getElementById('pet-delete-cancel');
+  const deleteConfirm = document.getElementById('pet-delete-confirm');
+
+  let petToDelete = null;
+  let cardToDelete = null;
+
+  // Silme onay penceresini aç
+  deleteButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      const card = button.closest('.pets-profile-card');
+      if (!card) return;
+
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+      if (!pet) return;
+
+      petToDelete = pet;
+      cardToDelete = card;
+
+      deleteName.textContent = pet.name;
+
+      deleteDialog.showModal();
+    });
+  });
+
+  // Vazgeç butonu
+  deleteCancel.addEventListener('click', function () {
+    deleteDialog.close();
+  });
+
+  // Silme işlemini onayla
+
+  deleteConfirm.addEventListener('click', async function () {
+    if (!petToDelete || !cardToDelete) return;
+
+    // Silinecek hayvanın veritabanındaki ID'si
+    const petId = petToDelete.id;
+
+    if (!Number.isInteger(petId) || petId <= 0) {
+      alert('Hayvanın kayıt numarası bulunamadı.');
+      return;
+    }
+
+    // İşlem devam ederken tekrar tıklanmasını önle
+    deleteConfirm.disabled = true;
+
+    try {
+      const response = await fetch(`api/pets/${petId}`, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+      });
+
+      if (response.status === 401) {
+        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Hayvan silme hatası:', errorText);
+        alert('Hayvan silinemedi. Lütfen tekrar deneyin.');
+        return;
+      }
+
+      // Silme başarılıysa listeyi veritabanından yenile
+      await loadPetsFromApi();
+
+      deleteDialog.close();
+
+      petToDelete = null;
+      cardToDelete = null;
+
+      alert('Hayvan başarıyla silindi!');
+    } catch (error) {
+      console.error('Silme sırasında hata:', error);
+      alert('Sunucuya bağlanırken bir hata oluştu.');
+    } finally {
+      deleteConfirm.disabled = false;
+    }
+  });
+
+  // Pencere kapandığında seçimi temizle
+  deleteDialog.addEventListener('close', function () {
+    petToDelete = null;
+    cardToDelete = null;
+  });
+
+  // Pencerenin dışına tıklayınca kapat
+  deleteDialog.addEventListener('click', function (event) {
+    if (event.target === deleteDialog) {
+      deleteDialog.close();
+    }
+  });
+  // ========================================
+  // YENİ HAYVAN EKLEME
+  // ========================================
+
+  // Yeni Hayvan Ekle butonu
+  addButton.addEventListener('click', function () {
+    addForm.reset();
+    addDialog.showModal();
+  });
+
+  // X butonu
+  addCloseButton.addEventListener('click', function () {
+    addDialog.close();
+  });
+
+  // Vazgeç butonu
+  addCancelButton.addEventListener('click', function () {
+    addDialog.close();
+  });
+
+  // Pencerenin dışına tıklayınca kapat
+  addDialog.addEventListener('click', function (event) {
+    if (event.target === addDialog) {
+      addDialog.close();
+    }
+  });
+  // ========================================
+  // YENİ HAYVAN KARTLARI İÇİN BUTON BAĞLANTILARI
+  // ========================================
+
+  function setupNewPetCard(card) {
+    // Profili Gör
+    card.querySelector('.pets-profile-btn').addEventListener('click', function () {
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+
+      if (pet) {
+        openPetProfile(pet);
+      }
+    });
+
+    // Bilgileri Düzenle
+    card.querySelector('.pets-edit-btn').addEventListener('click', function () {
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+      if (!pet) return;
+
+      editingPet = pet;
+      editingCard = card;
+
+      document.getElementById('pet-edit-name').value = pet.name;
+      document.getElementById('pet-edit-type').value = pet.type;
+      document.getElementById('pet-edit-breed').value = pet.breed ?? '';
+      document.getElementById('pet-edit-gender').value = pet.gender ?? '';
+      document.getElementById('pet-edit-birthdate').value = pet.birthdate ?? '';
+      document.getElementById('pet-edit-weight').value = pet.weight ?? '';
+      document.getElementById('pet-edit-notes').value = pet.notes ?? '';
+
+      editDialog.showModal();
+    });
+
+    // Profil Fotoğrafı
+    const photoButton = card.querySelector('.pets-photo-btn');
+    const photoInput = card.querySelector('.pets-photo-input');
+
+    photoButton.addEventListener('click', function () {
+      photoInput.click();
+    });
+
+    photoInput.addEventListener('change', async function () {
+      const file = photoInput.files[0];
+      if (!file) return;
+
+      const allowedTypes = ['image/jpeg', 'image/png'];
+
+      if (!allowedTypes.includes(file.type)) {
+        alert('Lütfen JPG veya PNG fotoğraf seçin.');
+        photoInput.value = '';
+        return;
+      }
+
+      if (file.size === 0 || file.size > 5 * 1024 * 1024) {
+        alert("Fotoğraf 5 MB'tan büyük veya boş olamaz.");
+        photoInput.value = '';
+        return;
+      }
+
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+
+      if (!pet) return;
+
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      photoButton.disabled = true;
+
+      try {
+        const response = await fetch(`api/pet-photos/${petId}`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          alert(result.message || 'Fotoğraf yüklenemedi.');
+          return;
         }
 
-        const name = document.getElementById("pet-edit-name").value.trim();
-        const type = document.getElementById("pet-edit-type").value;
-        const breed = document.getElementById("pet-edit-breed").value.trim();
-        const gender = document.getElementById("pet-edit-gender").value;
-        const birthDate = document.getElementById("pet-edit-birthdate").value;
-        const weightValue = document.getElementById("pet-edit-weight").value;
-        const notes = document.getElementById("pet-edit-notes").value.trim();
+        // Güncel fotoğrafı veritabanından yeniden getir
+        await loadPetsFromApi();
 
-        if (!name || !type) {
-            alert("Hayvanın adı ve türü boş olamaz.");
-            return;
-        }
+        alert('Profil fotoğrafı başarıyla yüklendi!');
+      } catch (error) {
+        console.error('Fotoğraf yükleme hatası:', error);
+        alert('Fotoğraf yüklenirken bir hata oluştu.');
+      } finally {
+        photoButton.disabled = false;
+        photoInput.value = '';
+      }
+    });
 
-        if (birthDate && !calculatePetAge(birthDate)) {
-            alert("Lütfen geçerli bir doğum tarihi girin.");
-            return;
-        }
+    // Hayvanı Sil
+    card.querySelector('.pets-delete-btn').addEventListener('click', function () {
+      const petId = Number(card.dataset.petId);
+      const pet = pets[petId];
+      if (!pet) return;
 
-        const weight = weightValue === "" ? null : Number(weightValue);
+      petToDelete = pet;
+      cardToDelete = card;
 
-        if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
-            alert("Kilo sıfırdan büyük olmalıdır.");
-            return;
-        }
+      deleteName.textContent = pet.name;
+      deleteDialog.showModal();
+    });
+  }
+  // ========================================
+  // YENİ HAYVANI KAYDET VE KART OLUŞTUR
+  // ========================================
 
-        const petData = {
-            name: name,
-            type: type,
-            breed: breed || null,
-            gender: gender || null,
-            birthDate: birthDate || null,
-            weight: weight,
-            notes: notes || null
+  addForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const submitButton = addForm.querySelector('button[type="submit"]');
+
+    const name = document.getElementById('pet-add-name').value.trim();
+    const type = document.getElementById('pet-add-type').value;
+    const breed = document.getElementById('pet-add-breed').value.trim();
+    const gender = document.getElementById('pet-add-gender').value;
+    const birthDate = document.getElementById('pet-add-birthdate').value;
+    const weightValue = document.getElementById('pet-add-weight').value;
+    const notes = document.getElementById('pet-add-notes').value.trim();
+
+    if (!name || !type) {
+      alert('Hayvanın adını ve türünü girin.');
+      return;
+    }
+
+    if (birthDate && !calculatePetAge(birthDate)) {
+      alert('Lütfen geçerli bir doğum tarihi girin.');
+      return;
+    }
+
+    const weight = weightValue === '' ? null : Number(weightValue);
+
+    if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
+      alert('Kilo sıfırdan büyük olmalıdır.');
+      return;
+    }
+
+    const petData = {
+      name: name,
+      type: type,
+      breed: breed || null,
+      gender: gender || null,
+      birthDate: birthDate || null,
+      weight: weight,
+      notes: notes || null,
+    };
+
+    submitButton.disabled = true;
+
+    try {
+      const response = await fetch('api/pets', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(petData),
+      });
+
+      if (response.status === 401) {
+        alert('Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Hayvan ekleme hatası:', errorText);
+        alert('Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.');
+        return;
+      }
+
+      // Veritabanına kaydedildikten sonra listeyi yenile.
+      await loadPetsFromApi();
+
+      addDialog.close();
+      addForm.reset();
+
+      alert('Hayvanınız başarıyla kaydedildi!');
+    } catch (error) {
+      console.error('Hayvan eklenirken hata:', error);
+      alert('Sunucuya bağlanırken bir hata oluştu.');
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  // ========================================
+  // HAYVANLARI VERİTABANINDAN GETİR
+  // ========================================
+
+  async function loadPetsFromApi() {
+    const grid = document.querySelector('.pets-grid');
+
+    if (!grid) return;
+
+    grid.textContent = 'Hayvanlar yükleniyor...';
+
+    try {
+      const response = await fetch('api/pets', {
+        credentials: 'same-origin',
+      });
+
+      if (response.status === 401) {
+        grid.textContent = 'Hayvanlarınızı görmek için lütfen giriş yapın.';
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Hayvanlar yüklenemedi.');
+      }
+
+      const apiPets = await response.json();
+      Object.keys(pets).forEach((id) => delete pets[id]);
+
+      grid.replaceChildren();
+
+      if (apiPets.length === 0) {
+        grid.textContent = 'Henüz kayıtlı hayvanınız yok. Yeni bir hayvan ekleyebilirsiniz.';
+        return;
+      }
+
+      const avatars = {
+        Kedi: '🐱',
+        Köpek: '🐶',
+        Kuş: '🐦',
+        Diğer: '🐾',
+      };
+
+      const imageColors = {
+        Kedi: 'pets-cat-image',
+        Köpek: 'pets-dog-image',
+        Kuş: 'pets-bird-image',
+        Diğer: 'pets-other-image',
+      };
+
+      apiPets.forEach((apiPet) => {
+        const pet = {
+          id: apiPet.id,
+          name: apiPet.name,
+          type: apiPet.type,
+          breed: apiPet.breed,
+          gender: apiPet.gender,
+          birthdate: apiPet.birthDate,
+          weight: apiPet.weight,
+          notes: apiPet.notes,
+          age: calculatePetAge(apiPet.birthDate) || 'Belirtilmedi',
+          avatar: avatars[apiPet.type] || '🐾',
+          photo: apiPet.photoPath ? `api/pet-photos/${apiPet.id}` : null,
         };
 
-        const submitButton = editForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
+        pets[pet.id] = pet;
 
-        try {
-            const response = await fetch(`api/pets/${petId}`, {
-                method: "PUT",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(petData)
-            });
+        const card = document.createElement('article');
+        card.className = 'pets-profile-card';
+        card.dataset.petId = String(pet.id);
 
-            if (response.status === 401) {
-                alert("Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.");
-                return;
-            }
+        const imageColor = imageColors[pet.type] || 'pets-other-image';
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Güncelleme hatası:", errorText);
-                alert("Hayvan bilgileri güncellenemedi.");
-                return;
-            }
-
-            // Güncel bilgileri yeniden veritabanından getir.
-            await loadPetsFromApi();
-
-            editDialog.close();
-            editingPet = null;
-            editingCard = null;
-
-            alert("Hayvan bilgileri başarıyla güncellendi!");
-
-        } catch (error) {
-            console.error("Güncelleme sırasında hata:", error);
-            alert("Sunucuya bağlanırken bir hata oluştu.");
-        } finally {
-            submitButton.disabled = false;
-        }
-    });
-
-     // ========================================
-    // HAYVAN SİLME İŞLEMİ
-    // ========================================
-
-    const deleteDialog = document.getElementById("pet-delete-dialog");
-    const deleteName = document.getElementById("pet-delete-name");
-    const deleteCancel = document.getElementById("pet-delete-cancel");
-    const deleteConfirm = document.getElementById("pet-delete-confirm");
-
-    let petToDelete = null;
-    let cardToDelete = null;
-
-// Silme onay penceresini aç
-    deleteButtons.forEach(function (button) {
-
-        button.addEventListener("click", function () {
-
-            const card = button.closest(".pets-profile-card");
-            if (!card) return;
-
-            const petId = Number(card.dataset.petId);
-            const pet = pets[petId];
-            if (!pet) return;
-
-            petToDelete = pet;
-            cardToDelete = card;
-
-            deleteName.textContent = pet.name;
-
-            deleteDialog.showModal();
-        });
-
-    });
-
-// Vazgeç butonu
-    deleteCancel.addEventListener("click", function () {
-        deleteDialog.close();
-    });
-
-// Silme işlemini onayla
-
-    deleteConfirm.addEventListener("click", async function () {
-
-        if (!petToDelete || !cardToDelete) return;
-
-        // Silinecek hayvanın veritabanındaki ID'si
-        const petId = petToDelete.id;
-
-        if (!Number.isInteger(petId) || petId <= 0) {
-            alert("Hayvanın kayıt numarası bulunamadı.");
-            return;
-        }
-
-        // İşlem devam ederken tekrar tıklanmasını önle
-        deleteConfirm.disabled = true;
-
-        try {
-            const response = await fetch(`api/pets/${petId}`, {
-                method: "DELETE",
-                credentials: "same-origin"
-            });
-
-            if (response.status === 401) {
-                alert("Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.");
-                return;
-            }
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Hayvan silme hatası:", errorText);
-                alert("Hayvan silinemedi. Lütfen tekrar deneyin.");
-                return;
-            }
-
-            // Silme başarılıysa listeyi veritabanından yenile
-            await loadPetsFromApi();
-
-            deleteDialog.close();
-
-            petToDelete = null;
-            cardToDelete = null;
-
-            alert("Hayvan başarıyla silindi!");
-
-        } catch (error) {
-            console.error("Silme sırasında hata:", error);
-            alert("Sunucuya bağlanırken bir hata oluştu.");
-        } finally {
-            deleteConfirm.disabled = false;
-        }
-    });
-
-
-// Pencere kapandığında seçimi temizle
-    deleteDialog.addEventListener("close", function () {
-        petToDelete = null;
-        cardToDelete = null;
-    });
-
-// Pencerenin dışına tıklayınca kapat
-    deleteDialog.addEventListener("click", function (event) {
-        if (event.target === deleteDialog) {
-            deleteDialog.close();
-        }
-    });
-    // ========================================
-// YENİ HAYVAN EKLEME
-// ========================================
-
-// Yeni Hayvan Ekle butonu
-    addButton.addEventListener("click", function () {
-        addForm.reset();
-        addDialog.showModal();
-    });
-
-// X butonu
-    addCloseButton.addEventListener("click", function () {
-        addDialog.close();
-    });
-
-// Vazgeç butonu
-    addCancelButton.addEventListener("click", function () {
-        addDialog.close();
-    });
-
-// Pencerenin dışına tıklayınca kapat
-    addDialog.addEventListener("click", function (event) {
-        if (event.target === addDialog) {
-            addDialog.close();
-        }
-    });
-    // ========================================
-// YENİ HAYVAN KARTLARI İÇİN BUTON BAĞLANTILARI
-// ========================================
-
-    function setupNewPetCard(card) {
-
-        // Profili Gör
-        card.querySelector(".pets-profile-btn")
-            .addEventListener("click", function () {
-
-                const petId = Number(card.dataset.petId);
-                const pet = pets[petId];
-
-                if (pet) {
-                    openPetProfile(pet);
-                }
-            });
-
-        // Bilgileri Düzenle
-        card.querySelector(".pets-edit-btn")
-            .addEventListener("click", function () {
-
-                const petId = Number(card.dataset.petId);
-                const pet = pets[petId];
-                if (!pet) return;
-
-                editingPet = pet;
-                editingCard = card;
-
-                document.getElementById("pet-edit-name").value = pet.name;
-                document.getElementById("pet-edit-type").value = pet.type;
-                document.getElementById("pet-edit-breed").value = pet.breed ?? "";
-                document.getElementById("pet-edit-gender").value = pet.gender ?? "";
-                document.getElementById("pet-edit-birthdate").value = pet.birthdate ?? "";
-                document.getElementById("pet-edit-weight").value = pet.weight ?? "";
-                document.getElementById("pet-edit-notes").value = pet.notes ?? "";
-
-                editDialog.showModal();
-            });
-
-        // Profil Fotoğrafı
-        const photoButton = card.querySelector(".pets-photo-btn");
-        const photoInput = card.querySelector(".pets-photo-input");
-
-        photoButton.addEventListener("click", function () {
-            photoInput.click();
-        });
-
-
-        photoInput.addEventListener("change", async function () {
-
-            const file = photoInput.files[0];
-            if (!file) return;
-
-            const allowedTypes = ["image/jpeg", "image/png"];
-
-            if (!allowedTypes.includes(file.type)) {
-                alert("Lütfen JPG veya PNG fotoğraf seçin.");
-                photoInput.value = "";
-                return;
-            }
-
-            if (file.size === 0 || file.size > 5 * 1024 * 1024) {
-                alert("Fotoğraf 5 MB'tan büyük veya boş olamaz.");
-                photoInput.value = "";
-                return;
-            }
-
-            const petId = Number(card.dataset.petId);
-            const pet = pets[petId];
-
-            if (!pet) return;
-
-            const formData = new FormData();
-            formData.append("photo", file);
-
-            photoButton.disabled = true;
-
-            try {
-                const response = await fetch(`api/pet-photos/${petId}`, {
-                    method: "POST",
-                    credentials: "same-origin",
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    alert(result.message || "Fotoğraf yüklenemedi.");
-                    return;
-                }
-
-                // Güncel fotoğrafı veritabanından yeniden getir
-                await loadPetsFromApi();
-
-                alert("Profil fotoğrafı başarıyla yüklendi!");
-
-            } catch (error) {
-                console.error("Fotoğraf yükleme hatası:", error);
-                alert("Fotoğraf yüklenirken bir hata oluştu.");
-
-            } finally {
-                photoButton.disabled = false;
-                photoInput.value = "";
-            }
-        });
-
-
-        // Hayvanı Sil
-        card.querySelector(".pets-delete-btn")
-            .addEventListener("click", function () {
-
-                const petId = Number(card.dataset.petId);
-                const pet = pets[petId];
-                if (!pet) return;
-
-                petToDelete = pet;
-                cardToDelete = card;
-
-                deleteName.textContent = pet.name;
-                deleteDialog.showModal();
-            });
-    }
-    // ========================================
-// YENİ HAYVANI KAYDET VE KART OLUŞTUR
-// ========================================
-
-
-    addForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const submitButton = addForm.querySelector('button[type="submit"]');
-
-        const name = document.getElementById("pet-add-name").value.trim();
-        const type = document.getElementById("pet-add-type").value;
-        const breed = document.getElementById("pet-add-breed").value.trim();
-        const gender = document.getElementById("pet-add-gender").value;
-        const birthDate = document.getElementById("pet-add-birthdate").value;
-        const weightValue = document.getElementById("pet-add-weight").value;
-        const notes = document.getElementById("pet-add-notes").value.trim();
-
-        if (!name || !type) {
-            alert("Hayvanın adını ve türünü girin.");
-            return;
-        }
-
-        if (birthDate && !calculatePetAge(birthDate)) {
-            alert("Lütfen geçerli bir doğum tarihi girin.");
-            return;
-        }
-
-        const weight = weightValue === "" ? null : Number(weightValue);
-
-        if (weight !== null && (!Number.isFinite(weight) || weight <= 0)) {
-            alert("Kilo sıfırdan büyük olmalıdır.");
-            return;
-        }
-
-        const petData = {
-            name: name,
-            type: type,
-            breed: breed || null,
-            gender: gender || null,
-            birthDate: birthDate || null,
-            weight: weight,
-            notes: notes || null
-        };
-
-        submitButton.disabled = true;
-
-        try {
-            const response = await fetch("api/pets", {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(petData)
-            });
-
-            if (response.status === 401) {
-                alert("Oturumunuz sona ermiş. Lütfen tekrar giriş yapın.");
-                return;
-            }
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Hayvan ekleme hatası:", errorText);
-                alert("Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.");
-                return;
-            }
-
-            // Veritabanına kaydedildikten sonra listeyi yenile.
-            await loadPetsFromApi();
-
-            addDialog.close();
-            addForm.reset();
-
-            alert("Hayvanınız başarıyla kaydedildi!");
-
-        } catch (error) {
-            console.error("Hayvan eklenirken hata:", error);
-            alert("Sunucuya bağlanırken bir hata oluştu.");
-        } finally {
-            submitButton.disabled = false;
-        }
-    });
-
-
-    // ========================================
-    // HAYVANLARI VERİTABANINDAN GETİR
-    // ========================================
-
-    async function loadPetsFromApi() {
-        const grid = document.querySelector(".pets-grid");
-
-        if (!grid) return;
-
-        grid.textContent = "Hayvanlar yükleniyor...";
-
-        try {
-            const response = await fetch("api/pets", {
-                credentials: "same-origin"
-            });
-
-            if (response.status === 401) {
-                grid.textContent =
-                    "Hayvanlarınızı görmek için lütfen giriş yapın.";
-                return;
-            }
-
-            if (!response.ok) {
-                throw new Error("Hayvanlar yüklenemedi.");
-            }
-
-            const apiPets = await response.json();
-            Object.keys(pets).forEach(id => delete pets[id]);
-
-            grid.replaceChildren();
-
-            if (apiPets.length === 0) {
-                grid.textContent =
-                    "Henüz kayıtlı hayvanınız yok. Yeni bir hayvan ekleyebilirsiniz.";
-                return;
-            }
-
-            const avatars = {
-                Kedi: "🐱",
-                Köpek: "🐶",
-                Kuş: "🐦",
-                Diğer: "🐾"
-            };
-
-            const imageColors = {
-                Kedi: "pets-cat-image",
-                Köpek: "pets-dog-image",
-                Kuş: "pets-bird-image",
-                Diğer: "pets-other-image"
-            };
-
-            apiPets.forEach(apiPet => {
-                const pet = {
-                    id: apiPet.id,
-                    name: apiPet.name,
-                    type: apiPet.type,
-                    breed: apiPet.breed,
-                    gender: apiPet.gender,
-                    birthdate: apiPet.birthDate,
-                    weight: apiPet.weight,
-                    notes: apiPet.notes,
-                    age: calculatePetAge(apiPet.birthDate) || "Belirtilmedi",
-                    avatar: avatars[apiPet.type] || "🐾",
-                    photo: apiPet.photoPath
-                        ? `api/pet-photos/${apiPet.id}`
-                        : null
-                };
-
-                pets[pet.id] = pet;
-
-                const card = document.createElement("article");
-                card.className = "pets-profile-card";
-                card.dataset.petId = String(pet.id);
-
-                const imageColor =
-                    imageColors[pet.type] || "pets-other-image";
-
-                card.innerHTML = `
+        card.innerHTML = `
                     <div class="pets-card-image ${imageColor}">
                         <span></span>
                     </div>
@@ -735,59 +688,50 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 `;
 
-                card.querySelector(".pets-card-title h3").textContent =
-                    pet.name;
+        card.querySelector('.pets-card-title h3').textContent = pet.name;
 
-                card.querySelector(".pets-type-badge").textContent =
-                    pet.type;
+        card.querySelector('.pets-type-badge').textContent = pet.type;
 
-                card.querySelector(".pets-breed").textContent =
-                    pet.breed || pet.type;
+        card.querySelector('.pets-breed').textContent = pet.breed || pet.type;
 
-                card.querySelector(".pets-details span").textContent =
-                    "🎂 " + pet.age;
+        card.querySelector('.pets-details span').textContent = '🎂 ' + pet.age;
 
+        const imageContainer = card.querySelector('.pets-card-image');
+        const avatarSpan = imageContainer.querySelector('span');
 
-                const imageContainer = card.querySelector(".pets-card-image");
-                const avatarSpan = imageContainer.querySelector("span");
+        avatarSpan.textContent = pet.avatar;
 
-                avatarSpan.textContent = pet.avatar;
+        if (pet.photo) {
+          const img = document.createElement('img');
 
-                if (pet.photo) {
-                    const img = document.createElement("img");
+          img.src = pet.photo;
+          img.alt = pet.name + ' profil fotoğrafı';
 
-                    img.src = pet.photo;
-                    img.alt = pet.name + " profil fotoğrafı";
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+          img.style.display = 'block';
 
-                    img.style.width = "100%";
-                    img.style.height = "100%";
-                    img.style.objectFit = "cover";
-                    img.style.display = "block";
+          img.onload = () => {
+            avatarSpan.style.display = 'none';
+          };
 
-                    img.onload = () => {
-                        avatarSpan.style.display = "none";
-                    };
+          img.onerror = () => {
+            img.remove();
+            avatarSpan.style.display = '';
+          };
 
-                    img.onerror = () => {
-                        img.remove();
-                        avatarSpan.style.display = "";
-                    };
-
-                    imageContainer.appendChild(img);
-                }
-
-
-                setupNewPetCard(card);
-                grid.appendChild(card);
-            });
-
-        } catch (error) {
-            console.error("Hayvanlar yüklenirken hata:", error);
-            grid.textContent =
-                "Hayvanlar yüklenirken bir hata oluştu.";
+          imageContainer.appendChild(img);
         }
+
+        setupNewPetCard(card);
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Hayvanlar yüklenirken hata:', error);
+      grid.textContent = 'Hayvanlar yüklenirken bir hata oluştu.';
     }
+  }
 
-    loadPetsFromApi();
-
+  loadPetsFromApi();
 });

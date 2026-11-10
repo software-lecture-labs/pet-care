@@ -1,708 +1,708 @@
 /* PETCARE — GENEL TASARIM */
 :root {
-    --primary: #8564d8;
-    --primary-dark: #6749b4;
-    --primary-light: #f0eaff;
-    --background: #f8f7fc;
-    --text: #302b42;
-    --muted: #827c92;
-    --white: #ffffff;
-    --border: #eeeaf5;
-    --shadow: 0 8px 28px rgba(80, 60, 130, 0.08);
+  --primary: #8564d8;
+  --primary-dark: #6749b4;
+  --primary-light: #f0eaff;
+  --background: #f8f7fc;
+  --text: #302b42;
+  --muted: #827c92;
+  --white: #ffffff;
+  --border: #eeeaf5;
+  --shadow: 0 8px 28px rgba(80, 60, 130, 0.08);
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    color: var(--text);
-    background: var(--background);
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: var(--text);
+  background: var(--background);
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 button,
 input {
-    font: inherit;
+  font: inherit;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* SAYFA YAPISI */
 .app-container {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 
 /* SOL MENÜ */
 .sidebar {
-    width: 255px;
-    min-width: 255px;
-    min-height: 100vh;
-    background: var(--white);
-    border-right: 1px solid var(--border);
-    padding: 30px 18px;
-    display: flex;
-    flex-direction: column;
+  width: 255px;
+  min-width: 255px;
+  min-height: 100vh;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  padding: 30px 18px;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
-    font-size: 27px;
-    font-weight: 800;
-    color: var(--primary);
-    padding: 0 15px 32px;
+  font-size: 27px;
+  font-weight: 800;
+  color: var(--primary);
+  padding: 0 15px 32px;
 }
 
 .sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .menu-item {
-    padding: 13px 15px;
-    border-radius: 12px;
-    font-size: 14px;
-    color: #686176;
-    transition: 0.2s;
+  padding: 13px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #686176;
+  transition: 0.2s;
 }
 
 .menu-item:hover {
-    background: #f6f2ff;
-    color: var(--primary-dark);
+  background: #f6f2ff;
+  color: var(--primary-dark);
 }
 
 .menu-item.active {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-weight: 700;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
 }
 
 .sidebar-footer {
-    margin-top: auto;
-    padding: 25px 12px 5px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.7;
+  margin-top: auto;
+  padding: 25px 12px 5px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .footer-paw {
-    font-size: 26px;
-    margin-top: 10px;
+  font-size: 26px;
+  margin-top: 10px;
 }
 
 /* ANA İÇERİK */
 .main-content {
-    flex: 1;
-    min-width: 0;
-    padding: 25px 38px 55px;
-    max-width: 1600px;
-    margin: 0 auto;
+  flex: 1;
+  min-width: 0;
+  padding: 25px 38px 55px;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 /* ÜST BAR */
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
 .search-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 13px 18px;
-    width: 430px;
-    max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 13px 18px;
+  width: 430px;
+  max-width: 100%;
 }
 
 .search-box input {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 13px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
 }
 
 .topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .notification-btn {
-    background: var(--white);
-    border: 1px solid var(--border);
-    width: 43px;
-    height: 43px;
-    border-radius: 50%;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .avatar {
-    display: grid;
-    place-items: center;
-    width: 43px;
-    height: 43px;
-    background: #f8e6f1;
-    border-radius: 50%;
-    font-size: 23px;
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  background: #f8e6f1;
+  border-radius: 50%;
+  font-size: 23px;
 }
 
 .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .user-info strong {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .user-info small {
-    color: var(--muted);
-    font-size: 11px;
+  color: var(--muted);
+  font-size: 11px;
 }
 
 /* KARŞILAMA ALANI */
 .welcome-banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 190px;
-    padding: 32px 40px;
-    border-radius: 22px;
-    background: linear-gradient(110deg, #e9ddff, #f9e8f3);
-    margin-bottom: 35px;
-    overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 190px;
+  padding: 32px 40px;
+  border-radius: 22px;
+  background: linear-gradient(110deg, #e9ddff, #f9e8f3);
+  margin-bottom: 35px;
+  overflow: hidden;
 }
 
 .today-date {
-    font-size: 13px;
-    color: var(--primary-dark);
-    font-weight: 600;
+  font-size: 13px;
+  color: var(--primary-dark);
+  font-weight: 600;
 }
 
 .welcome-text h1 {
-    margin: 12px 0;
-    font-size: 30px;
+  margin: 12px 0;
+  font-size: 30px;
 }
 
 .welcome-text > p:last-child {
-    color: #756b87;
-    margin-bottom: 0;
+  color: #756b87;
+  margin-bottom: 0;
 }
 
 .welcome-animals {
-    font-size: 85px;
-    white-space: nowrap;
+  font-size: 85px;
+  white-space: nowrap;
 }
 
 /* ORTAK BÖLÜMLER */
 .section {
-    margin-bottom: 34px;
+  margin-bottom: 34px;
 }
 
 .section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
 }
 
 h2 {
-    font-size: 20px;
-    margin: 0 0 18px;
+  font-size: 20px;
+  margin: 0 0 18px;
 }
 
 .section-heading h2 {
-    margin: 0;
+  margin: 0;
 }
 
 .view-all {
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 600;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .view-all:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* HAYVAN KARTLARI */
 .pet-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
 }
 
 .pet-card {
-    background: var(--white);
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .pet-image {
-    height: 180px;
-    display: grid;
-    place-items: center;
-    font-size: 90px;
+  height: 180px;
+  display: grid;
+  place-items: center;
+  font-size: 90px;
 }
 
 .cat-image {
-    background: linear-gradient(135deg, #f9e7ee, #f5d5e3);
+  background: linear-gradient(135deg, #f9e7ee, #f5d5e3);
 }
 
 .dog-image {
-    background: linear-gradient(135deg, #e8e0ff, #d7c9f8);
+  background: linear-gradient(135deg, #e8e0ff, #d7c9f8);
 }
 
 .pet-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
 }
 
 .pet-info h3 {
-    margin: 0 0 6px;
-    font-size: 17px;
+  margin: 0 0 6px;
+  font-size: 17px;
 }
 
 .pet-info p {
-    margin: 0;
-    font-size: 13px;
-    color: var(--muted);
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .round-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
 
-    color: var(--primary);
-    background: var(--primary-light);
-    text-decoration: none;
-    font-size: 16px;
-    line-height: 1;
+  color: var(--primary);
+  background: var(--primary-light);
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 /* RANDEVULAR VE HATIRLATICILAR */
 .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-    margin-bottom: 35px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-bottom: 35px;
 }
 
 .dashboard-card {
-    background: var(--white);
-    padding: 24px;
-    border-radius: 18px;
-    box-shadow: var(--shadow);
+  background: var(--white);
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
 }
 
 .dashboard-card h2 {
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .appointment-details {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .appointment-icon,
 .reminder-icon {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    background: #f0eaff;
-    border-radius: 13px;
-    font-size: 25px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  background: #f0eaff;
+  border-radius: 13px;
+  font-size: 25px;
 }
 
 .appointment-info h3,
 .reminder-item h3 {
-    font-size: 14px;
-    margin: 3px 0 9px;
+  font-size: 14px;
+  margin: 3px 0 9px;
 }
 
 .appointment-info p,
 .reminder-item p {
-    font-size: 12px;
-    color: var(--muted);
-    margin: 7px 0;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 7px 0;
 }
 
 .reminder-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 13px 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 13px 0;
 }
 
 .reminder-item + .reminder-item {
-    border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border);
 }
 
 /* HIZLI İŞLEMLER */
 .action-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .action-card {
-    position: relative;
-    min-height: 165px;
-    padding: 22px;
-    border-radius: 17px;
-    transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  min-height: 165px;
+  padding: 22px;
+  border-radius: 17px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .action-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
 }
 
 .action-card.purple {
-    background: #eee6ff;
+  background: #eee6ff;
 }
 
 .action-card.pink {
-    background: #ffe9f1;
+  background: #ffe9f1;
 }
 
 .action-card.blue {
-    background: #e6f2ff;
+  background: #e6f2ff;
 }
 
 .action-card.orange {
-    background: #fff0e2;
+  background: #fff0e2;
 }
 
 .action-icon {
-    font-size: 28px;
-    margin-bottom: 15px;
+  font-size: 28px;
+  margin-bottom: 15px;
 }
 
 .action-card h3 {
-    font-size: 15px;
-    margin: 0 0 8px;
+  font-size: 15px;
+  margin: 0 0 8px;
 }
 
 .action-card p {
-    color: #766f80;
-    font-size: 12px;
-    line-height: 1.5;
-    margin: 0;
+  color: #766f80;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .action-card > span {
-    position: absolute;
-    right: 20px;
-    top: 25px;
-    color: var(--primary-dark);
+  position: absolute;
+  right: 20px;
+  top: 25px;
+  color: var(--primary-dark);
 }
 
 /* TABLET */
 @media (max-width: 1100px) {
-    .sidebar {
-        width: 220px;
-        min-width: 220px;
-    }
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+  }
 
-    .main-content {
-        padding: 25px;
-    }
+  .main-content {
+    padding: 25px;
+  }
 
-    .action-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* MOBİL */
 @media (max-width: 700px) {
-    .app-container {
-        flex-direction: column;
-    }
+  .app-container {
+    flex-direction: column;
+  }
 
-    .sidebar {
-        width: 100%;
-        min-width: 0;
-        min-height: auto;
-        padding: 15px;
-    }
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 15px;
+  }
 
-    .logo {
-        padding-bottom: 15px;
-    }
+  .logo {
+    padding-bottom: 15px;
+  }
 
-    .sidebar-menu {
-        flex-direction: row;
-        overflow-x: auto;
-    }
+  .sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+  }
 
-    .menu-item {
-        white-space: nowrap;
-    }
+  .menu-item {
+    white-space: nowrap;
+  }
 
-    .sidebar-footer {
-        display: none;
-    }
+  .sidebar-footer {
+    display: none;
+  }
 
-    .main-content {
-        padding: 18px;
-    }
+  .main-content {
+    padding: 18px;
+  }
 
-    .topbar {
-        flex-wrap: wrap;
-    }
+  .topbar {
+    flex-wrap: wrap;
+  }
 
-    .search-box {
-        width: 100%;
-    }
+  .search-box {
+    width: 100%;
+  }
 
-    .welcome-banner {
-        padding: 25px;
-    }
+  .welcome-banner {
+    padding: 25px;
+  }
 
-    .welcome-text h1 {
-        font-size: 23px;
-    }
+  .welcome-text h1 {
+    font-size: 23px;
+  }
 
-    .welcome-animals {
-        font-size: 42px;
-    }
+  .welcome-animals {
+    font-size: 42px;
+  }
 
-    .pet-grid,
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
+  .pet-grid,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .action-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 420px) {
-    .action-grid {
-        grid-template-columns: 1fr;
-    }
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .welcome-animals {
-        display: none;
-    }
+  .welcome-animals {
+    display: none;
+  }
 }
 /* Çıkış Yap Butonu */
 
 .logout-btn {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 12px;
-    background: #f3e8ff;
-    color: #7c3aed;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #f3e8ff;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .logout-btn:hover {
-    background: #e9d5ff;
-    transform: translateY(-2px);
+  background: #e9d5ff;
+  transform: translateY(-2px);
 }
-
 
 /* ========================================
    BİLDİRİM PANELİ
 ======================================== */
 
 .notification-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .notification-panel {
-    position: absolute;
-    top: calc(100% + 12px);
-    right: 0;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
 
-    width: 320px;
-    max-width: calc(100vw - 30px);
-    padding: 18px;
+  width: 320px;
+  max-width: calc(100vw - 30px);
+  padding: 18px;
 
-    background: #ffffff;
-    border: 1px solid #eee6fa;
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
+  background: #ffffff;
+  border: 1px solid #eee6fa;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
 
-    z-index: 100;
+  z-index: 100;
 }
 
 .notification-panel[hidden] {
-    display: none;
+  display: none;
 }
 
 .notification-panel h3 {
-    margin: 0 0 15px;
-    font-size: 16px;
-    color: #302b42;
+  margin: 0 0 15px;
+  font-size: 16px;
+  color: #302b42;
 }
 
 .notification-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 0;
-    border-bottom: 1px solid #f0eaff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f0eaff;
 }
 
 .notification-item > span {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    background: #f0eaff;
-    border-radius: 12px;
-    font-size: 20px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: #f0eaff;
+  border-radius: 12px;
+  font-size: 20px;
 }
 
 .notification-item div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .notification-item strong {
-    font-size: 12px;
-    color: #302b42;
+  font-size: 12px;
+  color: #302b42;
 }
 
 .notification-item small {
-    font-size: 11px;
-    color: #827c92;
+  font-size: 11px;
+  color: #827c92;
 }
 
 .notification-all {
-    display: block;
-    margin-top: 15px;
-    text-align: center;
-    color: #8564d8;
-    font-size: 12px;
-    font-weight: 700;
+  display: block;
+  margin-top: 15px;
+  text-align: center;
+  color: #8564d8;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .notification-all:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
-
 
 /* ========================================
    PROFİL BİLGİ PANELİ
 ======================================== */
 
 .profile-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .profile-wrapper .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font: inherit;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
 }
 
 .profile-panel {
-    position: absolute;
-    top: calc(100% + 15px);
-    right: 0;
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
 
-    width: 290px;
-    max-width: calc(100vw - 30px);
-    padding: 20px;
+  width: 290px;
+  max-width: calc(100vw - 30px);
+  padding: 20px;
 
-    background: #ffffff;
-    border: 1px solid #eee6fa;
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
+  background: #ffffff;
+  border: 1px solid #eee6fa;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(80, 60, 130, 0.15);
 
-    z-index: 100;
+  z-index: 100;
 }
 
 .profile-panel[hidden] {
-    display: none;
+  display: none;
 }
 
 .profile-panel h3 {
-    margin: 0 0 18px;
-    font-size: 16px;
-    color: #302b42;
+  margin: 0 0 18px;
+  font-size: 16px;
+  color: #302b42;
 }
 
 .profile-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0eaff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0eaff;
 }
 
 .profile-detail:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .profile-detail small {
-    font-size: 12px;
-    color: #827c92;
+  font-size: 12px;
+  color: #827c92;
 }
 
 .profile-detail strong {
-    font-size: 13px;
-    color: #302b42;
-    overflow-wrap: anywhere;
+  font-size: 13px;
+  color: #302b42;
+  overflow-wrap: anywhere;
 }
 
 /* ===================================
@@ -710,13 +710,13 @@ h2 {
 =================================== */
 
 .demo-data-note {
-    margin: 10px 0 16px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background-color: #f5efff;
-    color: #745b9a;
-    font-size: 13px;
-    line-height: 1.5;
+  margin: 10px 0 16px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background-color: #f5efff;
+  color: #745b9a;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 /* ===================================
@@ -725,31 +725,31 @@ h2 {
 
 /* Arama kutusu ve mesaj alanı */
 .search-wrapper {
-    position: relative;
-    min-width: 0;
+  position: relative;
+  min-width: 0;
 }
 
 /* Arama sonucu bulunamadığında gösterilen mesaj */
 .search-message {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 10px 14px;
-    background-color: #f5efff;
-    color: #745b9a;
-    border: 1px solid #e4d5fa;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 1.5;
-    z-index: 100;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 14px;
+  background-color: #f5efff;
+  color: #745b9a;
+  border: 1px solid #e4d5fa;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  z-index: 100;
 }
 
 /* Mesaj gizliyken yer kaplamasın */
 .search-message[hidden] {
-    display: none;
+  display: none;
 }
 
 /* ===================================
@@ -757,64 +757,64 @@ h2 {
 =================================== */
 
 .pets-header {
-    display: flex;
-    align-items: center;
-    min-height: 220px;
-    margin-bottom: 30px;
-    padding: 35px 40px;
-    border-radius: 22px;
-    background: linear-gradient(120deg, #eee5ff, #fbeaf5);
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 220px;
+  margin-bottom: 30px;
+  padding: 35px 40px;
+  border-radius: 22px;
+  background: linear-gradient(120deg, #eee5ff, #fbeaf5);
+  overflow: hidden;
 }
 
 .pets-header-content {
-    max-width: 560px;
+  max-width: 560px;
 }
 
 .pets-header h1 {
-    margin: 0 0 15px;
-    color: var(--primary-dark);
-    font-size: 34px;
-    font-weight: 800;
+  margin: 0 0 15px;
+  color: var(--primary-dark);
+  font-size: 34px;
+  font-weight: 800;
 }
 
 .pets-header p {
-    margin: 0;
-    color: #756b87;
-    font-size: 15px;
-    line-height: 1.7;
+  margin: 0;
+  color: #756b87;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
 .pets-content {
-    padding: 28px;
-    border-radius: 18px;
-    background: var(--white);
-    box-shadow: var(--shadow);
+  padding: 28px;
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: var(--shadow);
 }
 
 .pets-content h2 {
-    color: var(--text);
-    margin-bottom: 12px;
+  color: var(--text);
+  margin-bottom: 12px;
 }
 
 .pets-content p {
-    color: var(--muted);
-    line-height: 1.6;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 @media (max-width: 700px) {
-    .pets-header {
-        min-height: 180px;
-        padding: 25px;
-    }
+  .pets-header {
+    min-height: 180px;
+    padding: 25px;
+  }
 
-    .pets-header h1 {
-        font-size: 27px;
-    }
+  .pets-header h1 {
+    font-size: 27px;
+  }
 
-    .pets-content {
-        padding: 20px;
-    }
+  .pets-content {
+    padding: 20px;
+  }
 }
 
 /* ===================================
@@ -822,171 +822,173 @@ h2 {
 =================================== */
 
 .pets-section-heading {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .pets-section-heading h2 {
-    margin: 0 0 8px;
-    color: var(--text);
-    font-size: 23px;
+  margin: 0 0 8px;
+  color: var(--text);
+  font-size: 23px;
 }
 
 .pets-section-heading p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 /* Kartların yerleşimi */
 .pets-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 25px;
-    margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px;
+  margin-top: 24px;
 }
 
 /* Hayvan kartı */
 .pets-profile-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .pets-profile-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(80, 60, 130, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(80, 60, 130, 0.12);
 }
 
 /* Hayvan görseli */
 .pets-card-image {
-    height: 210px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pets-card-image span {
-    font-size: 95px;
-    line-height: 1;
+  font-size: 95px;
+  line-height: 1;
 }
 
 .pets-cat-image {
-    background: linear-gradient(135deg, #fbe9f0, #f5d7e5);
+  background: linear-gradient(135deg, #fbe9f0, #f5d7e5);
 }
 
 .pets-dog-image {
-    background: linear-gradient(135deg, #eae3ff, #d9cbf8);
+  background: linear-gradient(135deg, #eae3ff, #d9cbf8);
 }
 
 /* Kart içeriği */
 .pets-card-body {
-    padding: 24px;
+  padding: 24px;
 }
 
 .pets-card-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .pets-card-title h3 {
-    margin: 0;
-    font-size: 23px;
-    color: var(--text);
+  margin: 0;
+  font-size: 23px;
+  color: var(--text);
 }
 
 .pets-type-badge {
-    padding: 7px 14px;
-    border-radius: 20px;
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-size: 12px;
-    font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .pets-breed {
-    margin: 10px 0 16px;
-    color: var(--muted);
-    font-size: 14px;
+  margin: 10px 0 16px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .pets-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
 .pets-details span {
-    background: #f8f6fd;
-    padding: 9px 13px;
-    border-radius: 10px;
-    color: var(--text);
-    font-size: 13px;
+  background: #f8f6fd;
+  padding: 9px 13px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
 }
 
 /* Profili Gör butonu */
 .pets-profile-btn {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    background: var(--primary);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .pets-profile-btn:hover {
-    background: var(--primary-dark);
+  background: var(--primary-dark);
 }
 
 /* Hızlı erişim bağlantıları */
 .pets-card-links {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 22px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
 
 .pets-card-links a {
-    color: var(--primary-dark);
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
 }
 
 .pets-card-links a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Mobil uyumluluk */
 @media (max-width: 900px) {
-    .pets-grid {
-        grid-template-columns: 1fr;
-    }
+  .pets-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
-    .pets-card-image {
-        height: 170px;
-    }
+  .pets-card-image {
+    height: 170px;
+  }
 
-    .pets-card-image span {
-        font-size: 75px;
-    }
+  .pets-card-image span {
+    font-size: 75px;
+  }
 
-    .pets-card-body {
-        padding: 18px;
-    }
+  .pets-card-body {
+    padding: 18px;
+  }
 }
 
 /* ===================================
@@ -995,174 +997,174 @@ h2 {
 
 /* Modal pencere */
 .pet-profile-dialog {
-    width: min(440px, calc(100% - 32px));
-    max-height: 90vh;
-    padding: 0;
-    border: none;
-    border-radius: 24px;
-    background: var(--white);
-    box-shadow: 0 20px 60px rgba(60, 40, 100, 0.2);
-    overflow-y: auto;
+  width: min(440px, calc(100% - 32px));
+  max-height: 90vh;
+  padding: 0;
+  border: none;
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(60, 40, 100, 0.2);
+  overflow-y: auto;
 }
 
 /* Arka plan karartma */
 .pet-profile-dialog::backdrop {
-    background: rgba(38, 27, 65, 0.5);
-    backdrop-filter: blur(4px);
+  background: rgba(38, 27, 65, 0.5);
+  backdrop-filter: blur(4px);
 }
 
 /* Pencere içeriği */
 .pet-profile-modal {
-    padding: 28px;
+  padding: 28px;
 }
 
 /* Başlık ve kapatma butonu */
 .pet-profile-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .pet-profile-modal-header h2 {
-    margin: 0;
-    color: var(--primary-dark);
-    font-size: 23px;
-    font-weight: 700;
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 23px;
+  font-weight: 700;
 }
 
 .pet-profile-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .pet-profile-close:hover {
-    background: #e2d6ff;
+  background: #e2d6ff;
 }
 
 /* Hayvan avatarı */
 .pet-profile-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 110px;
-    height: 110px;
-    margin: 0 auto 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #fbe5ef, #e5dbff);
-    font-size: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbe5ef, #e5dbff);
+  font-size: 65px;
 }
 
 /* Örnek veri bilgilendirmesi */
 .pet-profile-modal .demo-data-note {
-    margin-bottom: 22px;
-    font-size: 13px;
-    line-height: 1.6;
+  margin-bottom: 22px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 /* Hayvan bilgileri */
 .pet-profile-details {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .pet-profile-details > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 15px 18px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: #faf9fe;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #faf9fe;
 }
 
 .pet-profile-details span {
-    color: var(--muted);
-    font-size: 14px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .pet-profile-details strong {
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 600;
-    text-align: right;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
 }
 
 /* Klavye ile kullanım */
 .pet-profile-close:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 3px;
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
 }
 
 /* Mobil uyumluluk */
 @media (max-width: 480px) {
-    .pet-profile-modal {
-        padding: 20px;
-    }
+  .pet-profile-modal {
+    padding: 20px;
+  }
 
-    .pet-profile-modal-header h2 {
-        font-size: 20px;
-    }
+  .pet-profile-modal-header h2 {
+    font-size: 20px;
+  }
 
-    .pet-profile-avatar {
-        width: 90px;
-        height: 90px;
-        font-size: 55px;
-    }
+  .pet-profile-avatar {
+    width: 90px;
+    height: 90px;
+    font-size: 55px;
+  }
 
-    .pet-profile-details > div {
-        padding: 13px;
-    }
+  .pet-profile-details > div {
+    padding: 13px;
+  }
 }
 
 /* HAYVAN KARTI İŞLEM BUTONLARI */
 
 .pets-card-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .pets-card-actions .pets-profile-btn,
 .pets-card-actions .pets-edit-btn {
-    display: block;
-    width: 100%;
-    padding: 13px 16px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .pets-card-actions .pets-profile-btn {
-    background: #8561d8;
-    color: white;
-    border: none;
+  background: #8561d8;
+  color: white;
+  border: none;
 }
 
 .pets-card-actions .pets-edit-btn {
-    background: #f3edff;
-    color: #7653c6;
-    border: 1px solid #e4d8ff;
+  background: #f3edff;
+  color: #7653c6;
+  border: 1px solid #e4d8ff;
 }
 
 .pets-card-actions .pets-edit-btn:hover {
-    background: #e9ddff;
+  background: #e9ddff;
 }
 
 /* ========================================
@@ -1170,261 +1172,261 @@ h2 {
 ======================================== */
 
 #pet-edit-dialog .pet-profile-modal {
-    width: 100%;
-    box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #pet-edit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 #pet-edit-form label {
-    display: block;
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #51446b;
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #51446b;
 }
 
 #pet-edit-form input,
 #pet-edit-form select,
 #pet-edit-form textarea {
-    display: block;
-    width: 100%;
-    padding: 12px 14px;
-    box-sizing: border-box;
-    border: 1px solid #e5dcf5;
-    border-radius: 10px;
-    background: #faf8ff;
-    color: #302744;
-    font-family: inherit;
-    font-size: 14px;
-    outline: none;
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 1px solid #e5dcf5;
+  border-radius: 10px;
+  background: #faf8ff;
+  color: #302744;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
 }
 
 #pet-edit-form input:focus,
 #pet-edit-form select:focus,
 #pet-edit-form textarea:focus {
-    border-color: #9875df;
-    box-shadow: 0 0 0 3px rgba(152, 117, 223, 0.12);
+  border-color: #9875df;
+  box-shadow: 0 0 0 3px rgba(152, 117, 223, 0.12);
 }
 
 #pet-edit-form textarea {
-    resize: vertical;
-    min-height: 85px;
+  resize: vertical;
+  min-height: 85px;
 }
 
 #pet-edit-dialog {
-    width: min(520px, 90vw);
-    max-height: 85vh;
-    overflow-y: auto;
-    box-sizing: border-box;
+  width: min(520px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .pet-edit-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .pet-edit-actions button {
-    flex: 1;
-    padding: 13px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
+  flex: 1;
+  padding: 13px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 #pet-edit-cancel {
-    background: #f2edfa;
-    color: #7255a8;
-    border: 1px solid #e3d8f3;
+  background: #f2edfa;
+  color: #7255a8;
+  border: 1px solid #e3d8f3;
 }
 
-.pet-edit-actions button[type="submit"] {
-    background: #8561d8;
-    color: white;
-    border: none;
+.pet-edit-actions button[type='submit'] {
+  background: #8561d8;
+  color: white;
+  border: none;
 }
 
 @media (max-width: 480px) {
-    .pet-edit-actions {
-        flex-direction: column;
-    }
+  .pet-edit-actions {
+    flex-direction: column;
+  }
 }
 
 /* HAYVAN PROFİL FOTOĞRAFI */
 
 .pets-photo-btn {
-    width: 100%;
-    padding: 13px 16px;
-    border: 1px solid #e4d8ff;
-    border-radius: 12px;
-    background: #fff7fc;
-    color: #a45491;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #e4d8ff;
+  border-radius: 12px;
+  background: #fff7fc;
+  color: #a45491;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .pets-photo-btn:hover {
-    background: #fcebf6;
+  background: #fcebf6;
 }
 
 /* YÜKLENEN HAYVAN FOTOĞRAFI */
 
 .pet-uploaded-photo {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Hayvan fotoğrafı görünümü */
 
 .pets-card-image {
-    height: 260px;
-    overflow: hidden;
+  height: 260px;
+  overflow: hidden;
 }
 
 .pets-card-image:has(.pet-uploaded-photo) {
-    background: #f8f3ff;
+  background: #f8f3ff;
 }
 
 .pets-card-image .pet-uploaded-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 /* HAYVANI SİL BUTONU */
 
 .pets-card-actions .pets-delete-btn {
-    display: block;
-    width: 100%;
-    padding: 13px 16px;
-    box-sizing: border-box;
-    border: 1px solid #f5cbd3;
-    border-radius: 12px;
-    background: #fff2f4;
-    color: #c44d65;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  box-sizing: border-box;
+  border: 1px solid #f5cbd3;
+  border-radius: 12px;
+  background: #fff2f4;
+  color: #c44d65;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .pets-card-actions .pets-delete-btn:hover {
-    background: #ffe3e9;
+  background: #ffe3e9;
 }
 
 /* HAYVAN SİLME ONAY PENCERESİ */
 
 .pet-delete-dialog {
-    width: min(420px, 90vw);
-    max-width: 90vw;
-    padding: 0;
-    border: none;
-    border-radius: 22px;
-    box-shadow: 0 20px 60px rgba(50, 30, 80, 0.2);
+  width: min(420px, 90vw);
+  max-width: 90vw;
+  padding: 0;
+  border: none;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(50, 30, 80, 0.2);
 }
 
 .pet-delete-dialog::backdrop {
-    background: rgba(39, 25, 60, 0.5);
-    backdrop-filter: blur(4px);
+  background: rgba(39, 25, 60, 0.5);
+  backdrop-filter: blur(4px);
 }
 
 .pet-delete-content {
-    padding: 32px;
-    text-align: center;
+  padding: 32px;
+  text-align: center;
 }
 
 .pet-delete-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    background: #fff0f2;
-    font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #fff0f2;
+  font-size: 30px;
 }
 
 .pet-delete-content h2 {
-    margin-bottom: 12px;
-    color: #49366e;
-    font-size: 21px;
+  margin-bottom: 12px;
+  color: #49366e;
+  font-size: 21px;
 }
 
 .pet-delete-content p {
-    color: #746783;
-    line-height: 1.6;
+  color: #746783;
+  line-height: 1.6;
 }
 
 .pet-delete-warning {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .pet-delete-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
 }
 
 .pet-delete-actions button {
-    flex: 1;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
+  flex: 1;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 #pet-delete-cancel {
-    background: #f2edff;
-    color: #7653c6;
+  background: #f2edff;
+  color: #7653c6;
 }
 
 #pet-delete-confirm {
-    background: #c95b72;
-    color: white;
+  background: #c95b72;
+  color: white;
 }
 
 #pet-delete-confirm:hover {
-    background: #b84860;
+  background: #b84860;
 }
 
 /* YENİ HAYVAN EKLE BUTONU */
 
 .pets-section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .pet-add-btn {
-    padding: 13px 22px;
-    background: #8561d8;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  padding: 13px 22px;
+  background: #8561d8;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .pet-add-btn:hover {
-    background: #704dc5;
+  background: #704dc5;
 }
 
 /* ========================================
@@ -1432,71 +1434,71 @@ h2 {
 ======================================== */
 
 #pet-add-dialog {
-    width: min(520px, 90vw);
-    max-height: 85vh;
-    overflow-y: auto;
-    box-sizing: border-box;
+  width: min(520px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 #pet-add-dialog .pet-profile-modal {
-    width: 100%;
-    box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #pet-add-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 #pet-add-form label {
-    display: block;
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #51446b;
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #51446b;
 }
 
 #pet-add-form input,
 #pet-add-form select,
 #pet-add-form textarea {
-    display: block;
-    width: 100%;
-    padding: 12px 14px;
-    box-sizing: border-box;
-    border: 1px solid #e5dcf5;
-    border-radius: 10px;
-    background: #faf8ff;
-    color: #302744;
-    font-family: inherit;
-    font-size: 14px;
-    outline: none;
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 1px solid #e5dcf5;
+  border-radius: 10px;
+  background: #faf8ff;
+  color: #302744;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
 }
 
 #pet-add-form input:focus,
 #pet-add-form select:focus,
 #pet-add-form textarea:focus {
-    border-color: #9875df;
-    box-shadow: 0 0 0 3px rgba(152, 117, 223, 0.12);
+  border-color: #9875df;
+  box-shadow: 0 0 0 3px rgba(152, 117, 223, 0.12);
 }
 
 #pet-add-form textarea {
-    resize: vertical;
-    min-height: 85px;
+  resize: vertical;
+  min-height: 85px;
 }
 
 #pet-add-cancel {
-    background: #f2edfa;
-    color: #7255a8;
-    border: 1px solid #e3d8f3;
+  background: #f2edfa;
+  color: #7255a8;
+  border: 1px solid #e3d8f3;
 }
 
 /* YENİ EKLENEN HAYVANLARIN GÖRSEL ARKA PLANLARI */
 
 .pets-bird-image {
-    background: linear-gradient(135deg, #fff3d9, #ffe5b4);
+  background: linear-gradient(135deg, #fff3d9, #ffe5b4);
 }
 
 .pets-other-image {
-    background: linear-gradient(135deg, #e4f5ed, #ccebdd);
+  background: linear-gradient(135deg, #e4f5ed, #ccebdd);
 }
