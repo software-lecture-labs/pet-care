@@ -5,6 +5,7 @@ import com.petcare.entity.Pet;
 import com.petcare.entity.User;
 import com.petcare.repository.PetRepository;
 import com.petcare.repository.UserRepository;
+import com.petcare.exception.PetNotFoundException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -38,13 +39,12 @@ public class PetService {
         }
 
         Pet pet = petRepository.findById(petId)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new PetNotFoundException(
                         "Hayvan bulunamadı."
                 ));
 
-        // Başka kullanıcının hayvanına erişimi engelle
         if (!pet.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException(
+            throw new PetNotFoundException(
                     "Hayvan bulunamadı."
             );
         }

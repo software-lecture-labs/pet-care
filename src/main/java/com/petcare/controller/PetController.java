@@ -3,6 +3,7 @@ package com.petcare.controller;
 
 import com.petcare.entity.Pet;
 import com.petcare.service.PetService;
+import com.petcare.exception.PetNotFoundException;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -129,8 +130,10 @@ public class PetController {
             Pet pet = petService.getPet(userId, petId);
             return Response.ok(PetResponse.from(pet)).build();
 
-        } catch (IllegalArgumentException exception) {
+        } catch (PetNotFoundException exception) {
             return error(Response.Status.NOT_FOUND, exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            return error(Response.Status.BAD_REQUEST, exception.getMessage());
         }
     }
 
@@ -191,6 +194,8 @@ public class PetController {
 
             return Response.ok(PetResponse.from(pet)).build();
 
+        } catch (PetNotFoundException exception) {
+            return error(Response.Status.NOT_FOUND, exception.getMessage());
         } catch (IllegalArgumentException exception) {
             return error(Response.Status.BAD_REQUEST, exception.getMessage());
         }
@@ -214,8 +219,10 @@ public class PetController {
 
             return Response.noContent().build();
 
-        } catch (IllegalArgumentException exception) {
+        } catch (PetNotFoundException exception) {
             return error(Response.Status.NOT_FOUND, exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            return error(Response.Status.BAD_REQUEST, exception.getMessage());
         }
     }
 
