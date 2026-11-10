@@ -22,8 +22,12 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class PetController {
 
+    private final PetService petService;
+
     @Inject
-    private PetService petService;
+    public PetController(PetService petService) {
+        this.petService = petService;
+    }
 
     // Giriş yapan kullanıcının ID'sini oturumdan al
     private Long getCurrentUserId(HttpServletRequest request) {
