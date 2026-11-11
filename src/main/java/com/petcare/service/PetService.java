@@ -6,10 +6,14 @@ import com.petcare.entity.User;
 import com.petcare.repository.PetRepository;
 import com.petcare.repository.UserRepository;
 import com.petcare.exception.PetNotFoundException;
+import com.petcare.storage.PetPhotoStorage;
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionSynchronizationRegistry;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.annotation.Resource;
 
 import java.util.List;
 
@@ -21,6 +25,12 @@ public class PetService {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private PetPhotoStorage petPhotoStorage;
+
+    @Resource
+    private TransactionSynchronizationRegistry transactionRegistry;
 
     // Kullanıcının hayvanlarını listele
     public List<Pet> getPetsByUser(Long userId) {
@@ -100,11 +110,16 @@ public class PetService {
         return petRepository.update(pet);
     }
 
-    // Hayvanı sil
+    // Hayvanı sil ve transaction başarılıysa fotoğrafını temizle
     @Transactional
     public void deletePet(Long userId, Long petId) {
         Pet pet = getPet(userId, petId);
+
+        String photoPath = pet.getPhotoPath();
+
         petRepository.delete(pet);
+
+        deletePhotoAfterCommit(photoPath);
     }
 
     // Hayvanın profil fotoğrafı yolunu güncelle
@@ -120,19 +135,20 @@ public class PetService {
             );
         }
 
-        // PostgreSQL'deki photo_path alanını güncelle
+        // Mevcut fotoğrafın dosya adını sakla
+        String oldPhotoPath = pet.getPhotoPath();
+
+        // Yeni fotoğraf yolunu veritabanında güncelle
         pet.setPhotoPath(photoPath);
 
-        return petRepository.update(pet);
-    }
+        Pet updatedPet = petRepository.update(pet);
 
-    // Kullanıcı ID kontrolü
-    private void validateUserId(Long userId) {
-        if (userId == null || userId <= 0) {
-            throw new IllegalArgumentException(
-                    "Geçersiz kullanıcı bilgisi."
-            );
+        // Eski fotoğrafı yalnızca başarılı transaction sonrasında sil
+        if (oldPhotoPath != null && !oldPhotoPath.equals(photoPath)) {
+            deletePhotoAfterCommit(oldPhotoPath);
         }
+
+        return updatedPet;
     }
 
     // Temel hayvan bilgilerini doğrula
@@ -157,6 +173,47 @@ public class PetService {
                 pet.getWeight().signum() <= 0) {
             throw new IllegalArgumentException(
                     "Hayvanın kilosu sıfırdan büyük olmalıdır."
+            );
+        }
+    }
+    private void deletePhotoAfterCommit(String photoPath) {
+        if (photoPath == null || photoPath.isBlank()) {
+            return;
+        }
+
+        transactionRegistry.registerInterposedSynchronization(
+                new jakarta.transaction.Synchronization() {
+
+                    @Override
+                    public void beforeCompletion() {
+                        // Transaction tamamlanmadan dosya silinmez.
+                    }
+
+                    @Override
+                    public void afterCompletion(int status) {
+                        if (status != Status.STATUS_COMMITTED) {
+                            return;
+                        }
+
+                        try {
+                            petPhotoStorage.deletePhoto(photoPath);
+                        } catch (Exception exception) {
+                            java.util.logging.Logger
+                                    .getLogger(PetService.class.getName())
+                                    .log(
+                                            java.util.logging.Level.WARNING,
+                                            "Fotoğraf dosyası silinemedi: " + photoPath,
+                                            exception
+                                    );
+                        }
+                    }
+                }
+        );
+    }
+    private void validateUserId(Long userId) {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException(s
+                    "Geçersiz kullanıcı bilgisi."
             );
         }
     }
