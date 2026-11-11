@@ -236,6 +236,29 @@ document.addEventListener('DOMContentLoaded', async function () {
   // ========================================
   // 7. ANASAYFA - HAYVANLARIM
   // ========================================
+  function calculatePetAge(birthdate) {
+    if (!birthdate) return null;
+
+    const today = new Date();
+    const birth = new Date(birthdate + 'T00:00:00');
+
+    if (Number.isNaN(birth.getTime()) || birth > today) {
+      return null;
+    }
+
+    let age = today.getFullYear() - birth.getFullYear();
+
+    const monthDifference = today.getMonth() - birth.getMonth();
+
+    if (
+        monthDifference < 0 ||
+        (monthDifference === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+
+    return `${age} yaşında`;
+  }
 
   async function loadHomePets() {
     const grid = document.getElementById('home-pet-grid');
@@ -308,7 +331,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         name.textContent = pet.name;
 
         const description = document.createElement('p');
-        description.textContent = pet.type || 'Tür belirtilmedi';
+
+        const petDetails = [
+          pet.type,
+          pet.breed,
+          calculatePetAge(pet.birthDate)
+        ].filter(Boolean);
+
+        description.textContent =
+            petDetails.length > 0
+                ? petDetails.join(' • ')
+                : 'Bilgi belirtilmedi';
 
         details.append(name, description);
 
