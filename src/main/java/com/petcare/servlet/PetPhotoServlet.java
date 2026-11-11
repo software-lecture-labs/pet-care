@@ -263,8 +263,6 @@ public class PetPhotoServlet extends HttpServlet {
             contentType = "image/jpeg";
         } else if (fileName.endsWith(".png")) {
             contentType = "image/png";
-        } else if (fileName.endsWith(".webp")) {
-            contentType = "image/webp";
         } else {
             sendError(response, 404, "Geçersiz fotoğraf.");
             return;
