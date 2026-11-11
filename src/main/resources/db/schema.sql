@@ -37,3 +37,6 @@ CREATE TABLE IF NOT EXISTS pets (
     CONSTRAINT chk_pets_weight
     CHECK (weight IS NULL OR weight > 0)
     );
+-- Kullaniciya ait hayvanlari hizli sorgulamak icin indeks
+CREATE INDEX IF NOT EXISTS idx_pets_user_id
+    ON pets(user_id);
