@@ -212,7 +212,7 @@ public class PetService {
     }
     private void validateUserId(Long userId) {
         if (userId == null || userId <= 0) {
-            throw new IllegalArgumentException(s
+            throw new IllegalArgumentException(
                     "Geçersiz kullanıcı bilgisi."
             );
         }

@@ -15,6 +15,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.DELETE;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -216,6 +220,80 @@ public class AuthController {
     // ========================================
 // ÇIKIŞ YAPMA
 // ========================================
+
+    // Hesap silme isteğinde gönderilecek bilgiler.
+    public record DeleteAccountRequest(
+            @NotBlank String password
+    ) {
+    }
+
+    // Kullanıcının hesabını güvenli şekilde siler.
+    @POST
+    @Path("/delete-account")
+    public Response deleteAccount(
+            @Valid @NotNull DeleteAccountRequest deleteRequest,
+            @HeaderParam("X-CSRF-Token") String requestToken,
+            @Context HttpServletRequest request
+    ) {
+
+        HttpSession session = request.getSession(false);
+
+        // Oturum kontrolü.
+        if (session == null ||
+                !(session.getAttribute("userId") instanceof Long userId)) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("message", "Lütfen giriş yapın."))
+                    .build();
+        }
+
+        // CSRF token kontrolü.
+        String sessionToken = (String) session.getAttribute("csrfToken");
+
+        if (sessionToken == null || requestToken == null ||
+                !MessageDigest.isEqual(
+                        sessionToken.getBytes(StandardCharsets.UTF_8),
+                        requestToken.getBytes(StandardCharsets.UTF_8)
+                )) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("message", "Geçersiz CSRF token."))
+                    .build();
+        }
+
+        if (deleteRequest == null ||
+                deleteRequest.password() == null ||
+                deleteRequest.password().isBlank()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("message", "Şifrenizi girin."))
+                    .build();
+        }
+
+        try {
+            // Kullanıcıyı bul.
+            User user = authService.currentUser(userId)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Kullanıcı bulunamadı."));
+
+            // Mevcut şifreyi doğrula.
+            authService.login(user.getEmail(), deleteRequest.password());
+
+            // Hesabı ve fotoğrafları sil.
+            authService.deleteAccount(userId);
+
+            // Silme başarılıysa oturumu kapat.
+            session.invalidate();
+
+            return Response.ok(Map.of(
+                    "message", "Hesabınız başarıyla silindi."
+            )).build();
+
+        } catch (IllegalArgumentException exception) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of(
+                            "message", "Şifreniz hatalı veya kullanıcı bulunamadı."
+                    ))
+                    .build();
+        }
+    }
 
     @POST
     @Path("/logout")
