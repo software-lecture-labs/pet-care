@@ -1,4 +1,3 @@
-
 package com.petcare.service;
 
 import com.petcare.entity.Pet;
@@ -14,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.annotation.Resource;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -161,6 +161,15 @@ public class PetService {
             );
         }
 
+        if (pet.getBirthDate() != null &&
+                pet.getBirthDate().isAfter(LocalDate.now())) {
+
+            throw new IllegalArgumentException(
+                    "Hayvanın doğum tarihi gelecekte olamaz."
+            );
+        }
+
+
         if (pet.getType() == null ||
                 pet.getType().isBlank() ||
                 pet.getType().trim().length() > 30) {
@@ -169,12 +178,29 @@ public class PetService {
             );
         }
 
-        if (pet.getWeight() != null &&
-                pet.getWeight().signum() <= 0) {
-            throw new IllegalArgumentException(
-                    "Hayvanın kilosu sıfırdan büyük olmalıdır."
-            );
+
+        if (pet.getWeight() != null) {
+
+            if (pet.getWeight().signum() <= 0) {
+                throw new IllegalArgumentException(
+                        "Hayvanın kilosu sıfırdan büyük olmalıdır."
+                );
+            }
+
+            if (pet.getWeight().compareTo(
+                    new java.math.BigDecimal("9999.99")) > 0) {
+                throw new IllegalArgumentException(
+                        "Hayvanın kilosu en fazla 9999.99 kg olabilir."
+                );
+            }
+
+            if (pet.getWeight().scale() > 2) {
+                throw new IllegalArgumentException(
+                        "Kilo en fazla 2 ondalık basamak içerebilir."
+                );
+            }
         }
+
     }
     private void deletePhotoAfterCommit(String photoPath) {
         if (photoPath == null || photoPath.isBlank()) {

@@ -333,9 +333,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Güncelleme hatası:', errorText);
-        showToast('Hayvan bilgileri güncellenemedi.', 'error');
+        const errorData = await response.json().catch(() => ({}));
+
+        showToast(
+            errorData.message || 'Hayvan bilgileri güncellenemedi.',
+            'error'
+        );
         return;
       }
 
@@ -675,9 +678,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Hayvan ekleme hatası:', errorText);
-        showToast('Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.', 'error');
+        const errorData = await response.json().catch(() => ({}));
+
+        showToast(
+            errorData.message || 'Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.',
+            'error'
+        );
         return;
       }
 
