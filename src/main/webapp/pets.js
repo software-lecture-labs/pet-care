@@ -545,6 +545,25 @@ document.addEventListener('DOMContentLoaded', function () {
       const pet = pets[petId];
 
       if (!pet) return;
+      // Fotoğraf yükleme için CSRF token'ını al
+      const authResponse = await fetch('api/auth/me', {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+
+      if (!authResponse.ok) {
+        showToast('Oturum doğrulanamadı. Lütfen tekrar giriş yapın.', 'error');
+        return;
+      }
+
+      const authData = await authResponse.json();
+      const csrfToken = authData.csrfToken;
+
+      if (!csrfToken) {
+        showToast('Güvenlik doğrulaması yapılamadı.', 'error');
+        return;
+      }
 
       const formData = new FormData();
       formData.append('photo', file);
@@ -555,6 +574,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const response = await fetch(`api/pet-photos/${petId}`, {
           method: 'POST',
           credentials: 'same-origin',
+          headers: {
+            'X-CSRF-Token': csrfToken
+          },
           body: formData,
         });
 

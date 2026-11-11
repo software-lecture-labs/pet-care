@@ -66,6 +66,18 @@ public class PetPhotoServlet extends HttpServlet {
         }
 
         Long userId = (Long) session.getAttribute("userId");
+        // CSRF token doğrulaması
+        String expectedToken = (String) session.getAttribute("csrfToken");
+        String receivedToken = request.getHeader("X-CSRF-Token");
+
+        if (expectedToken == null || receivedToken == null ||
+                !java.security.MessageDigest.isEqual(
+                        expectedToken.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                        receivedToken.getBytes(java.nio.charset.StandardCharsets.UTF_8))) {
+
+            sendError(response, 403, "Geçersiz CSRF token.");
+            return;
+        }
 
         // URL'den hayvan ID'sini al
         Long petId;

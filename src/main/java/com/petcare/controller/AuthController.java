@@ -137,11 +137,21 @@ public class AuthController {
             HttpSession session = httpRequest.getSession(true);
 
             session.setAttribute("userId", user.getId());
+            // Oturuma özel güvenli CSRF token oluştur
+            byte[] csrfBytes = new byte[32];
+            new java.security.SecureRandom().nextBytes(csrfBytes);
+
+            String csrfToken = java.util.Base64.getUrlEncoder()
+                    .withoutPadding()
+                    .encodeToString(csrfBytes);
+
+            session.setAttribute("csrfToken", csrfToken);
 
             return Response.ok(Map.of(
                     "message", "Giriş başarılı.",
                     "userId", user.getId(),
-                    "firstName", user.getFirstName()
+                    "firstName", user.getFirstName(),
+                    "csrfToken", csrfToken
             )).build();
 
         } catch (IllegalArgumentException exception) {
@@ -176,13 +186,28 @@ public class AuthController {
                     .entity(Map.of("message", "Lütfen giriş yapın."))
                     .build();
         }
+        String csrfToken = (String) session.getAttribute("csrfToken");
+
+        if (csrfToken == null) {
+            byte[] csrfBytes = new byte[32];
+            new java.security.SecureRandom().nextBytes(csrfBytes);
+
+            csrfToken = java.util.Base64.getUrlEncoder()
+                    .withoutPadding()
+                    .encodeToString(csrfBytes);
+
+            session.setAttribute("csrfToken", csrfToken);
+        }
+
+        final String responseCsrfToken = csrfToken;
 
         return authService.currentUser(userId)
                 .map(user -> Response.ok(Map.of(
                         "userId", user.getId(),
                         "firstName", user.getFirstName(),
                         "lastName", user.getLastName(),
-                        "email", user.getEmail()
+                        "email", user.getEmail(),
+                        "csrfToken", responseCsrfToken
                 )).build())
                 .orElseGet(() -> Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("message", "Kullanıcı bulunamadı."))
