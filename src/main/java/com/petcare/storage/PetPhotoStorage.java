@@ -74,11 +74,6 @@ public class PetPhotoStorage {
             );
         }
 
-        if (extension == null) {
-            throw new IllegalArgumentException(
-                    "Yalnızca JPEG, PNG veya WebP yükleyebilirsiniz."
-            );
-        }
         // Görüntüyü tamamen belleğe yüklemeden piksel boyutlarını kontrol et
         try (var imageInput = ImageIO.createImageInputStream(
                 new ByteArrayInputStream(fileBytes))) {
@@ -171,13 +166,6 @@ public class PetPhotoStorage {
             return ".png";
         }
 
-        // WebP: RIFF....WEBP
-        if (bytes.length >= 12 &&
-                matchesText(bytes, 0, "RIFF") &&
-                matchesText(bytes, 8, "WEBP")) {
-            return ".webp";
-        }
-
         return null;
     }
 
@@ -195,21 +183,6 @@ public class PetPhotoStorage {
         return true;
     }
 
-    private boolean matchesText(
-            byte[] bytes, int offset, String text) {
-
-        if (bytes.length < offset + text.length()) {
-            return false;
-        }
-
-        for (int i = 0; i < text.length(); i++) {
-            if (bytes[offset + i] != (byte) text.charAt(i)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     // Kaydedilen fotoğraf dosyasını sil
     public void deletePhoto(String fileName) throws IOException {
