@@ -112,8 +112,6 @@ public class PetPhotoStorage {
         }
 
         // Dosyanın gerçekten okunabilir bir görüntü olduğunu doğrula
-        if (extension.equals(".jpg") || extension.equals(".png")) {
-
             BufferedImage image = ImageIO.read(
                     new ByteArrayInputStream(fileBytes)
             );
@@ -125,8 +123,6 @@ public class PetPhotoStorage {
                         "Geçersiz veya bozuk fotoğraf dosyası."
                 );
             }
-        }
-
 
         // Klasör yoksa oluştur
         Files.createDirectories(UPLOAD_DIRECTORY);
