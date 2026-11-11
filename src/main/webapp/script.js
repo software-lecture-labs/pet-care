@@ -291,6 +291,9 @@ document.addEventListener('DOMContentLoaded', async function () {
           photo.src = `api/pet-photos/${pet.id}`;
           photo.alt = `${pet.name} profil fotoğrafı`;
           photo.className = 'home-pet-photo';
+          photo.onerror = function () {
+            image.textContent = avatars[pet.type] || '🐾';
+          };
           image.appendChild(photo);
         } else {
           image.textContent = avatars[pet.type] || '🐾';
