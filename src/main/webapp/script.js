@@ -21,7 +21,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     if (!response.ok) {
-      throw new Error('Oturum kontrolü başarısız.');
+      const errorData = await response.json().catch(() => ({}));
+
+      throw new Error(
+          errorData.message || 'Oturum kontrolü başarısız.'
+      );
     }
 
     const user = await response.json();
@@ -58,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Sunucu hatasında kullanıcıyı giriş yapmamış
     // gibi göstermiyoruz.
-    alert('Oturum kontrolü yapılamadı. Lütfen tekrar deneyin.');
+    alert(error.message || 'Oturum kontrolü yapılamadı. Lütfen tekrar deneyin.');
     return;
   }
 
@@ -243,8 +247,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         cache: 'no-store',
       });
 
+      if (response.status === 401) {
+        window.location.replace('login.html');
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error('Hayvanlar yüklenemedi.');
+        const errorData = await response.json().catch(() => ({}));
+
+        throw new Error(
+            errorData.message || 'Hayvanlar yüklenemedi.'
+        );
       }
 
       const pets = await response.json();
@@ -308,7 +321,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
     } catch (error) {
       console.error('Anasayfa hayvan yükleme hatası:', error);
-      grid.textContent = 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
+      grid.textContent =
+          error.message || 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
     }
   }
 
