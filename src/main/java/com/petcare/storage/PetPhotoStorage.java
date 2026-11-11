@@ -35,6 +35,9 @@ public class PetPhotoStorage {
 
     // Maksimum fotoğraf boyutu: 5 MB
     private static final long MAX_FILE_SIZE = 5L * 1024 * 1024;
+    // Maksimum fotoğraf çözünürlüğü: 4096 x 4096 piksel
+    private static final int MAX_IMAGE_WIDTH = 4096;
+    private static final int MAX_IMAGE_HEIGHT = 4096;
 
     // Fotoğrafı sunucuya kaydet
     public String savePhoto(InputStream inputStream) throws IOException {
@@ -75,6 +78,42 @@ public class PetPhotoStorage {
             throw new IllegalArgumentException(
                     "Yalnızca JPEG, PNG veya WebP yükleyebilirsiniz."
             );
+        }
+        // Görüntüyü tamamen belleğe yüklemeden piksel boyutlarını kontrol et
+        try (var imageInput = ImageIO.createImageInputStream(
+                new ByteArrayInputStream(fileBytes))) {
+
+            if (imageInput == null) {
+                throw new IllegalArgumentException("Fotoğraf okunamadı.");
+            }
+
+            var readers = ImageIO.getImageReaders(imageInput);
+
+            if (!readers.hasNext()) {
+                throw new IllegalArgumentException(
+                        "Geçersiz veya desteklenmeyen fotoğraf."
+                );
+            }
+
+            var reader = readers.next();
+
+            try {
+                reader.setInput(imageInput);
+
+                int width = reader.getWidth(0);
+                int height = reader.getHeight(0);
+
+                if (width <= 0 || height <= 0 ||
+                        width > MAX_IMAGE_WIDTH ||
+                        height > MAX_IMAGE_HEIGHT) {
+
+                    throw new IllegalArgumentException(
+                            "Fotoğraf en fazla 4096 x 4096 piksel olabilir."
+                    );
+                }
+            } finally {
+                reader.dispose();
+            }
         }
 
         // Dosyanın gerçekten okunabilir bir görüntü olduğunu doğrula
