@@ -3,6 +3,7 @@ package com.petcare.servlet;
 
 import com.petcare.service.PetService;
 import com.petcare.storage.PetPhotoStorage;
+import com.petcare.exception.PetNotFoundException;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -101,11 +102,14 @@ public class PetPhotoServlet extends HttpServlet {
         try {
             petService.getPet(userId, petId);
 
-        } catch (IllegalArgumentException exception) {
+        } catch (PetNotFoundException exception) {
             sendError(response, 404, "Hayvan bulunamadı.");
             return;
-        }
 
+        } catch (IllegalArgumentException exception) {
+            sendError(response, 400, exception.getMessage());
+            return;
+        }
         // Fotoğrafı al
         Part photo;
 
@@ -244,8 +248,12 @@ public class PetPhotoServlet extends HttpServlet {
         try {
             pet = petService.getPet(userId, petId);
 
-        } catch (IllegalArgumentException exception) {
+        } catch (PetNotFoundException exception) {
             sendError(response, 404, "Hayvan bulunamadı.");
+            return;
+
+        } catch (IllegalArgumentException exception) {
+            sendError(response, 400, exception.getMessage());
             return;
         }
 
