@@ -17,8 +17,21 @@ import java.io.ByteArrayInputStream;
 public class PetPhotoStorage {
 
     // Fotoğrafların kaydedileceği klasör
-    private static final Path UPLOAD_DIRECTORY =
-            Path.of("C:", "PetCare", "uploads", "pets");
+    private static final Path UPLOAD_DIRECTORY = resolveUploadDirectory();
+
+    private static Path resolveUploadDirectory() {
+        String configuredPath = System.getenv("PETCARE_UPLOAD_DIR");
+
+        if (configuredPath == null || configuredPath.isBlank()) {
+            throw new IllegalStateException(
+                    "PETCARE_UPLOAD_DIR ortam değişkeni tanımlanmalıdır."
+            );
+        }
+
+        return Path.of(configuredPath.trim())
+                .toAbsolutePath()
+                .normalize();
+    }
 
     // Maksimum fotoğraf boyutu: 5 MB
     private static final long MAX_FILE_SIZE = 5L * 1024 * 1024;
