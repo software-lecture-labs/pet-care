@@ -267,14 +267,41 @@ public class AuthController {
                     .build();
         }
 
-        try {
-            // Kullanıcıyı bul.
-            User user = authService.currentUser(userId)
-                    .orElseThrow(() ->
-                            new IllegalArgumentException("Kullanıcı bulunamadı."));
 
+        // Kullanıcıyı bul.
+        User user = authService.currentUser(userId).orElse(null);
+            if (user == null) {
+                session.invalidate();
+
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity(Map.of(
+                                "message",
+                                "Oturum geçersiz. Lütfen tekrar giriş yapın."
+                        ))
+                        .build();
+            }
+
+            // Hesap silme işleminde başarısız şifre denemelerini sınırla.
+            String email = user.getEmail();
+
+            if (loginAttemptService.isBlocked(email)) {
+                return Response.status(429)
+                        .entity(Map.of(
+                                "message",
+                                "Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin."
+                        ))
+                        .build();
+            }
             // Mevcut şifreyi doğrula.
-            authService.login(user.getEmail(), deleteRequest.password());
+            try {
+                authService.login(email, deleteRequest.password());
+            } catch (IllegalArgumentException exception) {
+                loginAttemptService.recordFailedAttempt(email);
+
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity(Map.of("message", "Şifreniz hatalı."))
+                        .build();
+            }
 
             // Hesabı ve fotoğrafları sil.
             authService.deleteAccount(userId);
@@ -286,14 +313,8 @@ public class AuthController {
                     "message", "Hesabınız başarıyla silindi."
             )).build();
 
-        } catch (IllegalArgumentException exception) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(Map.of(
-                            "message", "Şifreniz hatalı veya kullanıcı bulunamadı."
-                    ))
-                    .build();
-        }
-    }
+
+}
 
     @POST
     @Path("/logout")
