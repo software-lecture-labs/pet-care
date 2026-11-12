@@ -17,7 +17,11 @@ import java.io.ByteArrayInputStream;
 public class PetPhotoStorage {
 
     // Fotoğrafların kaydedileceği klasör
-    private static final Path UPLOAD_DIRECTORY = resolveUploadDirectory();
+    private final Path uploadDirectory;
+
+    public PetPhotoStorage() {
+        this.uploadDirectory = resolveUploadDirectory();
+    }
 
     private static Path resolveUploadDirectory() {
         String configuredPath = System.getenv("PETCARE_UPLOAD_DIR");
@@ -125,12 +129,12 @@ public class PetPhotoStorage {
             }
 
         // Klasör yoksa oluştur
-        Files.createDirectories(UPLOAD_DIRECTORY);
+        Files.createDirectories(uploadDirectory);
 
         // Benzersiz dosya adı oluştur
         String fileName = UUID.randomUUID() + extension;
 
-        Path targetPath = UPLOAD_DIRECTORY.resolve(fileName);
+        Path targetPath = uploadDirectory.resolve(fileName);
 
         Files.write(
                 targetPath,
@@ -192,7 +196,7 @@ public class PetPhotoStorage {
             );
         }
 
-        Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
+        Path filePath =uploadDirectory.resolve(fileName);
 
         Files.deleteIfExists(filePath);
     }
@@ -209,7 +213,7 @@ public class PetPhotoStorage {
             );
         }
 
-        Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
+        Path filePath = uploadDirectory.resolve(fileName);
 
 
         if (!Files.isRegularFile(filePath)) {
