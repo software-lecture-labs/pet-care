@@ -141,13 +141,8 @@ public class AuthController {
             HttpSession session = httpRequest.getSession(true);
 
             session.setAttribute("userId", user.getId());
-            // Oturuma özel güvenli CSRF token oluştur
-            byte[] csrfBytes = new byte[32];
-            new java.security.SecureRandom().nextBytes(csrfBytes);
-
-            String csrfToken = java.util.Base64.getUrlEncoder()
-                    .withoutPadding()
-                    .encodeToString(csrfBytes);
+            // Oturuma özel güvenli CSRF token oluştur.
+            String csrfToken = generateCsrfToken();
 
             session.setAttribute("csrfToken", csrfToken);
 
@@ -193,13 +188,7 @@ public class AuthController {
         String csrfToken = (String) session.getAttribute("csrfToken");
 
         if (csrfToken == null) {
-            byte[] csrfBytes = new byte[32];
-            new java.security.SecureRandom().nextBytes(csrfBytes);
-
-            csrfToken = java.util.Base64.getUrlEncoder()
-                    .withoutPadding()
-                    .encodeToString(csrfBytes);
-
+            csrfToken = generateCsrfToken();
             session.setAttribute("csrfToken", csrfToken);
         }
 
@@ -329,6 +318,15 @@ public class AuthController {
         return Response.ok(Map.of(
                 "message", "Başarıyla çıkış yapıldı."
         )).build();
+    }
+    // Güvenli CSRF token oluşturur.
+    private String generateCsrfToken() {
+        byte[] csrfBytes = new byte[32];
+        new java.security.SecureRandom().nextBytes(csrfBytes);
+
+        return java.util.Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(csrfBytes);
     }
 
 }
