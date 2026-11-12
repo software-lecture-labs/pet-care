@@ -1,22 +1,298 @@
-<!doctype html>
+```
+<!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f7fc">
     <title>PetCare | Randevularım</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app-container">
-      <aside class="sidebar"></aside>
+    <!-- Projenin ortak stilleri; bu dosyayı değiştirmiyoruz. -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Yalnızca Randevularım sayfasının stilleri. -->
+    <link rel="stylesheet" href="appointments.css">
+</head>
+<body>
+<div class="app-container">
+    <!-- Ortak sol menü, sidebar.js tarafından doldurulur. -->
+    <aside class="sidebar"></aside>
 
-      <main class="main-content">
-        <h1>📅 Randevularım</h1>
-        <p>Bu sayfa yakında hazırlanacak. 💜</p>
-        <a href="index.html">← Ana Sayfaya Dön</a>
-      </main>
+    <main class="main-content appointment-page">
+        <!-- Ana sayfadaki üst bar ile aynı ID ve sınıflar: script.js bunu yönetir. -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <span aria-hidden="true">🔍</span>
+                    <input type="search" placeholder="Sayfa ara..." aria-label="Sayfa ara"
+                           aria-describedby="search-message">
+                </div>
+                <p id="search-message" class="search-message" role="status" aria-live="polite" hidden></p>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="notification-wrapper">
+                    <button id="notification-btn" class="notification-btn" type="button"
+                            aria-label="Bildirimleri göster" aria-expanded="false"
+                            aria-controls="notification-panel">🔔</button>
+                    <div id="notification-panel" class="notification-panel" hidden>
+                        <h3>🔔 Bildirimler</h3>
+                        <p class="demo-data-note">ℹ️ Bu bildirimler tanıtım amaçlı örnek verilerdir.</p>
+                        <div class="notification-item">
+                            <span aria-hidden="true">💉</span>
+                            <div><strong>Pamuk — Kuduz Aşısı</strong><small>5 Kasım 2026</small></div>
+                        </div>
+                        <div class="notification-item">
+                            <span aria-hidden="true">💊</span>
+                            <div><strong>Boncuk — Vitamin Takviyesi</strong><small>2 Kasım 2026</small></div>
+                        </div>
+                        <a href="reminders.html" class="notification-all">Tüm Hatırlatıcıları Gör →</a>
+                    </div>
+                </div>
+
+                <div class="profile-wrapper">
+                    <button type="button" class="user-profile" id="profile-btn"
+                            aria-expanded="false" aria-controls="profile-panel">
+                        <div class="avatar" aria-hidden="true">👩</div>
+                        <div class="user-info">
+                            <strong id="profile-name">Kullanıcı</strong>
+                            <small>Evcil Hayvan Sahibi</small>
+                        </div>
+                    </button>
+                    <div class="profile-panel" id="profile-panel" hidden>
+                        <h3>👤 Hesap Bilgilerim</h3>
+                        <div class="profile-detail">
+                            <small>Ad Soyad</small>
+                            <strong id="profile-fullname">-</strong>
+                        </div>
+                        <div class="profile-detail">
+                            <small>E-posta Adresi</small>
+                            <strong id="profile-email">-</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="logout-btn" class="logout-btn" type="button">🚪 Çıkış Yap</button>
+            </div>
+        </header>
+
+        <!-- SAYFA BAŞLIĞI -->
+        <section class="appt-hero" aria-labelledby="appt-page-title">
+            <div class="appt-hero-copy">
+                <span class="appt-eyebrow"><span class="appt-eyebrow-dot"></span> PETCARE / RANDEVU YÖNETİMİ</span>
+                <h1 id="appt-page-title">Randevularım <span aria-hidden="true">💜</span></h1>
+                <p>Minik dostlarının veteriner randevularını tek yerden planla, takip et ve yönet.</p>
+            </div>
+            <div class="appt-hero-art" aria-hidden="true">
+                <span class="appt-orbit appt-orbit-one"></span>
+                <span class="appt-orbit appt-orbit-two"></span>
+                <span class="appt-hero-icon appt-hero-calendar">🗓️</span>
+                <span class="appt-hero-icon appt-hero-dog">🐶</span>
+                <span class="appt-hero-icon appt-hero-cat">🐱</span>
+                <span class="appt-hero-sparkle">✦</span>
+            </div>
+        </section>
+
+        <!-- RANDEVU BİLGİLENDİRMESİ -->
+        <div class="appt-demo-note" role="note">
+            <span class="appt-demo-symbol" aria-hidden="true">ℹ️</span>
+            <span><strong>Bilgilendirme:</strong> Bu sayfadan oluşturulan randevular PetCare sistemine kaydedilir.
+                Veteriner kliniğine otomatik olarak rezervasyon iletilmez.</span>
+        </div>
+
+        <!-- ÖZET KARTLARI -->
+        <section class="appt-stats" aria-label="Randevu özeti">
+            <article class="appt-stat-card">
+                <div class="appt-stat-icon appt-stat-purple" aria-hidden="true">📅</div>
+                <div><p>Yaklaşan randevu</p><strong id="appt-stat-upcoming">0</strong></div>
+                <span class="appt-stat-decoration" aria-hidden="true">↗</span>
+            </article>
+            <article class="appt-stat-card">
+                <div class="appt-stat-icon appt-stat-green" aria-hidden="true">✓</div>
+                <div><p>Tamamlanan</p><strong id="appt-stat-completed">0</strong></div>
+                <span class="appt-stat-decoration" aria-hidden="true">✦</span>
+            </article>
+            <article class="appt-stat-card">
+                <div class="appt-stat-icon appt-stat-pink" aria-hidden="true">♡</div>
+                <div><p>Bu ayın randevusu</p><strong id="appt-stat-month">0</strong></div>
+                <span class="appt-stat-decoration" aria-hidden="true">✳</span>
+            </article>
+        </section>
+
+        <!-- TAKVİM + SEÇİLİ GÜN -->
+        <section class="appt-workspace" aria-label="Takvim ve günlük randevular">
+            <div class="appt-surface appt-calendar-card">
+                <div class="appt-card-head">
+                    <div>
+                        <span class="appt-kicker">TAKVİM</span>
+                        <h2 id="appt-month-label">Kasım 2026</h2>
+                    </div>
+                    <div class="appt-month-nav">
+                        <button id="appt-prev-month" class="appt-icon-button" type="button"
+                                aria-label="Önceki ay">‹</button>
+                        <button id="appt-next-month" class="appt-icon-button" type="button"
+                                aria-label="Sonraki ay">›</button>
+                    </div>
+                </div>
+                <div class="appt-weekdays" aria-hidden="true">
+                    <span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span>
+                    <span>Cum</span><span>Cmt</span><span>Paz</span>
+                </div>
+                <div id="appt-calendar-grid" class="appt-calendar-grid" aria-label="Aylık takvim"></div>
+                <div class="appt-calendar-footer">
+                    <span><i class="appt-dot-key" aria-hidden="true"></i> Randevu bulunan gün</span>
+                    <button id="appt-go-today" class="appt-text-button" type="button">Bugüne git →</button>
+                </div>
+            </div>
+
+            <div class="appt-surface appt-day-card">
+                <div class="appt-card-head appt-day-head">
+                    <div>
+                        <span class="appt-kicker">GÜNLÜK PLAN</span>
+                        <h2 id="appt-selected-date">Seçilen gün</h2>
+                        <p>Takvimden başka bir güne dokunarak randevularını görebilirsin.</p>
+                    </div>
+                    <button id="appt-open-create" class="appt-primary-button" type="button">
+                        <span aria-hidden="true">＋</span> Yeni Randevu Oluştur
+                    </button>
+                </div>
+                <div id="appt-day-list" class="appt-day-list" aria-live="polite"></div>
+                <div class="appt-day-tip">
+                    <span class="appt-tip-icon" aria-hidden="true">💡</span>
+                    <p>Düzenli veteriner kontrolleri, minik dostlarının sağlığını korumanın en güzel yollarından biridir.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TÜM RANDEVULAR -->
+        <section class="appt-all-section" aria-labelledby="appt-all-title">
+            <div class="appt-list-header">
+                <div>
+                    <span class="appt-kicker">RANDEVU TAKİBİ</span>
+                    <h2 id="appt-all-title">Randevu Listem</h2>
+                    <p>Yaklaşan ve geçmiş veteriner ziyaretlerini burada görüntüle.</p>
+                </div>
+                <span id="appt-count-label" class="appt-count-label">0 randevu</span>
+            </div>
+            <div class="appt-tabs" role="group" aria-label="Randevu durumu filtresi">
+                <button type="button" class="appt-tab is-active" data-filter="all" aria-pressed="true">Tümü</button>
+                <button type="button" class="appt-tab" data-filter="upcoming" aria-pressed="false">Yaklaşan</button>
+                <button type="button" class="appt-tab" data-filter="completed" aria-pressed="false">Tamamlanan</button>
+                <button type="button" class="appt-tab" data-filter="cancelled" aria-pressed="false">İptal Edilen</button>
+            </div>
+            <div id="appt-all-list" class="appt-all-list" aria-live="polite"></div>
+        </section>
+
+        <section class="appt-bottom-banner" aria-label="Sağlıklı patiler için hatırlatma">
+            <div class="appt-bottom-icon" aria-hidden="true">🐾</div>
+            <div>
+                <h2>Sağlıklı patiler, mutlu günler!</h2>
+                <p>Rutin kontrolleri aksatmadan minik dostlarının yanında ol. 💜</p>
+            </div>
+            <div class="appt-bottom-friends" aria-hidden="true">🐶 🐱</div>
+        </section>
+    </main>
+</div>
+
+<!-- YENİ RANDEVU DİYALOĞU -->
+<dialog id="appt-create-dialog" class="appt-dialog" aria-labelledby="appt-create-title">
+    <form id="appt-create-form" class="appt-modal" novalidate>
+        <div class="appt-modal-heading">
+            <div class="appt-modal-heading-icon" aria-hidden="true">📅</div>
+            <div>
+                <span class="appt-kicker">YENİ PLAN</span>
+                <h2 id="appt-create-title">Yeni Randevu Oluştur</h2>
+                <p>Minik dostun için uygun günü ve saati seç.</p>
+            </div>
+            <button type="button" class="appt-dialog-close" data-close-dialog
+                    aria-label="Randevu formunu kapat">×</button>
+        </div>
+        <div class="appt-form-content">
+            <div class="appt-form-row">
+                <div class="appt-form-field">
+                    <label for="appt-pet">Evcil hayvan <span aria-hidden="true">*</span></label>
+                    <select id="appt-pet" required>
+                        <option value="">Hayvan seçiniz</option>
+                    </select>
+                </div>
+                <div class="appt-form-field">
+                    <label for="appt-vet">Veteriner <span aria-hidden="true">*</span></label>
+                    <select id="appt-vet" required>
+                        <option value="">Veteriner seçiniz</option>
+                    </select>
+                </div>
+            </div>
+            <div class="appt-form-row">
+                <div class="appt-form-field">
+                    <label for="appt-date">Randevu tarihi <span aria-hidden="true">*</span></label>
+                    <input id="appt-date" type="date" required>
+                </div>
+                <div class="appt-form-field">
+                    <label for="appt-reason">Randevu nedeni <span aria-hidden="true">*</span></label>
+                    <select id="appt-reason" required>
+                        <option value="">Neden seçiniz</option>
+                        <option value="Genel kontrol">Genel kontrol</option>
+                        <option value="Aşı">Aşı</option>
+                        <option value="Diş kontrolü">Diş kontrolü</option>
+                        <option value="Kulak kontrolü">Kulak kontrolü</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
+                </div>
+            </div>
+            <fieldset class="appt-slots-fieldset">
+                <legend>Müsait saatler <span aria-hidden="true">*</span></legend>
+                <p>Veterineri ve tarihi seçtikten sonra sistemde kayıtlı müsait saatler gösterilir.</p>
+                <div id="appt-slot-list" class="appt-slot-list" aria-label="Saat seçenekleri"></div>
+            </fieldset>
+            <div class="appt-form-field">
+                <label for="appt-notes">Ek not <span class="appt-optional">(isteğe bağlı)</span></label>
+                <textarea id="appt-notes" rows="3" maxlength="220"
+                          placeholder="Veterinere iletmek istediğin kısa bir not..."></textarea>
+                <small class="appt-char-count"><span id="appt-notes-count">0</span>/220</small>
+            </div>
+            <p id="appt-form-error" class="appt-form-error" role="alert" hidden></p>
+            <div class="appt-form-disclaimer">ℹ️ Oluşturduğun randevu PetCare veritabanına kaydedilir; klinik ile otomatik olarak paylaşılmaz.</div>
+        </div>
+        <div class="appt-modal-actions">
+            <button type="button" class="appt-secondary-button" data-close-dialog>Vazgeç</button>
+            <button id="appt-form-submit" type="submit" class="appt-primary-button">Randevu Oluştur</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- RANDEVU DETAYLARI DİYALOĞU -->
+<dialog id="appt-details-dialog" class="appt-dialog appt-details-dialog" aria-labelledby="appt-details-title">
+    <div class="appt-modal">
+        <div class="appt-modal-heading">
+            <div class="appt-modal-heading-icon" aria-hidden="true">🐾</div>
+            <div>
+                <span class="appt-kicker">RANDEVU BİLGİLERİ</span>
+                <h2 id="appt-details-title">Randevu Detayları</h2>
+            </div>
+            <button type="button" class="appt-dialog-close" data-close-dialog
+                    aria-label="Randevu detaylarını kapat">×</button>
+        </div>
+        <div id="appt-details-body" class="appt-form-content"></div>
+        <div id="appt-cancel-confirm" class="appt-cancel-confirm" hidden>
+            <strong>Bu randevuyu iptal etmek istiyor musun?</strong>
+            <p>İptal ettikten sonra listede “İptal Edilen” olarak görünecek.</p>
+            <div class="appt-confirm-actions">
+                <button id="appt-cancel-back" type="button" class="appt-secondary-button">Vazgeç</button>
+                <button id="appt-cancel-yes" type="button" class="appt-danger-button">Evet, iptal et</button>
+            </div>
+        </div>
+        <div id="appt-details-actions" class="appt-modal-actions">
+            <button id="appt-reschedule" type="button" class="appt-secondary-button" hidden>Tarih / Saati Değiştir</button>
+            <button id="appt-cancel-request" type="button" class="appt-outline-danger">Randevuyu İptal Et</button>
+            <button type="button" class="appt-primary-button" data-close-dialog>Kapat</button>
+        </div>
     </div>
+</dialog>
 
-    <script src="sidebar.js"></script>
-  </body>
+<div id="appt-toast" class="appt-toast" role="status" aria-live="polite" hidden></div>
+
+<!-- Ortak script.js: oturum kontrolü, profil, bildirim, arama ve çıkış. -->
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<!-- Sayfaya özel JavaScript. -->
+<script src="appointments.js"></script>
+</body>
 </html>
