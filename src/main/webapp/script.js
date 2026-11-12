@@ -361,6 +361,110 @@ document.addEventListener('DOMContentLoaded', async function () {
           error.message || 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
     }
   }
+  // ========================================
+// 8. ANASAYFA - YAKLAŞAN RANDEVU
+// ========================================
+
+  async function loadHomeAppointment() {
+    const container = document.getElementById('home-next-appointment');
+
+    if (!container) return;
+
+    try {
+      const response = await fetch('api/appointments', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+
+      if (response.status === 401) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Randevular yüklenemedi.');
+      }
+
+      const appointments = await response.json();
+
+      const now = new Date();
+
+      const upcomingAppointments = appointments
+          .filter((appointment) => {
+            const date = new Date(appointment.startTime);
+            const status = String(appointment.status || '').toUpperCase();
+
+            return (
+                !Number.isNaN(date.getTime()) &&
+                date >= now &&
+                status !== 'CANCELLED' &&
+                status !== 'CANCELED' &&
+                status !== 'COMPLETED'
+            );
+          })
+          .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+      if (upcomingAppointments.length === 0) {
+        container.replaceChildren();
+
+        const message = document.createElement('p');
+        message.textContent = 'Henüz yaklaşan randevun bulunmuyor. 🐾';
+
+        container.appendChild(message);
+        return;
+      }
+
+      const appointment = upcomingAppointments[0];
+      const appointmentDate = new Date(appointment.startTime);
+
+      const formattedDate = appointmentDate.toLocaleString('tr-TR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Europe/Istanbul',
+      });
+
+      const petIcons = {
+        Kedi: '🐱',
+        Köpek: '🐶',
+        Kuş: '🐦',
+      };
+
+      container.replaceChildren();
+
+      const icon = document.createElement('div');
+      icon.className = 'appointment-icon';
+      icon.textContent = '🏥';
+
+      const info = document.createElement('div');
+      info.className = 'appointment-info';
+
+      const clinicName = document.createElement('h3');
+      clinicName.textContent =
+          appointment.clinicName || appointment.vetName || 'Veteriner randevusu';
+
+      const veterinarian = document.createElement('p');
+      veterinarian.textContent =
+          `👩‍⚕️ ${appointment.vetName || 'Veteriner bilgisi belirtilmedi'}`;
+
+      const date = document.createElement('p');
+      date.textContent = `📅 ${formattedDate}`;
+
+      const pet = document.createElement('p');
+      const petIcon = petIcons[appointment.petType] || '🐾';
+
+      pet.textContent =
+          `${petIcon} ${appointment.petName || 'Hayvan'} — ${appointment.reason || 'Muayene'}`;
+
+      info.append(clinicName, veterinarian, date, pet);
+      container.append(icon, info);
+    } catch (error) {
+      console.error('Anasayfa randevu yükleme hatası:', error);
+    }
+  }
 
   await loadHomePets();
+  await loadHomeAppointment();
 });
