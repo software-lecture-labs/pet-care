@@ -190,15 +190,100 @@ button {
 
 /* KARŞILAMA ALANI */
 .welcome-banner {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 190px;
-  padding: 32px 40px;
-  border-radius: 22px;
-  background: linear-gradient(110deg, #e9ddff, #f9e8f3);
+  min-height: 230px;
+  padding: 40px 45px;
+  border-radius: 28px;
+  background: linear-gradient(115deg, #eee3ff 0%, #f7eafa 55%, #ffe9f1 100%);
   margin-bottom: 35px;
   overflow: hidden;
+  isolation: isolate;
+}
+.welcome-text {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.welcome-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #8655d5;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.welcome-text .today-date {
+  margin: 0 0 10px;
+  color: #8655d5;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.welcome-text h1 {
+  margin: 0 0 12px;
+  color: #30204e;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.welcome-text > p:last-child {
+  margin: 0;
+  color: #87759d;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.welcome-illustration {
+  position: relative;
+  flex-shrink: 0;
+  width: 260px;
+  height: 170px;
+  margin-left: 20px;
+}
+
+.welcome-decoration-circle {
+  position: absolute;
+  right: 20px;
+  bottom: -55px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.welcome-dog,
+.welcome-cat,
+.welcome-sparkle {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-dog {
+  right: 95px;
+  bottom: 5px;
+  font-size: 105px;
+  transform: rotate(-8deg);
+}
+
+.welcome-cat {
+  right: 0;
+  bottom: 0;
+  font-size: 95px;
+  transform: rotate(8deg);
+}
+
+.welcome-sparkle {
+  top: 10px;
+  right: 15px;
+  color: #a77be8;
+  font-size: 35px;
 }
 
 .today-date {
