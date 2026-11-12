@@ -2,6 +2,15 @@ package com.petcare.service;
 
 import com.petcare.entity.User;
 import com.petcare.repository.UserRepository;
+import com.petcare.entity.Pet;
+import com.petcare.repository.PetRepository;
+import com.petcare.storage.PetPhotoStorage;
+
+import jakarta.annotation.Resource;
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionSynchronizationRegistry;
+
+import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -20,20 +29,32 @@ public class AuthService {
     private final UserRepository userRepository;
     private final Pbkdf2PasswordHash passwordHash;
 
+    private final PetRepository petRepository;
+    private final PetPhotoStorage petPhotoStorage;
+
+    @Resource
+    private TransactionSynchronizationRegistry transactionRegistry;
+
     // Payara CDI için parametresiz constructor
     protected AuthService() {
         this.userRepository = null;
         this.passwordHash = null;
+        this.petRepository = null;
+        this.petPhotoStorage = null;
     }
 
     // Constructor Injection
     @Inject
     public AuthService(
             UserRepository userRepository,
-            Pbkdf2PasswordHash passwordHash
+            Pbkdf2PasswordHash passwordHash,
+            PetRepository petRepository,
+            PetPhotoStorage petPhotoStorage
     ) {
         this.userRepository = userRepository;
         this.passwordHash = passwordHash;
+        this.petRepository = petRepository;
+        this.petPhotoStorage = petPhotoStorage;
     }
 
     private String dummyPasswordHash;
@@ -137,6 +158,68 @@ public class AuthService {
 
         return user;
     }
+
+    // Kullanıcı hesabını ve fotoğraflarını güvenli şekilde siler.
+    @Transactional
+    public void deleteAccount(Long userId) {
+
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException(
+                    "Geçersiz kullanıcı bilgisi."
+            );
+        }
+
+        // Kullanıcının varlığını kontrol et.
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Kullanıcı bulunamadı."
+                ));
+
+        // Kullanıcının fotoğraf yollarını al.
+        List<String> photoPaths = petRepository.findByUserId(userId)
+                .stream()
+                .map(Pet::getPhotoPath)
+                .filter(path -> path != null && !path.isBlank())
+                .distinct()
+                .toList();
+
+        // Kullanıcıyı sil.
+        userRepository.delete(user);
+
+        // Transaction başarılı olursa fotoğrafları sil.
+        transactionRegistry.registerInterposedSynchronization(
+                new jakarta.transaction.Synchronization() {
+
+                    @Override
+                    public void beforeCompletion() {
+                    }
+
+                    @Override
+                    public void afterCompletion(int status) {
+
+                        if (status != Status.STATUS_COMMITTED) {
+                            return;
+                        }
+
+                        for (String photoPath : photoPaths) {
+                            try {
+                                petPhotoStorage.deletePhoto(photoPath);
+                            } catch (Exception exception) {
+                                java.util.logging.Logger
+                                        .getLogger(AuthService.class.getName())
+                                        .log(
+                                                java.util.logging.Level.WARNING,
+                                                "Fotoğraf silinemedi: " + photoPath,
+                                                exception
+                                        );
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+
 
     // Kullanıcının giriş bilgilerini doğrular.
     public User login(String email, String password) {

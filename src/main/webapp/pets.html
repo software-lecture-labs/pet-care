@@ -1,25 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PetCare | Hayvanlarım</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app-container">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <aside class="sidebar"></aside>
 
-    <aside class="sidebar"></aside>
+      <main class="main-content">
+        <header class="topbar"></header>
 
-    <main class="main-content">
-        <h1>🐾 Hayvanlarım</h1>
-        <p>Bu sayfa yakında hazırlanacak. 💜</p>
+        <section class="pets-header">
+          <div class="pets-header-content">
+            <span class="pets-header-label">● PETCARE / HAYVAN YÖNETİMİ</span>
 
-        <a href="index.html">← Ana Sayfaya Dön</a>
-    </main>
+            <h1>Hayvanlarım 💜</h1>
 
-</div>
+            <p>
+              Minik dostlarınızın bilgilerini görüntüleyin,
+              düzenleyin ve yeni bir hayvan ekleyin.
+            </p>
+          </div>
 
-<script src="sidebar.js"></script>
-</body>
+          <div class="pets-header-illustration" aria-hidden="true">
+            <span class="pets-header-calendar">🐾</span>
+            <span class="pets-header-dog">🐶</span>
+            <span class="pets-header-cat">🐱</span>
+            <span class="pets-header-sparkle">✦</span>
+          </div>
+        </section>
+
+        <!-- HAYVANLARIM İÇERİK ALANI -->
+        <section class="pets-content">
+          <div class="pets-section-heading">
+            <div>
+              <h2>Minik Dostlarım 🐾</h2>
+              <p>Sevimli dostlarınızın bilgilerini buradan yönetebilirsiniz.</p>
+            </div>
+
+            <button type="button" id="pet-add-btn" class="pet-add-btn">+ Yeni Hayvan Ekle</button>
+          </div>
+
+          <div class="pets-grid">
+            <div class="pets-grid">
+              <!-- Hayvan kartları JavaScript ile API'den oluşturulacak. -->
+            </div>
+          </div>
+        </section>
+        <!-- HAYVAN PROFİL PENCERESİ -->
+        <dialog
+          id="pet-profile-dialog"
+          class="pet-profile-dialog"
+          aria-labelledby="pet-profile-title"
+        >
+          <div class="pet-profile-modal">
+            <div class="pet-profile-modal-header">
+              <h2 id="pet-profile-title">Hayvan Profili 🐾</h2>
+
+              <button
+                type="button"
+                id="pet-profile-close"
+                class="pet-profile-close"
+                aria-label="Profil penceresini kapat"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="pet-profile-avatar" id="pet-profile-avatar">🐾</div>
+
+            <div class="pet-profile-details">
+              <div>
+                <span>Adı</span>
+                <strong id="pet-profile-name">-</strong>
+              </div>
+
+              <div>
+                <span>Türü</span>
+                <strong id="pet-profile-type">-</strong>
+              </div>
+
+              <div>
+                <span>Yaşı</span>
+                <strong id="pet-profile-age">-</strong>
+              </div>
+
+              <div>
+                <span>Irkı</span>
+                <strong id="pet-profile-breed">-</strong>
+              </div>
+
+              <div>
+                <span>Cinsiyeti</span>
+                <strong id="pet-profile-gender">-</strong>
+              </div>
+
+              <div>
+                <span>Doğum Tarihi</span>
+                <strong id="pet-profile-birthdate">-</strong>
+              </div>
+
+              <div>
+                <span>Kilosu</span>
+                <strong id="pet-profile-weight">-</strong>
+              </div>
+
+              <div>
+                <span>Özel Notlar</span>
+                <strong id="pet-profile-notes">-</strong>
+              </div>
+            </div>
+          </div>
+        </dialog>
+        <!-- HAYVAN BİLGİLERİNİ DÜZENLEME PENCERESİ -->
+        <dialog id="pet-edit-dialog" class="pet-profile-dialog" aria-labelledby="pet-edit-title">
+          <div class="pet-profile-modal">
+            <div class="pet-profile-modal-header">
+              <h2 id="pet-edit-title">✏️ Bilgileri Düzenle</h2>
+
+              <button
+                type="button"
+                id="pet-edit-close"
+                class="pet-profile-close"
+                aria-label="Düzenleme penceresini kapat"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form id="pet-edit-form">
+              <label for="pet-edit-name">Hayvanın Adı</label>
+              <input type="text" id="pet-edit-name" required />
+
+              <label for="pet-edit-type">Türü</label>
+              <select id="pet-edit-type" required>
+                <option value="Kedi">Kedi</option>
+                <option value="Köpek">Köpek</option>
+                <option value="Kuş">Kuş</option>
+                <option value="Diğer">Diğer</option>
+              </select>
+
+              <label for="pet-edit-breed">Irkı</label>
+              <input type="text" id="pet-edit-breed" />
+
+              <label for="pet-edit-gender">Cinsiyeti</label>
+              <select id="pet-edit-gender">
+                <option value="">Belirtilmedi</option>
+                <option value="Dişi">Dişi</option>
+                <option value="Erkek">Erkek</option>
+              </select>
+
+              <label for="pet-edit-birthdate">Doğum Tarihi</label>
+              <input type="date" id="pet-edit-birthdate" />
+
+              <label for="pet-edit-weight">Kilosu (kg)</label>
+              <input type="number" id="pet-edit-weight" min="0" step="0.1" />
+
+              <label for="pet-edit-notes">Özel Notlar</label>
+              <textarea id="pet-edit-notes" rows="3"></textarea>
+
+              <div class="pet-edit-actions">
+                <button type="button" id="pet-edit-cancel">Vazgeç</button>
+
+                <button type="submit" class="pets-profile-btn">Değişiklikleri Kaydet</button>
+              </div>
+            </form>
+          </div>
+        </dialog>
+        <!-- YENİ HAYVAN EKLEME PENCERESİ -->
+        <dialog id="pet-add-dialog" class="pet-profile-dialog" aria-labelledby="pet-add-title">
+          <div class="pet-profile-modal">
+            <div class="pet-profile-modal-header">
+              <h2 id="pet-add-title">🐾 Yeni Hayvan Ekle</h2>
+
+              <button
+                type="button"
+                id="pet-add-close"
+                class="pet-profile-close"
+                aria-label="Pencereyi kapat"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form id="pet-add-form">
+              <label for="pet-add-name">Hayvanın Adı *</label>
+              <input type="text" id="pet-add-name" required maxlength="60" />
+
+              <label for="pet-add-type">Türü *</label>
+              <select id="pet-add-type" required>
+                <option value="">Tür seçiniz</option>
+                <option value="Kedi">Kedi</option>
+                <option value="Köpek">Köpek</option>
+                <option value="Kuş">Kuş</option>
+                <option value="Diğer">Diğer</option>
+              </select>
+
+              <label for="pet-add-breed">Irkı</label>
+              <input type="text" id="pet-add-breed" />
+
+              <label for="pet-add-gender">Cinsiyeti</label>
+              <select id="pet-add-gender">
+                <option value="">Belirtilmedi</option>
+                <option value="Dişi">Dişi</option>
+                <option value="Erkek">Erkek</option>
+              </select>
+
+              <label for="pet-add-birthdate">Doğum Tarihi</label>
+              <input type="date" id="pet-add-birthdate" />
+
+              <label for="pet-add-weight">Kilosu (kg)</label>
+              <input type="number" id="pet-add-weight" min="0" step="0.1" />
+
+              <label for="pet-add-notes">Özel Notlar</label>
+              <textarea id="pet-add-notes" rows="3"></textarea>
+
+              <div class="pet-edit-actions">
+                <button type="button" id="pet-add-cancel">Vazgeç</button>
+
+                <button type="submit" class="pets-profile-btn">🐾 Hayvanı Ekle</button>
+              </div>
+            </form>
+          </div>
+        </dialog>
+      </main>
+      <!-- HAYVAN SİLME ONAY PENCERESİ -->
+      <dialog id="pet-delete-dialog" class="pet-delete-dialog">
+        <div class="pet-delete-content">
+          <div class="pet-delete-icon">🗑️</div>
+
+          <h2>Hayvanı Silmek İstiyor musunuz?</h2>
+
+          <p>
+            <strong id="pet-delete-name"></strong> adlı dostunuzu silmek istediğinize emin misiniz?
+          </p>
+
+          <p class="pet-delete-warning">Bu işlem hayvanı listenizden kaldıracaktır.</p>
+
+          <div class="pet-delete-actions">
+            <button type="button" id="pet-delete-cancel">Vazgeç</button>
+
+            <button type="button" id="pet-delete-confirm">Evet, Sil</button>
+          </div>
+        </div>
+      </dialog>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script src="topbar.js"></script>
+    <script src="script.js"></script>
+    <script src="pets.js"></script>
+  </body>
 </html>
