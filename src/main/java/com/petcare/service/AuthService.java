@@ -29,11 +29,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final Pbkdf2PasswordHash passwordHash;
 
-    @Inject
-    private PetRepository petRepository;
-
-    @Inject
-    private PetPhotoStorage petPhotoStorage;
+    private final PetRepository petRepository;
+    private final PetPhotoStorage petPhotoStorage;
 
     @Resource
     private TransactionSynchronizationRegistry transactionRegistry;
@@ -42,16 +39,22 @@ public class AuthService {
     protected AuthService() {
         this.userRepository = null;
         this.passwordHash = null;
+        this.petRepository = null;
+        this.petPhotoStorage = null;
     }
 
     // Constructor Injection
     @Inject
     public AuthService(
             UserRepository userRepository,
-            Pbkdf2PasswordHash passwordHash
+            Pbkdf2PasswordHash passwordHash,
+            PetRepository petRepository,
+            PetPhotoStorage petPhotoStorage
     ) {
         this.userRepository = userRepository;
         this.passwordHash = passwordHash;
+        this.petRepository = petRepository;
+        this.petPhotoStorage = petPhotoStorage;
     }
 
     private String dummyPasswordHash;
