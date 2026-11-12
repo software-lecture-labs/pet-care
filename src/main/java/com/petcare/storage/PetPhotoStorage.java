@@ -22,10 +22,16 @@ public class PetPhotoStorage {
     public PetPhotoStorage() {
         this.uploadDirectory = resolveUploadDirectory();
     }
+    // Testlerde ortam değişkeni değerini kontrollü olarak kullanır.
+    PetPhotoStorage(String configuredPath) {
+        this.uploadDirectory = resolveUploadDirectory(configuredPath);
+    }
 
     private static Path resolveUploadDirectory() {
-        String configuredPath = System.getenv("PETCARE_UPLOAD_DIR");
+        return resolveUploadDirectory(System.getenv("PETCARE_UPLOAD_DIR"));
+    }
 
+    private static Path resolveUploadDirectory(String configuredPath) {
         if (configuredPath == null || configuredPath.isBlank()) {
             throw new IllegalStateException(
                     "PETCARE_UPLOAD_DIR ortam değişkeni tanımlanmalıdır."
