@@ -1,0 +1,135 @@
+/* ========================================
+   PETCARE - TOAST BİLDİRİMLERİ
+======================================== */
+
+.pet-toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+}
+
+.pet-toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border: 1px solid #e9ddfa;
+    border-left: 4px solid #a78bfa;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 28px rgba(109, 76, 155, 0.14);
+    color: #493b60;
+    font-size: 14px;
+    animation: pet-toast-in 0.3s ease-out;
+    pointer-events: auto;
+}
+
+.pet-toast--success {
+    border-left-color: #8fbe9b;
+}
+
+.pet-toast--error {
+    border-left-color: #e7a0a9;
+}
+
+.pet-toast-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #eaf6ed;
+    color: #548b62;
+    font-weight: 700;
+}
+
+.pet-toast--error .pet-toast-icon {
+    background: #fff0f1;
+    color: #c56c79;
+}
+.pet-toast-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.pet-toast-title {
+    color: #493b60;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.pet-toast-message {
+    color: #85778f;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.pet-toast-close {
+    border: none;
+    background: transparent;
+    color: #988ba8;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.pet-toast-close:hover {
+    color: #59476e;
+}
+
+@keyframes pet-toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .pet-toast-container {
+        top: 16px;
+        right: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pet-toast {
+        animation: none;
+    }
+}
+/* Uyarı bildirimleri */
+.pet-toast--warning {
+    border-left-color: #b49ae8;
+    background: #fcfaff;
+}
+
+.pet-toast--warning .pet-toast-icon {
+    background: #f0e9ff;
+    color: #8663c7;
+}
+
+.pet-toast--warning .pet-toast-title {
+    color: #7454a5;
+}
+
+/* Bildirim kapatma butonunu hizala */
+.pet-toast-close {
+    align-self: flex-start;
+    flex-shrink: 0;
+    padding: 0 2px;
+    line-height: 1;
+}
