@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.petcare.entity.Pet;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+
 import java.nio.file.NoSuchFileException;
 import java.util.Locale;
 
@@ -301,7 +302,6 @@ public class PetPhotoServlet extends HttpServlet {
             }
         }
     }
-
 
 
     private void sendError(

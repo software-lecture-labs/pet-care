@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+
 import jakarta.annotation.PostConstruct;
 
 @ApplicationScoped
@@ -131,17 +132,17 @@ public class PetPhotoStorage {
         }
 
         // Dosyanın gerçekten okunabilir bir görüntü olduğunu doğrula
-            BufferedImage image = ImageIO.read(
-                    new ByteArrayInputStream(fileBytes)
-            );
+        BufferedImage image = ImageIO.read(
+                new ByteArrayInputStream(fileBytes)
+        );
 
-            if (image == null ||
-                    image.getWidth() <= 0 ||
-                    image.getHeight() <= 0) {
-                throw new IllegalArgumentException(
-                        "Geçersiz veya bozuk fotoğraf dosyası."
-                );
-            }
+        if (image == null ||
+                image.getWidth() <= 0 ||
+                image.getHeight() <= 0) {
+            throw new IllegalArgumentException(
+                    "Geçersiz veya bozuk fotoğraf dosyası."
+            );
+        }
 
         // Klasör yoksa oluştur
         Files.createDirectories(uploadDirectory);
@@ -211,7 +212,7 @@ public class PetPhotoStorage {
             );
         }
 
-        Path filePath =uploadDirectory.resolve(fileName);
+        Path filePath = uploadDirectory.resolve(fileName);
 
         Files.deleteIfExists(filePath);
     }

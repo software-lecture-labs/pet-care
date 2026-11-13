@@ -1,6 +1,7 @@
 package com.petcare.entity;
 
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 
 @Entity
@@ -9,7 +10,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -26,20 +27,21 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public User(){
+    public User() {
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public String getFirstName(){
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName){
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return lastName;
     }
