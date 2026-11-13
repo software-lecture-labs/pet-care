@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
 
-      throw new Error(
-          errorData.message || 'Oturum kontrolü başarısız.'
-      );
+      throw new Error(errorData.message || 'Oturum kontrolü başarısız.');
     }
 
     const user = await response.json();
@@ -250,10 +248,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const monthDifference = today.getMonth() - birth.getMonth();
 
-    if (
-        monthDifference < 0 ||
-        (monthDifference === 0 && today.getDate() < birth.getDate())
-    ) {
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birth.getDate())) {
       age--;
     }
 
@@ -278,9 +273,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
 
-        throw new Error(
-            errorData.message || 'Hayvanlar yüklenemedi.'
-        );
+        throw new Error(errorData.message || 'Hayvanlar yüklenemedi.');
       }
 
       const pets = await response.json();
@@ -332,16 +325,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const description = document.createElement('p');
 
-        const petDetails = [
-          pet.type,
-          pet.breed,
-          calculatePetAge(pet.birthDate)
-        ].filter(Boolean);
+        const petDetails = [pet.type, pet.breed, calculatePetAge(pet.birthDate)].filter(Boolean);
 
         description.textContent =
-            petDetails.length > 0
-                ? petDetails.join(' • ')
-                : 'Bilgi belirtilmedi';
+          petDetails.length > 0 ? petDetails.join(' • ') : 'Bilgi belirtilmedi';
 
         details.append(name, description);
 
@@ -357,8 +344,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
     } catch (error) {
       console.error('Anasayfa hayvan yükleme hatası:', error);
-      grid.textContent =
-          error.message || 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
+      grid.textContent = error.message || 'Hayvanların şu anda yüklenemiyor. Lütfen tekrar dene.';
     }
   }
 
