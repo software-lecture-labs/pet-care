@@ -1,0 +1,12 @@
+# Metin dosyalarini Git'te LF olarak sakla
+* text=auto
+
+# Frontend dosyalarinda LF kullan
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+
+# Prettier yapilandirmasi
+.prettierrc text eol=lf
+.prettierignore text eol=lf
