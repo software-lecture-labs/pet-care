@@ -12,19 +12,28 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import jakarta.annotation.PostConstruct;
 
 @ApplicationScoped
 public class PetPhotoStorage {
 
     // Fotoğrafların kaydedileceği klasör
-    private final Path uploadDirectory;
+    private Path uploadDirectory;
 
     public PetPhotoStorage() {
-        this.uploadDirectory = resolveUploadDirectory();
+        // CDI için boş constructor
     }
+
     // Testlerde ortam değişkeni değerini kontrollü olarak kullanır.
     PetPhotoStorage(String configuredPath) {
         this.uploadDirectory = resolveUploadDirectory(configuredPath);
+    }
+
+    @PostConstruct
+    private void init() {
+        if (uploadDirectory == null) {
+            uploadDirectory = resolveUploadDirectory();
+        }
     }
 
     private static Path resolveUploadDirectory() {
