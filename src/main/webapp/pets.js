@@ -2,7 +2,21 @@
 // PETCARE - HAYVANLARIM SAYFASI
 // ========================================
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+  // ========================================
+// OTURUM DOĞRULAMASINI BEKLE
+// ========================================
+
+  if (!window.petCareAuthReady) {
+    console.error('Ortak oturum kontrolü bulunamadı.');
+    return;
+  }
+
+  const isAuthenticated = await window.petCareAuthReady;
+
+  if (!isAuthenticated) {
+    return;
+  }
   const pets = {};
 
   const dialog = document.getElementById('pet-profile-dialog');
