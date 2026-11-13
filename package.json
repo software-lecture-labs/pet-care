@@ -1,0 +1,25 @@
+{
+  "name": "petcare-github",
+  "version": "1.0.0",
+  "description": "PetCare, evcil hayvan sahiplerinin hayvanlarının sağlık bilgilerini, aşılarını, veteriner randevularını ve bakım süreçlerini tek bir platform üzerinden yönetmelerini amaçlayan bir web uygulamasıdır.",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write \"src/main/webapp/**/*.{html,css,js}\"",
+    "format:check": "prettier --check \"src/main/webapp/**/*.{html,css,js}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/software-lecture-labs/pet-care.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/software-lecture-labs/pet-care/issues"
+  },
+  "homepage": "https://github.com/software-lecture-labs/pet-care#readme",
+  "devDependencies": {
+    "prettier": "3.9.10"
+  }
+}

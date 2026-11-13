@@ -1,24 +1,281 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PetCare | Sağlık Kayıtları</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="health-records.css" />
+  <link rel="stylesheet" href="toast.css">
 </head>
+
 <body>
 <div class="app-container">
-
+  <!-- SOL MENÜ -->
   <aside class="sidebar"></aside>
 
+  <!-- ANA İÇERİK -->
   <main class="main-content">
-    <h1>📋 Sağlık Kayıtları</h1>
-    <p>Bu sayfa yakında hazırlanacak. 💜</p>
-    <a href="index.html">← Ana Sayfaya Dön</a>
-  </main>
 
+    <!-- ÜST BAR -->
+    <header class="topbar"></header>
+
+    <!-- SAĞLIK KAYITLARI BANNER -->
+    <section class="health-banner">
+      <div class="health-banner-content">
+            <span class="health-label">
+              ● PETCARE / SAĞLIK KAYITLARI
+            </span>
+
+        <h1>🩺 Sağlık Kayıtları</h1>
+
+        <p>
+          Minik dostlarının tüm sağlık bilgilerini
+          tek bir yerde görüntüle ve yönet.
+        </p>
+      </div>
+
+      <div class="health-banner-illustration"
+           aria-hidden="true">
+        <span>🐱</span>
+        <span>🐶</span>
+        <span>💜</span>
+      </div>
+    </section>
+
+    <!-- HAYVAN SEÇİMİ -->
+    <section class="health-pets-section">
+      <div class="health-pets-grid"
+           id="health-pets-grid">
+        <p class="pets-loading">
+          Hayvanların yükleniyor... 🐾
+        </p>
+      </div>
+    </section>
+
+    <!-- FİLTRELER -->
+    <section class="health-toolbar">
+      <div class="health-filters"
+           id="health-filters">
+
+        <button class="health-filter active"
+                data-filter="all">
+          Tüm Kayıtlar
+        </button>
+
+        <button class="health-filter"
+                data-filter="examination">
+          Muayene
+        </button>
+
+        <button class="health-filter"
+                data-filter="vaccination">
+          Aşı
+        </button>
+
+        <button class="health-filter"
+                data-filter="treatment">
+          Tedavi
+        </button>
+
+        <button class="health-filter"
+                data-filter="test">
+          Test Sonuçları
+        </button>
+
+        <button class="health-filter"
+                data-filter="other">
+          Diğer
+        </button>
+      </div>
+
+      <button class="health-add-btn"
+              id="health-add-btn"
+              type="button">
+        ＋ Yeni Kayıt Ekle
+      </button>
+    </section>
+
+    <!-- SAĞLIK GEÇMİŞİ -->
+    <section class="health-records-section">
+
+      <div class="health-records-heading">
+        <h2 id="health-records-title">
+          🐾 Sağlık Kayıtları
+        </h2>
+
+        <select id="health-sort"
+                aria-label="Kayıtları sırala">
+          <option value="newest">
+            Tarihe Göre (Yeni → Eski)
+          </option>
+          <option value="oldest">
+            Tarihe Göre (Eski → Yeni)
+          </option>
+        </select>
+      </div>
+
+      <div class="health-records-list"
+           id="health-records-list">
+
+        <p class="health-empty-message">
+          Sağlık kayıtları yükleniyor...
+        </p>
+
+      </div>
+
+      <!-- YENİ KAYIT ALANI -->
+      <button class="health-bottom-add"
+              id="health-bottom-add"
+              type="button">
+        <span class="health-bottom-icon">＋</span>
+
+        <span>
+              <strong>Yeni Sağlık Kaydı Ekle</strong>
+              <small>
+                Muayene, aşı, tedavi veya test
+                sonuçlarını kaydet.
+              </small>
+            </span>
+      </button>
+    </section>
+
+    <!-- ALT BİLGİ BANNER -->
+    <section class="health-footer-banner">
+      <span class="health-footer-icon">💜</span>
+
+      <div>
+        <h2>
+          Minik dostlarının sağlığı
+          her zaman önceliğimiz!
+        </h2>
+
+        <p>
+          Tüm sağlık kayıtlarını düzenli tutarak
+          daha sağlıklı ve mutlu bir yaşam
+          sürmelerine destek ol.
+        </p>
+      </div>
+
+      <span class="health-footer-paw"
+            aria-hidden="true">🐾</span>
+    </section>
+
+  </main>
 </div>
 
+<!-- YENİ SAĞLIK KAYDI EKLEME PENCERESİ -->
+<dialog class="health-dialog" id="health-add-dialog">
+
+  <div class="health-dialog-header">
+    <div>
+      <span class="health-dialog-label">🩺 PETCARE</span>
+      <h2 id="health-dialog-title">Yeni Sağlık Kaydı Ekle</h2>
+      <p>Minik dostunun sağlık bilgilerini kaydet.</p>
+    </div>
+
+    <button
+            type="button"
+            class="health-dialog-close"
+            id="health-dialog-close"
+            aria-label="Pencereyi kapat">
+      ×
+    </button>
+  </div>
+
+  <form id="health-add-form">
+
+    <div class="health-form-group">
+      <label for="health-form-pet">Evcil Hayvan</label>
+      <select id="health-form-pet" name="petId" required>
+        <option value="">Hayvan seçiniz</option>
+      </select>
+    </div>
+
+    <div class="health-form-row">
+
+      <div class="health-form-group">
+        <label for="health-form-type">Kayıt Türü *</label>
+        <select id="health-form-type" name="type" required>
+          <option value="">Kayıt türü seçiniz</option>
+          <option value="examination">🩺 Muayene</option>
+          <option value="vaccination">💉 Aşı</option>
+          <option value="treatment">💊 Tedavi</option>
+          <option value="test">🧪 Test Sonuçları</option>
+          <option value="other">📋 Diğer</option>
+        </select>
+      </div>
+
+      <div class="health-form-group">
+        <label for="health-form-date">İşlem Tarihi *</label>
+        <input
+                type="date"
+                id="health-form-date"
+                name="date"
+                required>
+      </div>
+
+    </div>
+
+    <div class="health-form-group">
+      <label for="health-form-title">Kayıt Başlığı *</label>
+      <input
+              type="text"
+              id="health-form-title"
+              name="title"
+              maxlength="150"
+              placeholder="Örn: Genel sağlık kontrolü"
+              required>
+    </div>
+
+    <div class="health-form-group">
+      <label for="health-form-clinic">Veteriner / Klinik</label>
+      <input
+              type="text"
+              id="health-form-clinic"
+              name="clinic"
+              maxlength="150"
+              placeholder="Örn: PetCare Veteriner Kliniği">
+    </div>
+
+    <div class="health-form-group">
+      <label for="health-form-description">Açıklama</label>
+      <textarea
+              id="health-form-description"
+              name="description"
+              rows="4"
+              maxlength="2000"
+              placeholder="Muayene, tedavi veya test ile ilgili notlarını yazabilirsin."></textarea>
+    </div>
+
+    <div class="health-dialog-actions">
+      <button
+              type="button"
+              class="health-dialog-cancel"
+              id="health-dialog-cancel">
+        Vazgeç
+      </button>
+
+      <button
+              type="submit"
+              class="health-dialog-save">
+        💜 Kaydı Ekle
+      </button>
+    </div>
+
+  </form>
+</dialog>
+
+
+<!-- ORTAK JAVASCRIPT DOSYALARI -->
 <script src="sidebar.js"></script>
+<script src="topbar.js"></script>
+<script src="toast.js"></script>
+
+<!-- SAĞLIK KAYITLARI -->
+<script src="health-records.js"></script>
+
 </body>
 </html>

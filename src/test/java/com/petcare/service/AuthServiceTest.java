@@ -2,8 +2,11 @@ package com.petcare.service;
 
 import com.petcare.entity.User;
 import com.petcare.repository.UserRepository;
+import com.petcare.repository.PetRepository;
+import com.petcare.storage.PetPhotoStorage;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.Optional;
 
@@ -18,7 +21,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mock(UserRepository.class),
-                mock(Pbkdf2PasswordHash.class)
+                mock(Pbkdf2PasswordHash.class),
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         IllegalArgumentException exception = assertThrows(
@@ -37,7 +42,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mock(UserRepository.class),
-                mock(Pbkdf2PasswordHash.class)
+                mock(Pbkdf2PasswordHash.class),
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         IllegalArgumentException exception = assertThrows(
@@ -61,7 +68,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mock(UserRepository.class),
-                mock(Pbkdf2PasswordHash.class)
+                mock(Pbkdf2PasswordHash.class),
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         String uzunSifre = "a".repeat(129);
@@ -94,7 +103,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         IllegalArgumentException exception = assertThrows(
@@ -137,7 +148,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         IllegalArgumentException exception = assertThrows(
@@ -182,7 +195,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         User result = authService.login(
@@ -216,7 +231,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         User result = authService.register(
@@ -253,7 +270,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         User user = authService.register(
@@ -292,7 +311,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         User result = authService.login(
@@ -333,7 +354,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         authService.initializePasswordHash();
@@ -375,7 +398,9 @@ class AuthServiceTest {
 
         AuthService authService = new AuthService(
                 mockRepository,
-                mockPasswordHash
+                mockPasswordHash,
+                mock(PetRepository.class),
+                mock(PetPhotoStorage.class)
         );
 
         authService.initializePasswordHash();

@@ -1,24 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PetCare | Ayarlar</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app-container">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <aside class="sidebar"></aside>
 
-    <aside class="sidebar"></aside>
-
-    <main class="main-content">
+      <main class="main-content">
         <h1>⚙️ Ayarlar</h1>
-        <p>Bu sayfa yakında hazırlanacak. 💜</p>
+
+        <section class="settings-section">
+          <h2>👤 Hesap Yönetimi</h2>
+          <p>
+            PetCare hesabınızla ilgili işlemleri buradan
+            gerçekleştirebilirsiniz.
+          </p>
+
+          <div class="settings-danger-zone">
+            <h3>🗑️ Hesabımı Sil</h3>
+
+            <p>
+              Hesabınızı sildiğinizde hayvanlarınız ve
+              onlara ait fotoğraflar kalıcı olarak silinir.
+              Bu işlem geri alınamaz.
+            </p>
+
+            <button
+                    type="button"
+                    id="delete-account-btn"
+                    class="settings-delete-btn">
+              Hesabımı Sil
+            </button>
+          </div>
+        </section>
+
+        <dialog id="delete-account-dialog">
+          <form id="delete-account-form">
+            <h2>Hesabınızı Silmek İstiyor musunuz?</h2>
+
+            <p>
+              Bu işlem geri alınamaz.
+              Devam etmek için mevcut şifrenizi girin.
+            </p>
+
+            <label for="delete-account-password">
+              Mevcut Şifreniz
+            </label>
+
+            <input
+                    type="password"
+                    id="delete-account-password"
+                    autocomplete="current-password"
+                    required
+            />
+
+            <div class="settings-dialog-actions">
+              <button
+                      type="button"
+                      id="delete-account-cancel">
+                Vazgeç
+              </button>
+
+              <button type="submit" id="delete-account-confirm">
+                Hesabımı Kalıcı Olarak Sil
+              </button>
+            </div>
+          </form>
+        </dialog>
+
         <a href="index.html">← Ana Sayfaya Dön</a>
-    </main>
+      </main>
+    </div>
 
-</div>
-
-<script src="sidebar.js"></script>
-</body>
+    <script src="sidebar.js"></script>
+    <script src="settings.js"></script>
+  </body>
 </html>
