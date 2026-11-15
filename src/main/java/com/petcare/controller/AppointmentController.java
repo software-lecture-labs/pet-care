@@ -22,8 +22,18 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AppointmentController {
 
+    private final AppointmentService appointmentService;
+
+    // Payara CDI için parametresiz constructor
+    protected AppointmentController() {
+        this.appointmentService = null;
+    }
+
+    // Constructor Injection
     @Inject
-    private AppointmentService appointmentService;
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     @Context
     private HttpServletRequest request;

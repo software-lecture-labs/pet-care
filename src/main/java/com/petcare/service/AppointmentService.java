@@ -14,8 +14,18 @@ import java.util.Map;
 @ApplicationScoped
 public class AppointmentService {
 
+    private final AppointmentRepository appointmentRepository;
+
+    // Payara CDI için parametresiz constructor
+    protected AppointmentService() {
+        this.appointmentRepository = null;
+    }
+
+    // Constructor Injection
     @Inject
-    private AppointmentRepository appointmentRepository;
+    public AppointmentService(AppointmentRepository appointmentRepository) {
+        this.appointmentRepository = appointmentRepository;
+    }
 
     // Kullanıcının randevularını listele
     public List<Appointment> getAppointments(Long userId) {
