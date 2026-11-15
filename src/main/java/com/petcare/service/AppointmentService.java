@@ -6,11 +6,10 @@ import com.petcare.repository.AppointmentRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class AppointmentService {
@@ -18,16 +17,24 @@ public class AppointmentService {
     @Inject
     private AppointmentRepository appointmentRepository;
 
-    @PersistenceContext
-    private EntityManager em;
-
     // Kullanıcının randevularını listele
     public List<Appointment> getAppointments(Long userId) {
+
         if (userId == null) {
             throw new SecurityException("Oturum bulunamadı.");
         }
 
         return appointmentRepository.findByUserId(userId);
+    }
+
+    // Kullanıcının randevularını detaylarıyla listele
+    public List<Map<String, Object>> getAppointmentDetails(Long userId) {
+
+        if (userId == null) {
+            throw new SecurityException("Oturum bulunamadı.");
+        }
+
+        return appointmentRepository.findDetailsByUserId(userId);
     }
 
     // Yeni randevu oluştur
@@ -57,35 +64,14 @@ public class AppointmentService {
         }
 
         // Veteriner ve seçilen saat aktif ve gelecekte mi?
-        Number available = (Number) em.createNativeQuery(
-                        "SELECT COUNT(*) " +
-                                "FROM vet_availability va " +
-                                "JOIN veterinarians v " +
-                                "ON v.id = va.veterinarian_id " +
-                                "WHERE va.id = ?1 " +
-                                "AND va.is_active = TRUE " +
-                                "AND v.is_active = TRUE " +
-                                "AND va.start_time > CURRENT_TIMESTAMP"
-                )
-                .setParameter(1, availabilityId)
-                .getSingleResult();
-
-        if (available.longValue() == 0) {
+        if (!appointmentRepository.isAvailabilityValid(availabilityId)) {
             throw new IllegalArgumentException(
                     "Seçilen randevu saati uygun değil."
             );
         }
 
         // Aynı saat daha önce alınmış mı?
-        Number booked = (Number) em.createNativeQuery(
-                        "SELECT COUNT(*) FROM appointments " +
-                                "WHERE availability_id = ?1 " +
-                                "AND status = 'scheduled'"
-                )
-                .setParameter(1, availabilityId)
-                .getSingleResult();
-
-        if (booked.longValue() > 0) {
+        if (appointmentRepository.isAvailabilityBooked(availabilityId)) {
             throw new IllegalStateException(
                     "Bu randevu saati dolu."
             );
@@ -109,7 +95,7 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
         // Veritabanı kısıtlarını hemen kontrol et
-        em.flush();
+        appointmentRepository.flush();
 
         return appointment;
     }
