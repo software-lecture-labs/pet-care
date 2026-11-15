@@ -3,6 +3,7 @@ package com.petcare.controller;
 
 import com.petcare.entity.Appointment;
 import com.petcare.service.AppointmentService;
+import com.petcare.exception.AppointmentSlotConflictException;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -115,7 +116,7 @@ public class AppointmentController {
 
             return error(400, e.getMessage());
 
-        } catch (IllegalStateException e) {
+        } catch (AppointmentSlotConflictException e) {
 
             return error(409, e.getMessage());
         }

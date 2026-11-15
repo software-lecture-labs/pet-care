@@ -2,9 +2,13 @@
 package com.petcare.repository;
 
 import com.petcare.entity.Appointment;
+import com.petcare.exception.AppointmentSlotConflictException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
+import org.postgresql.util.PSQLException;
+
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -97,7 +101,11 @@ public class AppointmentRepository {
 
     // Yeni randevu kaydeder
     public void save(Appointment appointment) {
-        em.persist(appointment);
+        try {
+            em.persist(appointment);
+        } catch (PersistenceException e) {
+            throw translatePersistenceException(e);
+        }
     }
 
     // Randevunun durumunu günceller
@@ -154,6 +162,38 @@ public class AppointmentRepository {
 
     // Veritabanı kısıtlarının hemen kontrol edilmesini sağlar
     public void flush() {
-        em.flush();
+        try {
+            em.flush();
+        } catch (PersistenceException e) {
+            throw translatePersistenceException(e);
+        }
+    }
+
+    // Randevu saati çakışmasını diğer veritabanı hatalarından ayırır
+    private RuntimeException translatePersistenceException(
+            PersistenceException exception) {
+
+        Throwable cause = exception;
+
+        while (cause != null) {
+
+            if (cause instanceof PSQLException sqlException) {
+
+                if ("23505".equals(sqlException.getSQLState())
+                        && sqlException.getServerErrorMessage() != null
+                        && "uq_active_appointment_slot".equals(
+                        sqlException.getServerErrorMessage().getConstraint())) {
+
+                    return new AppointmentSlotConflictException(
+                            "Bu randevu saati dolu.",
+                            exception
+                    );
+                }
+            }
+
+            cause = cause.getCause();
+        }
+
+        return exception;
     }
 }

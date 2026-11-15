@@ -3,6 +3,7 @@ package com.petcare.service;
 
 import com.petcare.entity.Appointment;
 import com.petcare.repository.AppointmentRepository;
+import com.petcare.exception.AppointmentSlotConflictException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -96,7 +97,7 @@ public class AppointmentService {
 
         // Aynı saat daha önce alınmış mı?
         if (appointmentRepository.isAvailabilityBooked(availabilityId)) {
-            throw new IllegalStateException(
+            throw new AppointmentSlotConflictException(
                     "Bu randevu saati dolu."
             );
         }
