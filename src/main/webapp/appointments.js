@@ -504,7 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     petId: Number(petId),
                     availabilityId: Number(selectedSlot),
                     reason,
-                    notes: notesInput.value.trim().slice(0, 220)
+                    notes: notesInput.value.trim()
                 })
             });
             createDialog.close();
