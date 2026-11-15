@@ -66,6 +66,20 @@ public class AppointmentService {
             );
         }
 
+        // Randevu nedeni uzunluk kontrolü
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException(
+                    "Randevu nedeni en fazla 255 karakter olabilir."
+            );
+        }
+
+        // Randevu notu uzunluk kontrolü
+        if (notes != null && notes.length() > 1000) {
+            throw new IllegalArgumentException(
+                    "Randevu notu en fazla 1000 karakter olabilir."
+            );
+        }
+
         // Hayvan bu kullanıcıya mı ait?
         if (!appointmentRepository.isPetOwnedByUser(petId, userId)) {
             throw new IllegalArgumentException(
@@ -84,12 +98,6 @@ public class AppointmentService {
         if (appointmentRepository.isAvailabilityBooked(availabilityId)) {
             throw new IllegalStateException(
                     "Bu randevu saati dolu."
-            );
-        }
-
-        if (reason != null && reason.length() > 255) {
-            throw new IllegalArgumentException(
-                    "Randevu nedeni en fazla 255 karakter olabilir."
             );
         }
 
