@@ -3,6 +3,7 @@ package com.petcare.service;
 
 import com.petcare.entity.Appointment;
 import com.petcare.repository.AppointmentRepository;
+import com.petcare.exception.AppointmentSlotConflictException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -122,6 +123,78 @@ class AppointmentServiceTest {
         assertNull(result.getNotes());
 
         verify(mockRepository).save(same(result));
+        verify(mockRepository).flush();
+    }
+
+    @Test
+    void doluRandevuSaatiReddedilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(true);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentSlotConflictException exception = assertThrows(
+                AppointmentSlotConflictException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, "Genel kontrol", null
+                )
+        );
+
+        assertEquals(
+                "Bu randevu saati dolu.",
+                exception.getMessage()
+        );
+
+        verify(mockRepository, never()).save(any());
+        verify(mockRepository, never()).flush();
+    }
+
+    @Test
+    void kayitSirasindaOlusanRandevuCakismasiIletilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(false);
+
+        doThrow(new AppointmentSlotConflictException(
+                "Bu randevu saati dolu."
+        )).when(mockRepository).flush();
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentSlotConflictException exception = assertThrows(
+                AppointmentSlotConflictException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, "Genel kontrol", null
+                )
+        );
+
+        assertEquals(
+                "Bu randevu saati dolu.",
+                exception.getMessage()
+        );
+
+        verify(mockRepository).save(any(Appointment.class));
         verify(mockRepository).flush();
     }
 }
