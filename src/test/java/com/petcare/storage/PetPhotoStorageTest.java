@@ -19,6 +19,7 @@ class PetPhotoStorageTest {
                 exception.getMessage()
         );
     }
+
     @Test
     void ortamDegiskeniBossaAciklayiciHataVerilmeli() {
 
@@ -31,5 +32,10 @@ class PetPhotoStorageTest {
                 "PETCARE_UPLOAD_DIR ortam değişkeni tanımlanmalıdır.",
                 exception.getMessage()
         );
+    }
+
+    @Test
+    void parametresizConstructorHataFirlatmamali() {
+        assertDoesNotThrow(() -> new PetPhotoStorage());
     }
 }
