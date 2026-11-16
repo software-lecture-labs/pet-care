@@ -38,4 +38,9 @@ class PetPhotoStorageTest {
     void parametresizConstructorHataFirlatmamali() {
         assertDoesNotThrow(() -> new PetPhotoStorage());
     }
+
+    @Test
+    void parametresizConstructorOrtamDegiskeniniOkumamali() {
+        assertNull(new PetPhotoStorage().uploadDirectory());
+    }
 }

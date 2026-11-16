@@ -36,6 +36,10 @@ public class PetPhotoStorage {
             uploadDirectory = resolveUploadDirectory();
         }
     }
+    // Testlerde klasörün başlangıç durumunu kontrol etmek için
+    Path uploadDirectory() {
+        return uploadDirectory;
+    }
 
     private static Path resolveUploadDirectory() {
         return resolveUploadDirectory(System.getenv("PETCARE_UPLOAD_DIR"));
