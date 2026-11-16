@@ -4,6 +4,10 @@ package com.petcare.service;
 import com.petcare.entity.Appointment;
 import com.petcare.repository.AppointmentRepository;
 import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -196,5 +200,42 @@ class AppointmentServiceTest {
 
         verify(mockRepository).save(any(Appointment.class));
         verify(mockRepository).flush();
+    }
+
+    @Test
+    void randevuDetaylariServiceTarafindanDogruDonulmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentDetail detail = new AppointmentDetail(
+                10L,
+                2L,
+                3L,
+                "Genel kontrol",
+                null,
+                "scheduled",
+                "2026-11-17T06:00:00Z",
+                4L,
+                "Dr. Elif Yılmaz",
+                "PetLife Veteriner Kliniği",
+                "Pamuk",
+                "Kedi"
+        );
+
+        List<AppointmentDetail> expected = List.of(detail);
+
+        when(mockRepository.findDetailsByUserId(1L))
+                .thenReturn(expected);
+
+        List<AppointmentDetail> result =
+                appointmentService.getAppointmentDetails(1L);
+
+        assertEquals(expected, result);
+
+        verify(mockRepository).findDetailsByUserId(1L);
     }
 }

@@ -2,6 +2,11 @@ package com.petcare.repository;
 
 import com.petcare.entity.Appointment;
 import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
+import jakarta.persistence.Query;
+
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,5 +159,105 @@ class AppointmentRepositoryTest {
 
         verify(entityManager).persist(appointment);
         verify(entityManager).flush();
+    }
+
+    @Test
+    void randevuDetaylariRecordAlanlarinaDogruEslenmeli() {
+
+        Query query = mock(Query.class);
+
+        Object[] row = {
+                10L,
+                2L,
+                3L,
+                "Genel kontrol",
+                "Test notu",
+                "scheduled",
+                "2026-11-17T06:00:00Z",
+                4L,
+                "Dr. Elif Yılmaz",
+                "PetLife Veteriner Kliniği",
+                "Pamuk",
+                "Kedi"
+        };
+
+        when(entityManager.createNativeQuery(anyString()))
+                .thenReturn(query);
+
+        when(query.setParameter(1, 1L))
+                .thenReturn(query);
+
+        when(query.setParameter(2, 1L))
+                .thenReturn(query);
+
+        when(query.getResultList())
+                .thenReturn(List.<Object[]>of(row));
+
+        List<AppointmentDetail> result =
+                appointmentRepository.findDetailsByUserId(1L);
+
+        assertEquals(1, result.size());
+
+        AppointmentDetail detail = result.get(0);
+
+        assertEquals(10L, detail.id());
+        assertEquals(2L, detail.petId());
+        assertEquals(3L, detail.availabilityId());
+        assertEquals("Genel kontrol", detail.reason());
+        assertEquals("Test notu", detail.notes());
+        assertEquals("scheduled", detail.status());
+        assertEquals("2026-11-17T06:00:00Z", detail.startTime());
+        assertEquals(4L, detail.veterinarianId());
+        assertEquals("Dr. Elif Yılmaz", detail.vetName());
+        assertEquals("PetLife Veteriner Kliniği", detail.clinicName());
+        assertEquals("Pamuk", detail.petName());
+        assertEquals("Kedi", detail.petType());
+
+        verify(query).setParameter(1, 1L);
+        verify(query).setParameter(2, 1L);
+    }
+
+    @Test
+    void randevuDetaylarindaNullAlanlarKorunmali() {
+
+        Query query = mock(Query.class);
+
+        Object[] row = {
+                10L,
+                2L,
+                3L,
+                null,
+                null,
+                "scheduled",
+                "2026-11-17T06:00:00Z",
+                4L,
+                "Dr. Elif Yılmaz",
+                null,
+                "Pamuk",
+                "Kedi"
+        };
+
+        when(entityManager.createNativeQuery(anyString()))
+                .thenReturn(query);
+
+        when(query.setParameter(1, 1L))
+                .thenReturn(query);
+
+        when(query.setParameter(2, 1L))
+                .thenReturn(query);
+
+        when(query.getResultList())
+                .thenReturn(List.<Object[]>of(row));
+
+        List<AppointmentDetail> result =
+                appointmentRepository.findDetailsByUserId(1L);
+
+        assertEquals(1, result.size());
+
+        AppointmentDetail detail = result.get(0);
+
+        assertNull(detail.reason());
+        assertNull(detail.notes());
+        assertNull(detail.clinicName());
     }
 }

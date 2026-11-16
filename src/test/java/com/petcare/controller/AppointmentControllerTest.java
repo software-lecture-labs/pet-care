@@ -3,6 +3,10 @@ package com.petcare.controller;
 import com.petcare.entity.Appointment;
 import com.petcare.exception.AppointmentSlotConflictException;
 import com.petcare.service.AppointmentService;
+import com.petcare.dto.AppointmentDetail;
+
+import java.util.List;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.Response;
@@ -132,5 +136,37 @@ class AppointmentControllerTest {
         );
 
         assertSame(exception, result);
+    }
+
+    @Test
+    void randevuDetaylari200IleDonmeli() {
+
+        AppointmentDetail detail = new AppointmentDetail(
+                10L,
+                2L,
+                3L,
+                "Genel kontrol",
+                null,
+                "scheduled",
+                "2026-11-17T06:00:00Z",
+                4L,
+                "Dr. Elif Yılmaz",
+                "PetLife Veteriner Kliniği",
+                "Pamuk",
+                "Kedi"
+        );
+
+        List<AppointmentDetail> expected = List.of(detail);
+
+        when(appointmentService.getAppointmentDetails(1L))
+                .thenReturn(expected);
+
+        Response response =
+                appointmentController.getAppointments();
+
+        assertEquals(200, response.getStatus());
+        assertEquals(expected, response.getEntity());
+
+        verify(appointmentService).getAppointmentDetails(1L);
     }
 }
