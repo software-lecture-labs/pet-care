@@ -4,6 +4,7 @@ package com.petcare.controller;
 import com.petcare.entity.Appointment;
 import com.petcare.service.AppointmentService;
 import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -74,7 +75,7 @@ public class AppointmentController {
             return error(401, "Oturum açmanız gerekiyor.");
         }
 
-        List<Map<String, Object>> appointments =
+        List<AppointmentDetail> appointments =
                 appointmentService.getAppointmentDetails(userId);
 
         return Response.ok(appointments).build();

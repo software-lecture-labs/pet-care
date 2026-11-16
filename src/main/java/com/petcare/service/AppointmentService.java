@@ -4,13 +4,13 @@ package com.petcare.service;
 import com.petcare.entity.Appointment;
 import com.petcare.repository.AppointmentRepository;
 import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @ApplicationScoped
 public class AppointmentService {
@@ -39,8 +39,7 @@ public class AppointmentService {
     }
 
     // Kullanıcının randevularını detaylarıyla listele
-    public List<Map<String, Object>> getAppointmentDetails(Long userId) {
-
+    public List<AppointmentDetail> getAppointmentDetails(Long userId) {
         if (userId == null) {
             throw new SecurityException("Oturum bulunamadı.");
         }
