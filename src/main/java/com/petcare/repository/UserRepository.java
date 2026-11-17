@@ -44,4 +44,15 @@ public class UserRepository {
     public Optional<User> findById(Long id) {
         return Optional.ofNullable(entityManager.find(User.class, id));
     }
+
+    // Kullanıcıyı veritabanından siler.
+    public void delete(User user) {
+        User managedUser = entityManager.contains(user)
+                ? user
+                : entityManager.merge(user);
+
+        entityManager.remove(managedUser);
+        entityManager.flush();
+    }
+
 }

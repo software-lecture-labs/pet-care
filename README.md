@@ -105,6 +105,52 @@ Bağlantıyı **Ping** işlemiyle doğrulayın.
 - **JNDI Name:** `jdbc/PetCareDS`
 - **Pool Name:** `PetCarePool`
 
+
+### Fotoğraf Yükleme Klasörünün Yapılandırılması
+
+Evcil hayvan fotoğrafları, uygulamanın dağıtım klasörü dışında
+saklanır. Fotoğrafların kaydedileceği dizin `PETCARE_UPLOAD_DIR`
+ortam değişkeni üzerinden belirlenir.
+
+Bu değişkenin tanımlanması zorunludur.
+
+İşletim sistemine göre örnek dizinler:
+
+- Windows: `C:\PetCare\uploads`
+- Linux: `/var/lib/petcare/uploads`
+- macOS: `/Users/Shared/petcare/uploads`
+- Docker: `/app/uploads`
+
+Windows PowerShell üzerinden örnek tanımlama:
+
+```powershell
+$env:PETCARE_UPLOAD_DIR = "C:\PetCare\uploads"
+```
+
+Linux/macOS terminalinde örnek tanımlama:
+
+```bash
+export PETCARE_UPLOAD_DIR=/var/lib/petcare/uploads
+```
+
+**Önemli:** Ortam değişkeni, Payara Server'ı çalıştıran
+işlem tarafından erişilebilir olmalıdır. Değişken
+tanımlandıktan sonra Payara Server yeniden başlatılmalıdır.
+
+Uygulama, belirtilen klasör mevcut değilse fotoğraf
+kaydedilirken klasörü otomatik olarak oluşturur.
+Payara'nın ilgili dizinde yazma ve okuma izinleri
+bulunmalıdır.
+
+Docker ortamında fotoğrafların kalıcı olması için
+yükleme klasörü bir volume ile eşleştirilmelidir.
+
+Fotoğraf yükleme sınırları:
+- Desteklenen formatlar: JPEG ve PNG
+- Maksimum dosya boyutu: 5 MB
+- Maksimum çözünürlük: 4096 × 4096 piksel
+```
+
 ### 4. Projeyi Çalıştırın
 
 Projeyi Maven ile derleyin:
