@@ -15,6 +15,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.DELETE;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -137,11 +142,16 @@ public class AuthController {
             HttpSession session = httpRequest.getSession(true);
 
             session.setAttribute("userId", user.getId());
+            // Oturuma özel güvenli CSRF token oluştur.
+            String csrfToken = generateCsrfToken();
+
+            session.setAttribute("csrfToken", csrfToken);
 
             return Response.ok(Map.of(
                     "message", "Giriş başarılı.",
                     "userId", user.getId(),
-                    "firstName", user.getFirstName()
+                    "firstName", user.getFirstName(),
+                    "csrfToken", csrfToken
             )).build();
 
         } catch (IllegalArgumentException exception) {
@@ -176,13 +186,22 @@ public class AuthController {
                     .entity(Map.of("message", "Lütfen giriş yapın."))
                     .build();
         }
+        String csrfToken = (String) session.getAttribute("csrfToken");
+
+        if (csrfToken == null) {
+            csrfToken = generateCsrfToken();
+            session.setAttribute("csrfToken", csrfToken);
+        }
+
+        final String responseCsrfToken = csrfToken;
 
         return authService.currentUser(userId)
                 .map(user -> Response.ok(Map.of(
                         "userId", user.getId(),
                         "firstName", user.getFirstName(),
                         "lastName", user.getLastName(),
-                        "email", user.getEmail()
+                        "email", user.getEmail(),
+                        "csrfToken", responseCsrfToken
                 )).build())
                 .orElseGet(() -> Response.status(Response.Status.UNAUTHORIZED)
                         .entity(Map.of("message", "Kullanıcı bulunamadı."))
@@ -191,6 +210,101 @@ public class AuthController {
     // ========================================
 // ÇIKIŞ YAPMA
 // ========================================
+
+    // Hesap silme isteğinde gönderilecek bilgiler.
+    public record DeleteAccountRequest(
+            @NotBlank String password
+    ) {
+    }
+
+    // Kullanıcının hesabını güvenli şekilde siler.
+    @POST
+    @Path("/delete-account")
+    public Response deleteAccount(
+            @Valid @NotNull DeleteAccountRequest deleteRequest,
+            @HeaderParam("X-CSRF-Token") String requestToken,
+            @Context HttpServletRequest request
+    ) {
+
+        HttpSession session = request.getSession(false);
+
+        // Oturum kontrolü.
+        if (session == null ||
+                !(session.getAttribute("userId") instanceof Long userId)) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("message", "Lütfen giriş yapın."))
+                    .build();
+        }
+
+        // CSRF token kontrolü.
+        String sessionToken = (String) session.getAttribute("csrfToken");
+
+        if (sessionToken == null || requestToken == null ||
+                !MessageDigest.isEqual(
+                        sessionToken.getBytes(StandardCharsets.UTF_8),
+                        requestToken.getBytes(StandardCharsets.UTF_8)
+                )) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("message", "Geçersiz CSRF token."))
+                    .build();
+        }
+
+        if (deleteRequest == null ||
+                deleteRequest.password() == null ||
+                deleteRequest.password().isBlank()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("message", "Şifrenizi girin."))
+                    .build();
+        }
+
+
+        // Kullanıcıyı bul.
+        User user = authService.currentUser(userId).orElse(null);
+        if (user == null) {
+            session.invalidate();
+
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of(
+                            "message",
+                            "Oturum geçersiz. Lütfen tekrar giriş yapın."
+                    ))
+                    .build();
+        }
+
+        // Hesap silme işleminde başarısız şifre denemelerini sınırla.
+        String email = user.getEmail();
+
+        if (loginAttemptService.isBlocked(email)) {
+            return Response.status(429)
+                    .entity(Map.of(
+                            "message",
+                            "Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin."
+                    ))
+                    .build();
+        }
+        // Mevcut şifreyi doğrula.
+        try {
+            authService.login(email, deleteRequest.password());
+        } catch (IllegalArgumentException exception) {
+            loginAttemptService.recordFailedAttempt(email);
+
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("message", "Şifreniz hatalı."))
+                    .build();
+        }
+
+        // Hesabı ve fotoğrafları sil.
+        authService.deleteAccount(userId);
+
+        // Silme başarılıysa oturumu kapat.
+        session.invalidate();
+
+        return Response.ok(Map.of(
+                "message", "Hesabınız başarıyla silindi."
+        )).build();
+
+
+    }
 
     @POST
     @Path("/logout")
@@ -205,6 +319,16 @@ public class AuthController {
         return Response.ok(Map.of(
                 "message", "Başarıyla çıkış yapıldı."
         )).build();
+    }
+
+    // Güvenli CSRF token oluşturur.
+    private String generateCsrfToken() {
+        byte[] csrfBytes = new byte[32];
+        new java.security.SecureRandom().nextBytes(csrfBytes);
+
+        return java.util.Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(csrfBytes);
     }
 
 }
