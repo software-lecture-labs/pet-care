@@ -45,11 +45,13 @@ CREATE TABLE IF NOT EXISTS appointments (
 
     CONSTRAINT fk_appointment_user
     FOREIGN KEY (user_id)
-    REFERENCES users(id),
+    REFERENCES users(id)
+    ON DELETE CASCADE,
 
     CONSTRAINT fk_appointment_pet
     FOREIGN KEY (pet_id)
-    REFERENCES pets(id),
+    REFERENCES pets(id)
+    ON DELETE CASCADE,
 
     CONSTRAINT fk_appointment_availability
     FOREIGN KEY (availability_id)
