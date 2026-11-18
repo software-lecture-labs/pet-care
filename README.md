@@ -99,6 +99,34 @@ Randevular modülünün arayüz üzerinden eksiksiz
 kullanılabilmesi için Hayvanlarım modülünün de
 uygulamaya dahil edilmesi gerekmektedir.
 
+#### Mevcut Veritabanının Güncellenmesi
+
+Eski veritabanı şemasını kullanan geliştiriciler,
+kullanıcı veya evcil hayvan silindiğinde ilişkili
+randevuların da otomatik olarak silinmesi için
+aşağıdaki SQL sorgusunu çalıştırmalıdır:
+
+```sql
+BEGIN;
+
+ALTER TABLE appointments
+DROP CONSTRAINT fk_appointment_user,
+    ADD CONSTRAINT fk_appointment_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id) ON DELETE CASCADE;
+
+ALTER TABLE appointments
+DROP CONSTRAINT fk_appointment_pet,
+    ADD CONSTRAINT fk_appointment_pet
+        FOREIGN KEY (pet_id)
+        REFERENCES pets(id) ON DELETE CASCADE;
+
+COMMIT;
+```
+
+Yeni kurulumlarda veya CASCADE kuralları zaten tanımlanmış
+veritabanlarında bu işlemin yapılmasına gerek yoktur.
+
 #### Örnek Veteriner ve Randevu Verileri
 
 `appointments_seed.sql` dosyası geliştirme ve test
