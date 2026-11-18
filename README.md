@@ -72,11 +72,85 @@ cd pet-care
 
 PostgreSQL üzerinde `petcare_db` veritabanını oluşturun.
 
-Ardından aşağıdaki SQL dosyasını çalıştırın:
+pgAdmin üzerinden oluşturduğunuz veritabanına bağlanarak
+aşağıdaki SQL dosyalarını belirtilen sırayla çalıştırın:
+
+| Sıra | SQL Dosyası | Açıklama |
+|---|---|---|
+| 1 | `schema.sql` | Kullanıcı ve hayvan tablolarını oluşturur. |
+| 2 | `appointments_schema.sql` | Veteriner, müsait saat ve randevu tablolarını oluşturur. |
+| 3 | `appointments_seed.sql` | Geliştirme ve test için örnek veterinerleri ve müsait saatleri ekler. |
+
+SQL dosyaları aşağıdaki dizinde bulunmaktadır:
 
 ```text
-src/main/resources/db/schema.sql
+src/main/resources/db/
 ```
+
+#### Randevu Modülü Bağımlılığı
+
+Randevu modülü, Hayvanlarım modülündeki `pets` tablosuna
+bağımlıdır.
+
+Modüller henüz birleştirilmediyse `schema.sql` dosyasının
+`feature/pets-page` branch'indeki sürümü kullanılmalıdır.
+
+Randevular modülünün arayüz üzerinden eksiksiz
+kullanılabilmesi için Hayvanlarım modülünün de
+uygulamaya dahil edilmesi gerekmektedir.
+
+#### Mevcut Veritabanının Güncellenmesi
+
+Eski veritabanı şemasını kullanan geliştiriciler,
+kullanıcı veya evcil hayvan silindiğinde ilişkili
+randevuların da otomatik olarak silinmesi için
+aşağıdaki SQL sorgusunu çalıştırmalıdır:
+
+```sql
+BEGIN;
+
+ALTER TABLE appointments
+DROP CONSTRAINT fk_appointment_user,
+    ADD CONSTRAINT fk_appointment_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id) ON DELETE CASCADE;
+
+ALTER TABLE appointments
+DROP CONSTRAINT fk_appointment_pet,
+    ADD CONSTRAINT fk_appointment_pet
+        FOREIGN KEY (pet_id)
+        REFERENCES pets(id) ON DELETE CASCADE;
+
+COMMIT;
+```
+
+Yeni kurulumlarda veya CASCADE kuralları zaten tanımlanmış
+veritabanlarında bu işlemin yapılmasına gerek yoktur.
+
+#### Örnek Veteriner ve Randevu Verileri
+
+`appointments_seed.sql` dosyası geliştirme ve test
+ortamlarında kullanılmak üzere hazırlanmıştır.
+
+Dosya çalıştırıldığında:
+
+- 6 örnek veteriner oluşturulur.
+- Yarından itibaren 7 günlük müsait saat oluşturulur.
+- Her veteriner için günlük 12 randevu aralığı oluşturulur.
+- Her randevu aralığı 30 dakikadır.
+- Boş veritabanında toplam 504 müsait randevu aralığı oluşturulur.
+- Saatler Türkiye saat dilimine göre belirlenir.
+- Kullanıcılar adına otomatik randevu oluşturulmaz.
+
+Seed dosyası aynı gün içerisinde sıralı olarak yeniden
+çalıştırıldığında mükerrer kayıt oluşturmaz.
+
+İleri tarihli müsait saatler eklemek için dosya daha
+sonraki günlerde tekrar çalıştırılabilir.
+
+> **Not:** Seed dosyası yalnızca geliştirme ve test
+> ortamlarında kullanılmalıdır. Üretim ortamında
+> çalıştırılması önerilmez.
 
 ### 3. Payara Server'ı Yapılandırın
 
