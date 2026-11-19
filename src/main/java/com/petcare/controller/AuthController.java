@@ -17,6 +17,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.DELETE;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -259,51 +260,51 @@ public class AuthController {
 
         // Kullanıcıyı bul.
         User user = authService.currentUser(userId).orElse(null);
-            if (user == null) {
-                session.invalidate();
-
-                return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity(Map.of(
-                                "message",
-                                "Oturum geçersiz. Lütfen tekrar giriş yapın."
-                        ))
-                        .build();
-            }
-
-            // Hesap silme işleminde başarısız şifre denemelerini sınırla.
-            String email = user.getEmail();
-
-            if (loginAttemptService.isBlocked(email)) {
-                return Response.status(429)
-                        .entity(Map.of(
-                                "message",
-                                "Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin."
-                        ))
-                        .build();
-            }
-            // Mevcut şifreyi doğrula.
-            try {
-                authService.login(email, deleteRequest.password());
-            } catch (IllegalArgumentException exception) {
-                loginAttemptService.recordFailedAttempt(email);
-
-                return Response.status(Response.Status.FORBIDDEN)
-                        .entity(Map.of("message", "Şifreniz hatalı."))
-                        .build();
-            }
-
-            // Hesabı ve fotoğrafları sil.
-            authService.deleteAccount(userId);
-
-            // Silme başarılıysa oturumu kapat.
+        if (user == null) {
             session.invalidate();
 
-            return Response.ok(Map.of(
-                    "message", "Hesabınız başarıyla silindi."
-            )).build();
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of(
+                            "message",
+                            "Oturum geçersiz. Lütfen tekrar giriş yapın."
+                    ))
+                    .build();
+        }
+
+        // Hesap silme işleminde başarısız şifre denemelerini sınırla.
+        String email = user.getEmail();
+
+        if (loginAttemptService.isBlocked(email)) {
+            return Response.status(429)
+                    .entity(Map.of(
+                            "message",
+                            "Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin."
+                    ))
+                    .build();
+        }
+        // Mevcut şifreyi doğrula.
+        try {
+            authService.login(email, deleteRequest.password());
+        } catch (IllegalArgumentException exception) {
+            loginAttemptService.recordFailedAttempt(email);
+
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("message", "Şifreniz hatalı."))
+                    .build();
+        }
+
+        // Hesabı ve fotoğrafları sil.
+        authService.deleteAccount(userId);
+
+        // Silme başarılıysa oturumu kapat.
+        session.invalidate();
+
+        return Response.ok(Map.of(
+                "message", "Hesabınız başarıyla silindi."
+        )).build();
 
 
-}
+    }
 
     @POST
     @Path("/logout")
@@ -319,6 +320,7 @@ public class AuthController {
                 "message", "Başarıyla çıkış yapıldı."
         )).build();
     }
+
     // Güvenli CSRF token oluşturur.
     private String generateCsrfToken() {
         byte[] csrfBytes = new byte[32];

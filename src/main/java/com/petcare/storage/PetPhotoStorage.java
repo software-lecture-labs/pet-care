@@ -13,18 +13,32 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 
+import jakarta.annotation.PostConstruct;
+
 @ApplicationScoped
 public class PetPhotoStorage {
 
     // Fotoğrafların kaydedileceği klasör
-    private final Path uploadDirectory;
+    private Path uploadDirectory;
 
     public PetPhotoStorage() {
-        this.uploadDirectory = resolveUploadDirectory();
+        // CDI için boş constructor
     }
+
     // Testlerde ortam değişkeni değerini kontrollü olarak kullanır.
     PetPhotoStorage(String configuredPath) {
         this.uploadDirectory = resolveUploadDirectory(configuredPath);
+    }
+
+    @PostConstruct
+    private void init() {
+        if (uploadDirectory == null) {
+            uploadDirectory = resolveUploadDirectory();
+        }
+    }
+    // Testlerde klasörün başlangıç durumunu kontrol etmek için
+    Path uploadDirectory() {
+        return uploadDirectory;
     }
 
     private static Path resolveUploadDirectory() {
@@ -122,17 +136,17 @@ public class PetPhotoStorage {
         }
 
         // Dosyanın gerçekten okunabilir bir görüntü olduğunu doğrula
-            BufferedImage image = ImageIO.read(
-                    new ByteArrayInputStream(fileBytes)
-            );
+        BufferedImage image = ImageIO.read(
+                new ByteArrayInputStream(fileBytes)
+        );
 
-            if (image == null ||
-                    image.getWidth() <= 0 ||
-                    image.getHeight() <= 0) {
-                throw new IllegalArgumentException(
-                        "Geçersiz veya bozuk fotoğraf dosyası."
-                );
-            }
+        if (image == null ||
+                image.getWidth() <= 0 ||
+                image.getHeight() <= 0) {
+            throw new IllegalArgumentException(
+                    "Geçersiz veya bozuk fotoğraf dosyası."
+            );
+        }
 
         // Klasör yoksa oluştur
         Files.createDirectories(uploadDirectory);
@@ -202,7 +216,7 @@ public class PetPhotoStorage {
             );
         }
 
-        Path filePath =uploadDirectory.resolve(fileName);
+        Path filePath = uploadDirectory.resolve(fileName);
 
         Files.deleteIfExists(filePath);
     }

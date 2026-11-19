@@ -16,10 +16,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.transaction.Transactional;
+
 import java.util.Optional;
 import java.sql.SQLException;
 
 import jakarta.annotation.PostConstruct;
+
 import java.util.Map;
 import java.util.Locale;
 
@@ -58,6 +60,7 @@ public class AuthService {
     }
 
     private String dummyPasswordHash;
+
     @PostConstruct
     public void initializePasswordHash() {
 
@@ -220,7 +223,6 @@ public class AuthService {
     }
 
 
-
     // Kullanıcının giriş bilgilerini doğrular.
     public User login(String email, String password) {
 
@@ -276,6 +278,7 @@ public class AuthService {
 
         return userRepository.findById(userId);
     }
+
     private boolean isUniqueEmailViolation(Throwable exception) {
         Throwable cause = exception;
 

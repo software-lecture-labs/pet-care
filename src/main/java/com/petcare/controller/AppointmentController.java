@@ -3,11 +3,11 @@ package com.petcare.controller;
 
 import com.petcare.entity.Appointment;
 import com.petcare.service.AppointmentService;
+import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
@@ -15,8 +15,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +24,18 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AppointmentController {
 
-    @Inject
-    private AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
-    @PersistenceContext
-    private EntityManager em;
+    // Payara CDI için parametresiz constructor
+    protected AppointmentController() {
+        this.appointmentService = null;
+    }
+
+    // Constructor Injection
+    @Inject
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     @Context
     private HttpServletRequest request;
@@ -70,80 +75,10 @@ public class AppointmentController {
             return error(401, "Oturum açmanız gerekiyor.");
         }
 
-        List<?> rows = em.createNativeQuery("""
-                SELECT
-                    a.id,
-                    a.pet_id,
-                    a.availability_id,
-                    a.reason,
-                    a.notes,
-                    a.status,
-                    to_char(
-                        va.start_time AT TIME ZONE 'UTC',
-                        'YYYY-MM-DD"T"HH24":"MI":"SS"Z"'
-                    ) AS start_time,
-                    v.id AS veterinarian_id,
-                    v.full_name,
-                    v.clinic_name,
-                    p.name AS pet_name,
-                    p.type AS pet_type
-                FROM appointments a
-                JOIN pets p
-                    ON p.id = a.pet_id
-                JOIN vet_availability va
-                    ON va.id = a.availability_id
-                JOIN veterinarians v
-                    ON v.id = va.veterinarian_id
-                WHERE a.user_id = ?1
-                    AND p.user_id = ?2
-                ORDER BY va.start_time DESC
-                """)
-                .setParameter(1, userId)
-                .setParameter(2, userId)
-                .getResultList();
+        List<AppointmentDetail> appointments =
+                appointmentService.getAppointmentDetails(userId);
 
-        List<Map<String, Object>> result =
-                new ArrayList<>();
-
-        for (Object item : rows) {
-
-            Object[] row = (Object[]) item;
-
-            Map<String, Object> appointment =
-                    new LinkedHashMap<>();
-
-            appointment.put(
-                    "id", ((Number) row[0]).longValue()
-            );
-
-            appointment.put(
-                    "petId", ((Number) row[1]).longValue()
-            );
-
-            appointment.put(
-                    "availabilityId",
-                    ((Number) row[2]).longValue()
-            );
-
-            appointment.put("reason", row[3]);
-            appointment.put("notes", row[4]);
-            appointment.put("status", row[5]);
-            appointment.put("startTime", row[6]);
-
-            appointment.put(
-                    "veterinarianId",
-                    ((Number) row[7]).longValue()
-            );
-
-            appointment.put("vetName", row[8]);
-            appointment.put("clinicName", row[9]);
-            appointment.put("petName", row[10]);
-            appointment.put("petType", row[11]);
-
-            result.add(appointment);
-        }
-
-        return Response.ok(result).build();
+        return Response.ok(appointments).build();
     }
 
     // POST /api/appointments
@@ -182,7 +117,7 @@ public class AppointmentController {
 
             return error(400, e.getMessage());
 
-        } catch (IllegalStateException e) {
+        } catch (AppointmentSlotConflictException e) {
 
             return error(409, e.getMessage());
         }

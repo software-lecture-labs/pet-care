@@ -3,11 +3,11 @@ package com.petcare.service;
 
 import com.petcare.entity.Appointment;
 import com.petcare.repository.AppointmentRepository;
+import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -15,19 +15,36 @@ import java.util.List;
 @ApplicationScoped
 public class AppointmentService {
 
-    @Inject
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    // Payara CDI için parametresiz constructor
+    protected AppointmentService() {
+        this.appointmentRepository = null;
+    }
+
+    // Constructor Injection
+    @Inject
+    public AppointmentService(AppointmentRepository appointmentRepository) {
+        this.appointmentRepository = appointmentRepository;
+    }
 
     // Kullanıcının randevularını listele
     public List<Appointment> getAppointments(Long userId) {
+
         if (userId == null) {
             throw new SecurityException("Oturum bulunamadı.");
         }
 
         return appointmentRepository.findByUserId(userId);
+    }
+
+    // Kullanıcının randevularını detaylarıyla listele
+    public List<AppointmentDetail> getAppointmentDetails(Long userId) {
+        if (userId == null) {
+            throw new SecurityException("Oturum bulunamadı.");
+        }
+
+        return appointmentRepository.findDetailsByUserId(userId);
     }
 
     // Yeni randevu oluştur
@@ -49,6 +66,20 @@ public class AppointmentService {
             );
         }
 
+        // Randevu nedeni uzunluk kontrolü
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException(
+                    "Randevu nedeni en fazla 255 karakter olabilir."
+            );
+        }
+
+        // Randevu notu uzunluk kontrolü
+        if (notes != null && notes.length() > 1000) {
+            throw new IllegalArgumentException(
+                    "Randevu notu en fazla 1000 karakter olabilir."
+            );
+        }
+
         // Hayvan bu kullanıcıya mı ait?
         if (!appointmentRepository.isPetOwnedByUser(petId, userId)) {
             throw new IllegalArgumentException(
@@ -57,43 +88,16 @@ public class AppointmentService {
         }
 
         // Veteriner ve seçilen saat aktif ve gelecekte mi?
-        Number available = (Number) em.createNativeQuery(
-                        "SELECT COUNT(*) " +
-                                "FROM vet_availability va " +
-                                "JOIN veterinarians v " +
-                                "ON v.id = va.veterinarian_id " +
-                                "WHERE va.id = ?1 " +
-                                "AND va.is_active = TRUE " +
-                                "AND v.is_active = TRUE " +
-                                "AND va.start_time > CURRENT_TIMESTAMP"
-                )
-                .setParameter(1, availabilityId)
-                .getSingleResult();
-
-        if (available.longValue() == 0) {
+        if (!appointmentRepository.isAvailabilityValid(availabilityId)) {
             throw new IllegalArgumentException(
                     "Seçilen randevu saati uygun değil."
             );
         }
 
         // Aynı saat daha önce alınmış mı?
-        Number booked = (Number) em.createNativeQuery(
-                        "SELECT COUNT(*) FROM appointments " +
-                                "WHERE availability_id = ?1 " +
-                                "AND status = 'scheduled'"
-                )
-                .setParameter(1, availabilityId)
-                .getSingleResult();
-
-        if (booked.longValue() > 0) {
-            throw new IllegalStateException(
+        if (appointmentRepository.isAvailabilityBooked(availabilityId)) {
+            throw new AppointmentSlotConflictException(
                     "Bu randevu saati dolu."
-            );
-        }
-
-        if (reason != null && reason.length() > 255) {
-            throw new IllegalArgumentException(
-                    "Randevu nedeni en fazla 255 karakter olabilir."
             );
         }
 
@@ -109,7 +113,7 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
         // Veritabanı kısıtlarını hemen kontrol et
-        em.flush();
+        appointmentRepository.flush();
 
         return appointment;
     }

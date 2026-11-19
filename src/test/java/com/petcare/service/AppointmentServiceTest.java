@@ -1,0 +1,241 @@
+
+package com.petcare.service;
+
+import com.petcare.entity.Appointment;
+import com.petcare.repository.AppointmentRepository;
+import com.petcare.exception.AppointmentSlotConflictException;
+import com.petcare.dto.AppointmentDetail;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class AppointmentServiceTest {
+
+    @Test
+    void uzunRandevuNedeniReddedilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        String reason = "a".repeat(256);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, reason, null
+                )
+        );
+
+        assertEquals(
+                "Randevu nedeni en fazla 255 karakter olabilir.",
+                exception.getMessage()
+        );
+
+        verifyNoInteractions(mockRepository);
+    }
+
+    @Test
+    void uzunRandevuNotuReddedilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        String notes = "a".repeat(1001);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, "Genel kontrol", notes
+                )
+        );
+
+        assertEquals(
+                "Randevu notu en fazla 1000 karakter olabilir.",
+                exception.getMessage()
+        );
+
+        verifyNoInteractions(mockRepository);
+    }
+
+    @Test
+    void sinirDegerlerdeRandevuOlusturulabilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(false);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        String reason = "a".repeat(255);
+        String notes = "b".repeat(1000);
+
+        Appointment result = appointmentService.createAppointment(
+                1L, 2L, 3L, reason, notes
+        );
+
+        assertNotNull(result);
+        assertEquals(reason, result.getReason());
+        assertEquals(notes, result.getNotes());
+        assertEquals("scheduled", result.getStatus());
+
+        verify(mockRepository).save(same(result));
+        verify(mockRepository).flush();
+    }
+
+    @Test
+    void notOlmadanRandevuOlusturulabilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(false);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        Appointment result = appointmentService.createAppointment(
+                1L, 2L, 3L, "Genel kontrol", null
+        );
+
+        assertNotNull(result);
+        assertNull(result.getNotes());
+
+        verify(mockRepository).save(same(result));
+        verify(mockRepository).flush();
+    }
+
+    @Test
+    void doluRandevuSaatiReddedilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(true);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentSlotConflictException exception = assertThrows(
+                AppointmentSlotConflictException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, "Genel kontrol", null
+                )
+        );
+
+        assertEquals(
+                "Bu randevu saati dolu.",
+                exception.getMessage()
+        );
+
+        verify(mockRepository, never()).save(any());
+        verify(mockRepository, never()).flush();
+    }
+
+    @Test
+    void kayitSirasindaOlusanRandevuCakismasiIletilmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        when(mockRepository.isPetOwnedByUser(2L, 1L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityValid(3L))
+                .thenReturn(true);
+
+        when(mockRepository.isAvailabilityBooked(3L))
+                .thenReturn(false);
+
+        doThrow(new AppointmentSlotConflictException(
+                "Bu randevu saati dolu."
+        )).when(mockRepository).flush();
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentSlotConflictException exception = assertThrows(
+                AppointmentSlotConflictException.class,
+                () -> appointmentService.createAppointment(
+                        1L, 2L, 3L, "Genel kontrol", null
+                )
+        );
+
+        assertEquals(
+                "Bu randevu saati dolu.",
+                exception.getMessage()
+        );
+
+        verify(mockRepository).save(any(Appointment.class));
+        verify(mockRepository).flush();
+    }
+
+    @Test
+    void randevuDetaylariServiceTarafindanDogruDonulmeli() {
+
+        AppointmentRepository mockRepository =
+                mock(AppointmentRepository.class);
+
+        AppointmentService appointmentService =
+                new AppointmentService(mockRepository);
+
+        AppointmentDetail detail = new AppointmentDetail(
+                10L,
+                2L,
+                3L,
+                "Genel kontrol",
+                null,
+                "scheduled",
+                "2026-11-17T06:00:00Z",
+                4L,
+                "Dr. Elif Yılmaz",
+                "PetLife Veteriner Kliniği",
+                "Pamuk",
+                "Kedi"
+        );
+
+        List<AppointmentDetail> expected = List.of(detail);
+
+        when(mockRepository.findDetailsByUserId(1L))
+                .thenReturn(expected);
+
+        List<AppointmentDetail> result =
+                appointmentService.getAppointmentDetails(1L);
+
+        assertEquals(expected, result);
+
+        verify(mockRepository).findDetailsByUserId(1L);
+    }
+}

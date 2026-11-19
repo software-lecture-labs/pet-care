@@ -335,10 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
 
-        showToast(
-            errorData.message || 'Hayvan bilgileri güncellenemedi.',
-            'error'
-        );
+        showToast(errorData.message || 'Hayvan bilgileri güncellenemedi.', 'error');
         return;
       }
 
@@ -578,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function () {
           method: 'POST',
           credentials: 'same-origin',
           headers: {
-            'X-CSRF-Token': csrfToken
+            'X-CSRF-Token': csrfToken,
           },
           body: formData,
         });
@@ -681,8 +678,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const errorData = await response.json().catch(() => ({}));
 
         showToast(
-            errorData.message || 'Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.',
-            'error'
+          errorData.message || 'Hayvan kaydedilemedi. Lütfen bilgileri kontrol edin.',
+          'error',
         );
         return;
       }

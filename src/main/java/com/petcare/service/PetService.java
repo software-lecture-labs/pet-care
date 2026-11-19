@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.annotation.Resource;
+
 import java.time.LocalDate;
 
 import java.util.List;
@@ -202,6 +203,7 @@ public class PetService {
         }
 
     }
+
     private void deletePhotoAfterCommit(String photoPath) {
         if (photoPath == null || photoPath.isBlank()) {
             return;
@@ -236,6 +238,7 @@ public class PetService {
                 }
         );
     }
+
     private void validateUserId(Long userId) {
         if (userId == null || userId <= 0) {
             throw new IllegalArgumentException(
