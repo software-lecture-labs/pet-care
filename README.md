@@ -127,6 +127,12 @@ COMMIT;
 Yeni kurulumlarda veya CASCADE kuralları zaten tanımlanmış
 veritabanlarında bu işlemin yapılmasına gerek yoktur.
 
+`ON DELETE CASCADE`, hesap ve evcil hayvan silme işlemlerinde
+veri bütünlüğünü sağlamak amacıyla tercih edilmiştir.
+Bu yaklaşım geçmiş randevuları da sildiğinden, ileride
+veteriner randevu geçmişi modülü geliştirilirse yeniden
+değerlendirilmelidir.
+
 #### Örnek Veteriner ve Randevu Verileri
 
 `appointments_seed.sql` dosyası geliştirme ve test
