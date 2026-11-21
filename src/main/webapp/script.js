@@ -448,6 +448,13 @@ document.addEventListener('DOMContentLoaded', async function () {
       container.append(icon, info);
     } catch (error) {
       console.error('Anasayfa randevu yükleme hatası:', error);
+
+      container.replaceChildren();
+
+      const message = document.createElement('p');
+      message.textContent = 'Randevu bilgileri şu anda yüklenemiyor.';
+
+      container.appendChild(message);
     }
   }
 
