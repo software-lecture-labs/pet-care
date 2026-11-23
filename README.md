@@ -35,6 +35,65 @@ Proje, kullanıcı dostu bir arayüz ve güvenli bir altyapı hedeflenerek geli�
 | Test | JUnit 5, Mockito |
 | Diğer | Maven, Git, GitHub |
 
+## Veteriner Ara Modülü
+
+Veteriner Ara modülü, kullanıcıların veteriner kliniklerini listeleyebilmesini, klinik adı veya ilçe üzerinden arama yapabilmesini ve klinik detaylarına ulaşabilmesini sağlar.
+
+### Modül Özellikleri
+
+- **Klinik Listeleme:** Veritabanındaki aktif veteriner kliniklerinin görüntülenmesi.
+- **Klinik Arama:** Klinik adına göre arama yapılması.
+- **İlçe Filtreleme:** İstanbul'daki ilçelere göre kliniklerin filtrelenmesi.
+- **Klinik Detayları:** Klinik adı, adres, ilçe ve iletişim bilgilerinin görüntülenmesi.
+- **Harita Entegrasyonu:** Google Maps üzerinden klinik adreslerinin aranması ve yol tarifi bağlantılarının sunulması.
+- **Responsive Arayüz:** Farklı ekran boyutlarına uyumlu kullanıcı arayüzü.
+
+### Backend Mimarisi
+
+Modül, projenin katmanlı mimarisine uygun olarak geliştirilmiştir.
+
+| Dosya | Görevi |
+|---|---|
+| `ClinicController.java` | Klinik REST API isteklerini karşılar. |
+| `ClinicService.java` | Klinik işlemlerinin iş mantığını yönetir. |
+| `ClinicRepository.java` | Klinik verilerinin veritabanından alınmasını sağlar. |
+| `Clinic.java` | Klinik veritabanı modelini temsil eder. |
+
+### REST API
+
+| Metot | Endpoint | Açıklama |
+|---|---|---|
+| GET | `/api/clinics` | Aktif klinikleri listeler. |
+| GET | `/api/clinics?name=...` | Klinik adına göre arama yapar. |
+| GET | `/api/clinics?district=...` | İlçeye göre klinikleri filtreler. |
+| GET | `/api/clinics/{id}` | Belirtilen kliniğin detaylarını getirir. |
+
+API adresleri `/PetCare` uygulama context root'u altında çalışmaktadır.
+
+### Frontend Dosyaları
+
+- `veterinarians.html` — Veteriner Ara sayfası
+- `veterinarians.css` — Sayfa tasarımı ve responsive stiller
+- `veterinarians.js` — API bağlantıları, arama, filtreleme ve harita işlemleri
+- `leaflet-fallback.css` — Harita bileşeni için yedek stiller
+
+### Veritabanı
+
+Klinik verileri PostgreSQL üzerinde `clinics` tablosunda tutulmaktadır.
+
+İlgili SQL dosyaları:
+
+- `clinics_schema.sql` — Klinik tablosunu oluşturur.
+- `clinics_seed.sql` — Geliştirme amaçlı başlangıç verilerini içerir.
+- `clinics_real_seed.sql` — Klinik kayıtlarını ekler.
+
+SQL dosyaları `src/main/resources/db/` dizininde bulunmaktadır.
+
+**Not:** Klinik arama ve harita özellikleri, randevu oluşturma işleminden bağımsızdır. Listelenen tüm kliniklerde uygulama üzerinden randevu alınabildiği anlamına gelmez. Harita araması da adresin kesin olarak doğrulandığını garanti etmez.
+
+
+
+
 ## Proje Mimarisi
 
 PetCare, katmanlı mimari kullanılarak geliştirilmektedir.

@@ -1,0 +1,48 @@
+/* Leaflet yerleşim yedeği. CDN'den leaflet.css yüklenemediğinde
+   harita döşemelerinin dağılmasını önler. */
+#clinic-map.leaflet-container { position:relative; overflow:hidden; outline:0; background:#e9e4f3; font:12px/1.5 Arial,sans-serif; cursor:grab; touch-action:pan-x pan-y; }
+#clinic-map .leaflet-pane,
+#clinic-map .leaflet-tile,
+#clinic-map .leaflet-marker-icon,
+#clinic-map .leaflet-marker-shadow,
+#clinic-map .leaflet-tile-container,
+#clinic-map .leaflet-pane > svg,
+#clinic-map .leaflet-pane > canvas,
+#clinic-map .leaflet-zoom-box,
+#clinic-map .leaflet-image-layer,
+#clinic-map .leaflet-layer { position:absolute; left:0; top:0; }
+#clinic-map .leaflet-map-pane,
+#clinic-map .leaflet-tile-container { pointer-events:none; }
+#clinic-map .leaflet-tile-pane { z-index:200; }
+#clinic-map .leaflet-overlay-pane { z-index:400; }
+#clinic-map .leaflet-shadow-pane { z-index:500; }
+#clinic-map .leaflet-marker-pane { z-index:600; }
+#clinic-map .leaflet-tooltip-pane { z-index:650; }
+#clinic-map .leaflet-popup-pane { z-index:700; }
+#clinic-map .leaflet-map-pane { position:absolute;left:0;top:0; }
+#clinic-map .leaflet-tile { width:256px;height:256px;max-width:none!important;max-height:none!important; visibility:inherit; }
+#clinic-map .leaflet-tile-loaded { visibility:inherit; }
+#clinic-map .leaflet-marker-icon, #clinic-map .leaflet-marker-shadow { display:block; max-width:none!important; }
+#clinic-map .leaflet-zoom-animated { transform-origin:0 0; }
+#clinic-map .leaflet-control-container .leaflet-top,
+#clinic-map .leaflet-control-container .leaflet-bottom { position:absolute; z-index:800; pointer-events:none; }
+#clinic-map .leaflet-top { top:0; }
+#clinic-map .leaflet-bottom { bottom:0; }
+#clinic-map .leaflet-left { left:0; }
+#clinic-map .leaflet-right { right:0; }
+#clinic-map .leaflet-control { position:relative; z-index:800; pointer-events:auto; margin:10px; }
+#clinic-map .leaflet-top .leaflet-control { margin-top:10px; }
+#clinic-map .leaflet-bottom .leaflet-control { margin-bottom:10px; }
+#clinic-map .leaflet-control-zoom { border:2px solid rgba(0,0,0,.15); border-radius:5px; overflow:hidden; width:30px; background:#fff; }
+#clinic-map .leaflet-control-zoom a { display:block;width:30px;height:30px;line-height:30px;text-align:center;background:#fff;color:#333;text-decoration:none;font-size:20px;font-weight:bold; }
+#clinic-map .leaflet-control-zoom a + a { border-top:1px solid #ccc; }
+#clinic-map .leaflet-control-attribution { padding:0 5px; background:rgba(255,255,255,.82);font-size:10px;line-height:1.5; }
+#clinic-map .leaflet-control-attribution a { color:#2564b4; }
+#clinic-map .leaflet-popup { position:absolute; text-align:center; margin-bottom:20px; }
+#clinic-map .leaflet-popup-content-wrapper { padding:10px 12px; border-radius:12px; background:#fff; box-shadow:0 3px 15px rgba(0,0,0,.2); }
+#clinic-map .leaflet-popup-content { margin:0; line-height:1.5; min-width:90px; }
+#clinic-map .leaflet-popup-tip-container { display:none; }
+#clinic-map .leaflet-popup-close-button { position:absolute;top:3px;right:6px;z-index:2;cursor:pointer;font-size:16px; }
+#clinic-map .leaflet-popup-pane, #clinic-map .leaflet-marker-pane, #clinic-map .leaflet-shadow-pane { pointer-events:none; }
+#clinic-map .leaflet-popup, #clinic-map .leaflet-marker-icon, #clinic-map .leaflet-interactive { pointer-events:auto; }
+#clinic-map .leaflet-container img, #clinic-map img.leaflet-image-layer { max-width:none!important; }
