@@ -8,25 +8,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   // ========================================
 
   try {
-    const response = await fetch('api/auth/me', {
-      method: 'GET',
-      credentials: 'same-origin',
-      cache: 'no-store',
-    });
+    const user = await window.petCareAuthReady;
 
-    // Kullanıcı giriş yapmamışsa
-    if (response.status === 401) {
-      window.location.replace('login.html');
+    // Oturum doğrulanamadıysa sayfa işlemlerini başlatma.
+    if (!user) {
       return;
     }
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-
-      throw new Error(errorData.message || 'Oturum kontrolü başarısız.');
-    }
-
-    const user = await response.json();
 
     // ========================================
     // 2. KULLANICI BİLGİLERİNİ GÖSTER
