@@ -79,7 +79,8 @@ aşağıdaki SQL dosyalarını belirtilen sırayla çalıştırın:
 |---|---|---|
 | 1 | `schema.sql` | Kullanıcı ve hayvan tablolarını oluşturur. |
 | 2 | `appointments_schema.sql` | Veteriner, müsait saat ve randevu tablolarını oluşturur. |
-| 3 | `appointments_seed.sql` | Geliştirme ve test için örnek veterinerleri ve müsait saatleri ekler. |
+| 3 | `health_records_schema.sql` | Hayvanlara ait sağlık kayıtları tablosunu oluşturur. |
+| 4 | `appointments_seed.sql` | Geliştirme ve test için örnek veterinerleri ve müsait saatleri ekler. |
 
 SQL dosyaları aşağıdaki dizinde bulunmaktadır:
 
