@@ -4,6 +4,7 @@ package com.petcare.controller;
 import com.petcare.entity.HealthRecord;
 import com.petcare.exception.PetNotFoundException;
 import com.petcare.service.HealthRecordService;
+import com.petcare.exception.HealthRecordNotFoundException;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,8 +119,7 @@ public class HealthRecordController {
                             .toList();
 
             return Response.ok(records).build();
-
-        } catch (PetNotFoundException exception) {
+        } catch (PetNotFoundException exception)  {
             return error(
                     Response.Status.NOT_FOUND,
                     exception.getMessage()
@@ -201,10 +201,15 @@ public class HealthRecordController {
                     .ok(HealthRecordResponse.from(record))
                     .build();
 
+        } catch (HealthRecordNotFoundException exception) {
+            return error(
+                    Response.Status.NOT_FOUND,
+                    "Sağlık kaydı bulunamadı."
+            );
         } catch (PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
-                    exception.getMessage()
+                    "Sağlık kaydı bulunamadı."
             );
         } catch (IllegalArgumentException exception) {
             return error(
@@ -247,10 +252,15 @@ public class HealthRecordController {
                     .ok(HealthRecordResponse.from(record))
                     .build();
 
+        } catch (HealthRecordNotFoundException exception) {
+            return error(
+                    Response.Status.NOT_FOUND,
+                    "Sağlık kaydı bulunamadı."
+            );
         } catch (PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
-                    exception.getMessage()
+                    "Sağlık kaydı bulunamadı."
             );
         } catch (IllegalArgumentException exception) {
             return error(
@@ -279,10 +289,15 @@ public class HealthRecordController {
 
             return Response.noContent().build();
 
+        } catch (HealthRecordNotFoundException exception) {
+            return error(
+                    Response.Status.NOT_FOUND,
+                    "Sağlık kaydı bulunamadı."
+            );
         } catch (PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
-                    exception.getMessage()
+                    "Sağlık kaydı bulunamadı."
             );
         } catch (IllegalArgumentException exception) {
             return error(

@@ -2,6 +2,7 @@
 package com.petcare.service;
 
 import com.petcare.entity.HealthRecord;
+import com.petcare.exception.HealthRecordNotFoundException;
 import com.petcare.entity.Pet;
 import com.petcare.repository.HealthRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -69,10 +70,11 @@ public class HealthRecordService {
         HealthRecord record = healthRecordRepository
                 .findById(recordId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
+                        new HealthRecordNotFoundException(
                                 "Sağlık kaydı bulunamadı."
                         )
                 );
+
 
         // Başka kullanıcıya ait kayıtların
         // görüntülenmesini engelle.
