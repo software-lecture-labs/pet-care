@@ -2,6 +2,34 @@
 // PETCARE - ORTAK ÜST ÇUBUK
 // ========================================
 
+// ========================================
+// ORTAK OTURUM DOĞRULAMASI
+// ========================================
+
+window.petCareAuthReady = (async function () {
+  try {
+    const response = await fetch('api/auth/me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+    });
+
+    if (response.status === 401) {
+      window.location.replace('login.html');
+      return false;
+    }
+
+    if (!response.ok) {
+      throw new Error('Oturum kontrolü başarısız.');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Oturum kontrol hatası:', error);
+    throw error;
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
   const topbar = document.querySelector('.topbar');
 
