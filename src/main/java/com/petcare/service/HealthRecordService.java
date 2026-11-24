@@ -130,7 +130,11 @@ public class HealthRecordService {
 
     // Metin alanlarının başındaki ve sonundaki boşlukları temizle.
     private String trimOrNull(String value) {
-        return value == null ? null : value.trim();
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value.trim();
     }
 
     // Kaydetmeden önce sağlık kaydı metinlerini düzenle.

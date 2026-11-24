@@ -176,13 +176,13 @@ document.addEventListener("DOMContentLoaded", async () =>{
                     <div class="health-record-info">
                         <h3>${escapeHtml(record.title)}</h3>
 
-                        <p>
-                            ${escapeHtml(record.description)}
-                        </p>
+                        ${record.description?.trim()
+                ? `<p>${escapeHtml(record.description)}</p>`
+                : ""}
 
-                        <p>
-                            ${escapeHtml(record.clinic || "")}
-                        </p>
+                    ${record.clinic?.trim()
+                ? `<p>${escapeHtml(record.clinic)}</p>`
+                : ""}
 
                         <span class="health-record-type">
                             ${typeLabels[type]}
