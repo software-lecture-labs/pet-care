@@ -201,12 +201,7 @@ public class HealthRecordController {
                     .ok(HealthRecordResponse.from(record))
                     .build();
 
-        } catch (HealthRecordNotFoundException exception) {
-            return error(
-                    Response.Status.NOT_FOUND,
-                    "Sağlık kaydı bulunamadı."
-            );
-        } catch (PetNotFoundException exception) {
+        } catch (HealthRecordNotFoundException | PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
                     "Sağlık kaydı bulunamadı."
@@ -252,12 +247,7 @@ public class HealthRecordController {
                     .ok(HealthRecordResponse.from(record))
                     .build();
 
-        } catch (HealthRecordNotFoundException exception) {
-            return error(
-                    Response.Status.NOT_FOUND,
-                    "Sağlık kaydı bulunamadı."
-            );
-        } catch (PetNotFoundException exception) {
+        } catch (HealthRecordNotFoundException | PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
                     "Sağlık kaydı bulunamadı."
@@ -289,16 +279,12 @@ public class HealthRecordController {
 
             return Response.noContent().build();
 
-        } catch (HealthRecordNotFoundException exception) {
+        } catch (HealthRecordNotFoundException | PetNotFoundException exception) {
             return error(
                     Response.Status.NOT_FOUND,
                     "Sağlık kaydı bulunamadı."
             );
-        } catch (PetNotFoundException exception) {
-            return error(
-                    Response.Status.NOT_FOUND,
-                    "Sağlık kaydı bulunamadı."
-            );
+
         } catch (IllegalArgumentException exception) {
             return error(
                     Response.Status.BAD_REQUEST,
