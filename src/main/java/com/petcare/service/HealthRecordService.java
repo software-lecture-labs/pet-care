@@ -24,11 +24,24 @@ public class HealthRecordService {
             "other"
     );
 
-    @Inject
-    private HealthRecordRepository healthRecordRepository;
+    private final HealthRecordRepository healthRecordRepository;
+    private final PetService petService;
 
+    // Payara CDI için parametresiz constructor
+    protected HealthRecordService() {
+        this.healthRecordRepository = null;
+        this.petService = null;
+    }
+
+    // Constructor Injection
     @Inject
-    private PetService petService;
+    public HealthRecordService(
+            HealthRecordRepository healthRecordRepository,
+            PetService petService
+    ) {
+        this.healthRecordRepository = healthRecordRepository;
+        this.petService = petService;
+    }
 
     // Kullanıcının kendi hayvanına ait sağlık kayıtlarını getir.
     @Transactional
