@@ -1,0 +1,712 @@
+
+/* ==========================================
+   PETCARE - SAĞLIK KAYITLARI
+========================================== */
+
+.health-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 230px;
+    padding: 40px 45px;
+    margin-bottom: 30px;
+    border-radius: 28px;
+    background: linear-gradient(115deg, #eee3ff, #f7eafa 55%, #ffe9f1);
+    overflow: hidden;
+}
+
+.health-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+}
+
+.health-label {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #8655d5;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.health-banner h1 {
+    margin: 0 0 15px;
+    color: #6749b4;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.health-banner p {
+    margin: 0;
+    color: #756b87;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.health-banner-illustration {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 80px;
+    white-space: nowrap;
+}
+
+.health-banner-illustration span:last-child {
+    font-size: 35px;
+    align-self: flex-start;
+}
+
+/* HAYVAN SEÇİMİ */
+
+.health-pets-section {
+    margin-bottom: 28px;
+}
+
+.health-pets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.health-pet-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    padding: 18px;
+    border: 2px solid #eeeaf5;
+    border-radius: 20px;
+    background: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.health-pet-card:hover {
+    border-color: #c7b3f3;
+    transform: translateY(-2px);
+}
+
+.health-pet-card.active {
+    border-color: #8564d8;
+    background: #faf7ff;
+    box-shadow: 0 8px 24px rgba(133, 100, 216, 0.12);
+}
+
+.health-pet-avatar {
+    display: grid;
+    place-items: center;
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+    border-radius: 17px;
+    background: #f1e8ff;
+    font-size: 42px;
+    overflow: hidden;
+}
+
+.health-pet-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.health-pet-info h3 {
+    margin: 0 0 8px;
+    color: #302b42;
+    font-size: 18px;
+}
+
+.health-pet-info p {
+    margin: 0;
+    color: #827c92;
+    font-size: 13px;
+}
+
+.health-pet-check {
+    margin-left: auto;
+    color: #8564d8;
+    font-size: 24px;
+}
+
+/* FİLTRELER */
+
+.health-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.health-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.health-filter {
+    padding: 11px 16px;
+    border: 1px solid #e9e3f4;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #756b87;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.health-filter:hover {
+    background: #f4efff;
+    color: #6749b4;
+}
+
+.health-filter.active {
+    background: #8564d8;
+    border-color: #8564d8;
+    color: white;
+}
+
+.health-add-btn {
+    flex-shrink: 0;
+    padding: 13px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #8564d8;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.health-add-btn:hover {
+    background: #6749b4;
+}
+
+/* SAĞLIK GEÇMİŞİ */
+
+.health-records-section {
+    padding: 28px;
+    border: 1px solid #eeeaf5;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 8px 28px rgba(80, 60, 130, 0.06);
+}
+
+.health-records-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.health-records-heading h2 {
+    margin: 0;
+    color: #302b42;
+    font-size: 21px;
+}
+
+#health-sort {
+    max-width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #eeeaf5;
+    border-radius: 11px;
+    background: #faf8ff;
+    color: #756b87;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* ZAMAN ÇİZELGESİ */
+
+.health-records-list {
+    position: relative;
+    padding-left: 28px;
+}
+
+.health-records-list::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 10px;
+    width: 2px;
+    background: #e9dfff;
+}
+
+.health-record-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 22px;
+    border: 1px solid #eeeaf5;
+    border-radius: 17px;
+    background: #ffffff;
+}
+
+.health-record-item::before {
+    content: "";
+    position: absolute;
+    top: 27px;
+    left: -24px;
+    width: 12px;
+    height: 12px;
+    border: 3px solid #8564d8;
+    border-radius: 50%;
+    background: #ffffff;
+    z-index: 1;
+}
+
+.health-record-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.health-record-icon {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: #f0eaff;
+    font-size: 24px;
+}
+
+.health-record-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.health-record-info h3 {
+    margin: 0 0 8px;
+    color: #302b42;
+    font-size: 16px;
+}
+
+.health-record-info p {
+    margin: 6px 0;
+    color: #827c92;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.health-record-date {
+    flex-shrink: 0;
+    color: #8564d8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.health-record-type {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f0eaff;
+    color: #6749b4;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* KATEGORİ RENKLERİ */
+
+.health-record-item.vaccination .health-record-icon {
+    background: #e5f5ed;
+}
+
+.health-record-item.treatment .health-record-icon {
+    background: #fff0e4;
+}
+
+.health-record-item.test .health-record-icon {
+    background: #e7f1ff;
+}
+
+.health-record-item.other .health-record-icon {
+    background: #ffeaf2;
+}
+
+/* BOŞ KAYIT MESAJI */
+
+.health-empty-message {
+    padding: 30px 15px;
+    color: #827c92;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ALT KAYIT EKLEME ALANI */
+
+.health-bottom-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 24px;
+    border: 2px dashed #d9c9f7;
+    border-radius: 17px;
+    background: #faf7ff;
+    color: #6749b4;
+    text-align: left;
+    cursor: pointer;
+}
+
+.health-bottom-add:hover {
+    background: #f2eaff;
+}
+
+.health-bottom-icon {
+    display: grid;
+    place-items: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 13px;
+    background: #e9ddff;
+    font-size: 26px;
+}
+
+.health-bottom-add strong,
+.health-bottom-add small {
+    display: block;
+}
+
+.health-bottom-add strong {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.health-bottom-add small {
+    color: #8a7ba0;
+    font-size: 12px;
+}
+
+/* ALT BİLGİ BANNER */
+
+.health-footer-banner {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 22px;
+    background: linear-gradient(110deg, #eee3ff, #ffe9f1);
+}
+
+.health-footer-icon {
+    font-size: 45px;
+}
+
+.health-footer-banner h2 {
+    margin: 0 0 10px;
+    color: #6749b4;
+    font-size: 19px;
+}
+
+.health-footer-banner p {
+    margin: 0;
+    color: #827c92;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.health-footer-paw {
+    margin-left: auto;
+    font-size: 50px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .health-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 800px) {
+    .health-pets-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .health-banner {
+        padding: 28px;
+    }
+
+    .health-banner-illustration {
+        font-size: 48px;
+    }
+
+    .health-records-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 550px) {
+    .health-banner {
+        min-height: 190px;
+        padding: 24px;
+    }
+
+    .health-banner h1 {
+        font-size: 25px;
+    }
+
+    .health-banner-illustration {
+        display: none;
+    }
+
+    .health-records-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .health-record-top {
+        flex-wrap: wrap;
+    }
+
+    .health-record-date {
+        width: 100%;
+    }
+
+    .health-footer-paw {
+        display: none;
+    }
+}
+    /* ==========================================
+       YENİ SAĞLIK KAYDI EKLEME PENCERESİ
+    ========================================== */
+
+    .health-dialog {
+        width: min(560px, calc(100% - 32px));
+        max-height: min(90vh, 850px);
+        padding: 0;
+        border: 1px solid #eee5fa;
+        border-radius: 24px;
+        background: #ffffff;
+        color: #302b42;
+        box-shadow: 0 24px 70px rgba(55, 35, 95, 0.2);
+        overflow-y: auto;
+    }
+
+    .health-dialog[open] {
+        margin: auto;
+    }
+
+    .health-dialog::backdrop {
+        background: rgba(39, 28, 65, 0.5);
+        backdrop-filter: blur(4px);
+    }
+
+    /* PENCERE BAŞLIĞI */
+
+    .health-dialog-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 28px 30px 22px;
+        background: linear-gradient(115deg, #f0e6ff, #fff0f6);
+        border-bottom: 1px solid #eee5fa;
+    }
+
+    .health-dialog-label {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: #8655d5;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+    }
+
+    .health-dialog-header h2 {
+        margin: 0 0 8px;
+        color: #6749b4;
+        font-size: 23px;
+        font-weight: 800;
+    }
+
+    .health-dialog-header p {
+        margin: 0;
+        color: #827c92;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .health-dialog-close {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border: none;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #8564d8;
+        font-size: 25px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .health-dialog-close:hover {
+        background: #ffffff;
+        color: #6749b4;
+    }
+
+    /* FORM */
+
+    #health-add-form {
+        padding: 26px 30px 30px;
+    }
+
+    .health-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-bottom: 20px;
+    }
+
+    .health-form-group label {
+        color: #403650;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .health-form-group input,
+    .health-form-group select,
+    .health-form-group textarea {
+        width: 100%;
+        min-height: 45px;
+        padding: 12px 14px;
+        border: 1px solid #e6def1;
+        border-radius: 12px;
+        outline: none;
+        background: #fcfaff;
+        color: #403650;
+        font: inherit;
+        font-size: 13px;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .health-form-group textarea {
+        min-height: 110px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .health-form-group input::placeholder,
+    .health-form-group textarea::placeholder {
+        color: #a39ab2;
+    }
+
+    .health-form-group input:focus,
+    .health-form-group select:focus,
+    .health-form-group textarea:focus {
+        border-color: #8564d8;
+        box-shadow: 0 0 0 3px rgba(133, 100, 216, 0.12);
+    }
+
+    .health-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .health-form-row .health-form-group {
+        min-width: 0;
+    }
+
+    /* FORM BUTONLARI */
+
+    .health-dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 26px;
+        padding-top: 22px;
+        border-top: 1px solid #f0eaf8;
+    }
+
+    .health-dialog-cancel,
+    .health-dialog-save {
+        min-height: 44px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .health-dialog-cancel {
+        border: 1px solid #e6def1;
+        background: #ffffff;
+        color: #756b87;
+    }
+
+    .health-dialog-cancel:hover {
+        background: #f6f1ff;
+    }
+
+    .health-dialog-save {
+        border: none;
+        background: #8564d8;
+        color: #ffffff;
+    }
+
+    .health-dialog-save:hover {
+        background: #6749b4;
+    }
+
+    .health-dialog button:focus-visible {
+        outline: 3px solid #c7b3f3;
+        outline-offset: 3px;
+    }
+
+    /* MOBİL GÖRÜNÜM */
+
+    @media (max-width: 550px) {
+        .health-dialog {
+            width: calc(100% - 24px);
+            max-height: 92vh;
+            border-radius: 18px;
+        }
+
+        .health-dialog-header {
+            padding: 22px 20px;
+        }
+
+        .health-dialog-header h2 {
+            font-size: 20px;
+        }
+
+        #health-add-form {
+            padding: 22px 20px;
+        }
+
+        .health-form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .health-dialog-actions {
+            flex-direction: column-reverse;
+        }
+
+        .health-dialog-cancel,
+        .health-dialog-save {
+            width: 100%;
+        }
+    }
+.health-pet-emoji[hidden] {
+    display: none;
+}

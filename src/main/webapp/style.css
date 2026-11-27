@@ -1841,3 +1841,114 @@ h2 {
   font-size: 14px;
   line-height: 1.6;
 }
+
+/* ========================================
+   HAYVANLARIM - ALT BANNER
+======================================== */
+
+.pets-bottom-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 175px;
+  margin-top: 30px;
+  padding: 28px 36px;
+  border-radius: 22px;
+  background: linear-gradient(110deg, #f4eaff, #e9d8ff, #f8efff);
+  overflow: hidden;
+}
+
+.pets-bottom-banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 65%;
+}
+
+.pets-bottom-banner-label {
+  color: #9564bf;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.pets-bottom-banner h2 {
+  margin: 12px 0 8px;
+  color: #563477;
+  font-size: 21px;
+  line-height: 1.35;
+}
+
+.pets-bottom-banner p {
+  margin: 0;
+  color: #806a94;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.pets-bottom-banner-art {
+  position: relative;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 180px;
+  height: 125px;
+}
+
+.pets-bottom-banner-cat,
+.pets-bottom-banner-dog {
+  font-size: 76px;
+  line-height: 1;
+}
+
+.pets-bottom-banner-cat {
+  transform: rotate(-10deg) translateX(12px);
+}
+
+.pets-bottom-banner-dog {
+  transform: rotate(8deg) translateX(-12px);
+}
+
+.pets-bottom-banner-heart {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  color: #aa76d8;
+  font-size: 35px;
+}
+
+.pets-bottom-banner-paw {
+  position: absolute;
+  bottom: -10px;
+  left: 15px;
+  font-size: 25px;
+  opacity: 0.5;
+}
+
+/* Mobil görünüm */
+@media (max-width: 700px) {
+  .pets-bottom-banner {
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .pets-bottom-banner-content {
+    max-width: 100%;
+  }
+
+  .pets-bottom-banner h2 {
+    font-size: 17px;
+  }
+
+  .pets-bottom-banner-art {
+    width: 95px;
+    height: 100px;
+  }
+
+  .pets-bottom-banner-cat,
+  .pets-bottom-banner-dog {
+    font-size: 45px;
+  }
+}

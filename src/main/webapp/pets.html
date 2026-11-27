@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PetCare | Hayvanlarım</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="toast.css" />
   </head>
   <body>
     <div class="app-container">
@@ -43,13 +44,32 @@
 
             <button type="button" id="pet-add-btn" class="pet-add-btn">+ Yeni Hayvan Ekle</button>
           </div>
-
           <div class="pets-grid">
-            <div class="pets-grid">
-              <!-- Hayvan kartları JavaScript ile API'den oluşturulacak. -->
-            </div>
+            <!-- Hayvan kartları JavaScript ile API'den oluşturulacak. -->
           </div>
         </section>
+
+        <!-- HAYVANLARIM ALT BANNER -->
+        <section class="pets-bottom-banner">
+          <div class="pets-bottom-banner-content">
+            <span class="pets-bottom-banner-label">🐾 SEVGİYLE BÜYÜYEN DOSTLUK</span>
+
+            <h2>Onların dünyası, senin sevginle güzelleşiyor! 💜</h2>
+
+            <p>
+              Minik dostlarının bilgilerini güncel tut,
+              birlikte geçirdiğiniz her güzel anı daha özel kıl.
+            </p>
+          </div>
+
+          <div class="pets-bottom-banner-art" aria-hidden="true">
+            <span class="pets-bottom-banner-heart">♡</span>
+            <span class="pets-bottom-banner-cat">🐱</span>
+            <span class="pets-bottom-banner-dog">🐶</span>
+            <span class="pets-bottom-banner-paw">🐾</span>
+          </div>
+        </section>
+
         <!-- HAYVAN PROFİL PENCERESİ -->
         <dialog
           id="pet-profile-dialog"
@@ -252,6 +272,7 @@
     <script src="sidebar.js"></script>
     <script src="topbar.js"></script>
     <script src="script.js"></script>
+    <script src="toast.js"></script>
     <script src="pets.js"></script>
   </body>
 </html>
