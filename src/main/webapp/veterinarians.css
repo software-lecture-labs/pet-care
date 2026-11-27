@@ -59,7 +59,6 @@
 .vet-map-heading strong {display:block;font-size:14px}.vet-map-heading small {display:block;margin-top:5px;color:var(--muted);font-size:11px}
 .vet-map-heading>span {font-size:10px;color:#8878a7;background:#f6f2ff;padding:7px;border-radius:8px}
 .vet-map {height:415px;background:#eee9f6;z-index:0}
-.vet-map-notice {padding:13px 17px;color:#76688d;background:#f8f4ff;border-top:1px solid #eee7fa;font-size:12px;line-height:1.6}
 .vet-map-footer {display:flex;justify-content:space-between;gap:8px;padding:13px 17px;font-size:10px;color:#8a8195}
 .vet-map-footer a {color:var(--primary-dark);font-weight:750;white-space:nowrap}
 .vet-help-strip {display:flex;align-items:center;gap:16px;margin-top:24px;padding:19px 22px;border-radius:18px;border:1px solid #e4d8fa;background:linear-gradient(100deg,#f1eaff,#fff4fa)}
@@ -112,12 +111,9 @@
     isolation: isolate;
 }
 
-/* Harita bilgisi yalnızca kullanıcı arama yaptığında görünür. */
-.vet-map-notice[hidden] { display:none !important; }
-.vet-map-notice a { color:var(--primary-dark);font-weight:700;text-decoration:underline; }
 
-/* Harita üzerinde seçili kliniği gösterme: Google Maps arama görünümü */
-#clinic-map[hidden], #clinic-google-map[hidden], #clinic-map-external[hidden] { display: none !important; }
-.vet-google-map { display:block; border:0; width:100%; min-height:440px; }
+/* Google Maps bölge ve klinik arama görünümü */
+#clinic-google-map[hidden], #clinic-map-external[hidden] { display: none !important; }
+.vet-google-map { display:block; border:0; width:100%;  }
 .vet-map-external { display:block; padding:12px 16px; color:var(--primary-dark); background:#faf7ff; font-size:13px; font-weight:700; text-align:right; border-top:1px solid var(--border); }
 .vet-map-external:hover { text-decoration:underline; }

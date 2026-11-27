@@ -1,6 +1,7 @@
 
 package com.petcare.controller;
 
+import com.petcare.dto.ClinicResponse;
 import com.petcare.entity.Clinic;
 import com.petcare.service.ClinicService;
 
@@ -14,7 +15,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class ClinicController {
             @QueryParam("name") String name,
             @QueryParam("district") String district) {
 
-        List<Map<String, Object>> clinics = clinicService
+        List<ClinicResponse> clinics = clinicService
                 .getClinics(name, district)
                 .stream()
                 .map(this::toResponse)
@@ -76,20 +76,17 @@ public class ClinicController {
     }
 
     // Entity nesnesini API yanıtına dönüştürür.
-    private Map<String, Object> toResponse(Clinic clinic) {
-
-        Map<String, Object> response = new LinkedHashMap<>();
-
-        response.put("id", clinic.getId());
-        response.put("name", clinic.getName());
-        response.put("district", clinic.getDistrict());
-        response.put("address", clinic.getAddress());
-        response.put("phone", clinic.getPhone());
-        response.put("latitude", clinic.getLatitude());
-        response.put("longitude", clinic.getLongitude());
-        response.put("imageUrl", clinic.getImageUrl());
-        response.put("isDemo", clinic.isDemo());
-
-        return response;
+    private ClinicResponse toResponse(Clinic clinic) {
+        return new ClinicResponse(
+                clinic.getId(),
+                clinic.getName(),
+                clinic.getDistrict(),
+                clinic.getAddress(),
+                clinic.getPhone(),
+                clinic.getLatitude(),
+                clinic.getLongitude(),
+                clinic.getImageUrl(),
+                clinic.isDemo()
+        );
     }
 }

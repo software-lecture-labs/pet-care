@@ -6,17 +6,17 @@
   <title>PetCare | Veteriner Ara</title>
   <meta name="description" content="İstanbul Anadolu Yakası veteriner kliniklerini arayın, ilçe seçin ve yol tarifi alın." />
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="leaflet-fallback.css" />
   <link rel="stylesheet" href="veterinarians.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <script src="sidebar.js" defer></script>
+  <script src="topbar.js" defer></script>
+  <script src="script.js" defer></script>
   <script src="veterinarians.js" defer></script>
 </head>
 <body>
 <div class="app-container">
   <aside class="sidebar"></aside>
   <main class="main-content vet-page" id="main-content">
+    <header class="topbar"></header>
     <div class="vet-topline">
       <div class="vet-breadcrumb"><a href="index.html">Ana Sayfa</a><span aria-hidden="true">/</span><strong>Veteriner Ara</strong></div>
       <a class="vet-home" href="index.html">← Ana sayfaya dön</a>
@@ -55,10 +55,8 @@
         </div>
         <aside class="vet-map-column" aria-label="Klinik haritası">
           <div class="vet-map-heading"><div><strong>🗺️ Klinik haritası</strong><small>Kliniklerin haritadaki konumunu keşfet</small></div></div>
-          <div id="clinic-map" class="vet-map" role="region" aria-label="İstanbul Anadolu Yakası haritası"></div>
-          <iframe id="clinic-google-map" class="vet-map vet-google-map" title="Seçilen kliniğin Google Maps haritası" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe>
+          <iframe id="clinic-google-map" class="vet-map vet-google-map" title="Google Maps klinik haritası" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe>
           <a id="clinic-map-external" class="vet-map-external" target="_blank" rel="noopener noreferrer" hidden>↗ Google Maps'te aç</a>
-          <div id="map-notice" class="vet-map-notice" role="status" hidden></div>
         </aside>
       </div>
     </section>
