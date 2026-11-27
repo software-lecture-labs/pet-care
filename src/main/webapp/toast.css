@@ -81,6 +81,10 @@
     color: #988ba8;
     font-size: 22px;
     cursor: pointer;
+    align-self: flex-start;
+    flex-shrink: 0;
+    padding: 0 2px;
+    line-height: 1;
 }
 
 .pet-toast-close:hover {
@@ -124,12 +128,4 @@
 
 .pet-toast--warning .pet-toast-title {
     color: #7454a5;
-}
-
-/* Bildirim kapatma butonunu hizala */
-.pet-toast-close {
-    align-self: flex-start;
-    flex-shrink: 0;
-    padding: 0 2px;
-    line-height: 1;
 }
