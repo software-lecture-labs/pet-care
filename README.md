@@ -14,6 +14,8 @@ Proje, kullanıcı dostu bir arayüz ve güvenli bir altyapı hedeflenerek geli�
 - Form doğrulamaları ve e-posta benzersizlik kontrolü
 - Başarısız giriş denemelerinin sınırlandırılması (Rate Limiting)
 - Validasyon hatalarında ilgili alan adlarının gösterilmesi
+- Veteriner kliniklerinin listelenmesi, aranması ve ilçe bazında filtrelenmesi
+- Klinik detayları, Google Maps konum araması ve yol tarifi bağlantıları
 
 ### Planlanan Özellikler
 
@@ -44,6 +46,7 @@ src/main/java/com/petcare/
 │
 ├── config/         → REST API yapılandırması
 ├── controller/     → REST API işlemleri
+├── dto/            → API veri aktarım modelleri
 ├── entity/         → Veri modelleri
 ├── exception/      → Hata yönetimi
 ├── repository/     → Veritabanı işlemleri
@@ -53,6 +56,7 @@ src/main/java/com/petcare/
 Katmanların sorumlulukları:
 
 - **Controller:** HTTP isteklerini karşılar ve API yanıtlarını oluşturur.
+- **DTO:** API üzerinden taşınan verilerin yapısını tanımlar.
 - **Service:** İş kurallarını ve kimlik doğrulama işlemlerini yönetir.
 - **Repository:** Veritabanı işlemlerini gerçekleştirir.
 - **Entity:** Veritabanında saklanan veri modellerini temsil eder.
@@ -80,13 +84,44 @@ aşağıdaki SQL dosyalarını belirtilen sırayla çalıştırın:
 | 1 | `schema.sql` | Kullanıcı ve hayvan tablolarını oluşturur. |
 | 2 | `appointments_schema.sql` | Veteriner, müsait saat ve randevu tablolarını oluşturur. |
 | 3 | `health_records_schema.sql` | Hayvanlara ait sağlık kayıtları tablosunu oluşturur. |
-| 4 | `appointments_seed.sql` | Geliştirme ve test için örnek veterinerleri ve müsait saatleri ekler. |
+| 4 | `clinics_schema.sql` | Klinik tablosunu ve veteriner-klinik ilişkisini oluşturur. |
+| 5 | `appointments_seed.sql` | Geliştirme ve test için örnek veterinerleri ve müsait saatleri ekler. |
+| 6 | `clinics_real_seed.sql` | Veteriner Ara sayfası için klinik kayıtlarını ekler. |
+| 7 (isteğe bağlı) | `clinics_seed.sql` | Geliştirme ve test için demo klinik kaydını ekler. |
 
 SQL dosyaları aşağıdaki dizinde bulunmaktadır:
 
 ```text
 src/main/resources/db/
 ```
+
+#### Klinik Modülü Bağımlılığı
+
+`clinics_schema.sql`, `veterinarians` tablosuna foreign key alanı eklediği için `appointments_schema.sql` dosyasından sonra çalıştırılmalıdır. Klinik seed dosyaları ise `clinics_schema.sql` dosyasından sonra çalıştırılır. `health_records_schema.sql`, `pets` tablosuna bağımlıdır ve `schema.sql` sonrasında çalıştırılmalıdır.
+
+`clinics_seed.sql` isteğe bağlıdır. Bu dosyadaki eski demo veteriner (Dr. Ahmet Yılmaz), güncel `appointments_seed.sql` dosyasındaki altı örnek veteriner arasında bulunmadığından yeni kurulumda otomatik bağlantı oluşmaz. Demo klinik Veteriner Ara arayüzünde gösterilmez. Klinik listesi için `clinics_real_seed.sql` yeterlidir; randevu modülünün başlangıç verileri bağımsızdır.
+
+Mevcut veritabanında gerekli tablolar zaten varsa veritabanını silmeden eksik klinik şeması ve gerekli seed dosyaları çalıştırılabilir.
+
+**Not:** Klinik arama ve harita özellikleri, randevu oluşturma işleminden bağımsızdır. Listelenen tüm kliniklerde uygulama üzerinden randevu alınabildiği anlamına gelmez. Harita araması da adresin kesin olarak doğrulandığını garanti etmez.
+
+#### Türkçe Arama ve PostgreSQL Gereksinimi
+
+Klinik adı ve ilçe karşılaştırmalarında PostgreSQL tarafında `tr-TR-x-icu` collation kullanılır. Aranan metin ve veritabanındaki değer aynı Türkçe dil kurallarıyla küçük harfe dönüştürülür. Klinik ID değerleri native SQL ile belirlenir, ilgili `Clinic` nesneleri JPQL ile getirilir. Bu yaklaşım EclipseLink ile native SQL sonuçlarının entity eşleştirmesinde karşılaşılan sorunu önler.
+
+PostgreSQL kurulumunda ICU desteği ve aşağıdaki collation bulunmalıdır. pgAdmin üzerinden kontrol edilebilir:
+
+```sql
+SELECT collname, collprovider
+FROM pg_collation
+WHERE collname = 'tr-TR-x-icu';
+```
+
+Sorgu sonuç döndürmüyorsa ICU destekli PostgreSQL kurulumu ve ilgili collation sağlanmalıdır. Veritabanının genel dil ayarını değiştirmek gerekmez.
+
+#### Veteriner ve Klinik İlişkisi
+
+`veterinarians.clinic_id`, `clinics.id` alanına bağlı, boş bırakılabilir bir foreign key alanıdır. Mevcut randevu sorguları ve başlangıç verileri `veterinarians.clinic_name` alanına bağımlı olduğu için bu alan korunmuştur. Klinik ve randevu modülleri entegre edilirken mevcut kayıtların eşleştirilmesi, sorguların ve testlerin güncellenmesi sonrasında `clinic_name` alanının kaldırılması değerlendirilecektir.
 
 #### Randevu Modülü Bağımlılığı
 
@@ -230,7 +265,6 @@ Fotoğraf yükleme sınırları:
 - Desteklenen formatlar: JPEG ve PNG
 - Maksimum dosya boyutu: 5 MB
 - Maksimum çözünürlük: 4096 × 4096 piksel
-```
 
 ### 4. Projeyi Çalıştırın
 
@@ -302,5 +336,3 @@ Testleri çalıştırmak için:
 ```bash
 mvn test
 ```
-
-

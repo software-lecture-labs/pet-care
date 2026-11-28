@@ -1,22 +1,75 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PetCare | Veteriner Ara</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app-container">
-      <aside class="sidebar"></aside>
-
-      <main class="main-content">
-        <h1>🩺 Veteriner Ara</h1>
-        <p>Bu sayfa yakında hazırlanacak. 💜</p>
-        <a href="index.html">← Ana Sayfaya Dön</a>
-      </main>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PetCare | Veteriner Ara</title>
+  <meta name="description" content="İstanbul Anadolu Yakası veteriner kliniklerini arayın, ilçe seçin ve yol tarifi alın." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="veterinarians.css" />
+  <script src="sidebar.js" defer></script>
+  <script src="topbar.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="veterinarians.js" defer></script>
+</head>
+<body>
+<div class="app-container">
+  <aside class="sidebar"></aside>
+  <main class="main-content vet-page" id="main-content">
+    <header class="topbar"></header>
+    <div class="vet-topline">
+      <div class="vet-breadcrumb"><a href="index.html">Ana Sayfa</a><span aria-hidden="true">/</span><strong>Veteriner Ara</strong></div>
+      <a class="vet-home" href="index.html">← Ana sayfaya dön</a>
     </div>
 
-    <script src="sidebar.js"></script>
-  </body>
+    <section class="vet-hero" aria-labelledby="vet-hero-title">
+      <div class="vet-hero-copy">
+        <span class="vet-eyebrow">✦ PETCARE KLİNİK REHBERİ</span>
+        <h1 id="vet-hero-title">Minik dostun için <span>doğru kliniği bul.</span></h1>
+        <p>İstanbul Anadolu Yakası’ndaki veteriner kliniklerini keşfet, adreslerini incele ve kolayca yol tarifi al.</p>
+        <div class="vet-hero-pills"><span>📍 6 ilçe</span><span>🐾 30 klinik</span></div>
+      </div>
+      <div class="vet-hero-art" aria-hidden="true"><span class="vet-hero-circle"></span><span class="vet-hero-dog">🐶</span><span class="vet-hero-cat">🐱</span><span class="vet-hero-plus">✦</span></div>
+    </section>
+
+    <section class="vet-search-panel" aria-label="Klinik arama ve filtreleme">
+      <label class="vet-field vet-search-field" for="clinic-search">
+        <span class="vet-field-label">Klinik ara</span>
+        <span class="vet-field-control"><span aria-hidden="true">⌕</span><input id="clinic-search" type="search" placeholder="Örn. Papyon, Vetoloji, Metropol..." maxlength="150" autocomplete="off" /></span>
+      </label>
+      <label class="vet-field vet-district-field" for="district-filter">
+        <span class="vet-field-label">İlçe seç</span>
+        <select id="district-filter"><option value="">Tüm ilçeler</option><option value="Ataşehir">Ataşehir</option><option value="Kadıköy">Kadıköy</option><option value="Kartal">Kartal</option><option value="Maltepe">Maltepe</option><option value="Pendik">Pendik</option><option value="Üsküdar">Üsküdar</option></select>
+      </label>
+      <button id="reset-filters" class="vet-reset" type="button">↺ Temizle</button>
+    </section>
+
+    <section class="vet-results-section" aria-labelledby="vet-results-title">
+      <div class="vet-section-heading"><div><span class="vet-overline">KEŞFET</span><h2 id="vet-results-title">Veteriner klinikleri</h2><p id="results-summary" aria-live="polite">Klinikler yükleniyor...</p></div><span class="vet-directory-note">📌 İstanbul, Anadolu Yakası</span></div>
+      <div class="vet-content-grid">
+        <div class="vet-list-column">
+          <div class="vet-list-toolbar"><span>🏥 Klinik listesi</span><span id="list-count" class="vet-list-count">—</span></div>
+          <div id="clinic-status" class="vet-status" role="status">Klinikler getiriliyor...</div>
+          <div id="clinic-list" class="vet-clinic-list" aria-live="polite"></div>
+          <button id="load-more" class="vet-more" type="button" hidden>Daha fazla klinik göster ↓</button>
+        </div>
+        <aside class="vet-map-column" aria-label="Klinik haritası">
+          <div class="vet-map-heading"><div><strong>🗺️ Klinik haritası</strong><small>Kliniklerin haritadaki konumunu keşfet</small></div></div>
+          <iframe id="clinic-google-map" class="vet-map vet-google-map" title="Google Maps klinik haritası" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe>
+          <a id="clinic-map-external" class="vet-map-external" target="_blank" rel="noopener noreferrer" hidden>↗ Google Maps'te aç</a>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="clinic-dialog" class="vet-dialog" aria-labelledby="dialog-title">
+  <div class="vet-dialog-head"><span id="dialog-category" class="vet-dialog-tag">Veteriner kliniği</span><button id="dialog-close" class="vet-dialog-close" type="button" aria-label="Pencereyi kapat">✕</button></div>
+  <div class="vet-dialog-icon" aria-hidden="true">🏥</div>
+  <h2 id="dialog-title"></h2><p id="dialog-district" class="vet-dialog-district"></p>
+  <div class="vet-dialog-details"><div><span>📍 Adres</span><p id="dialog-address"></p></div><div><span>📞 Telefon</span><p id="dialog-phone"></p></div></div>
+
+  <div class="vet-dialog-actions"><a id="dialog-directions" class="vet-primary-link" href="#" target="_blank" rel="noopener noreferrer">↗ Google Maps yol tarifi</a><button id="dialog-map" class="vet-secondary-btn" type="button">🗺️ Haritada göster</button></div>
+</dialog>
+</body>
 </html>

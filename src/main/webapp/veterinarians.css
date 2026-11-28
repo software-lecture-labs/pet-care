@@ -1,0 +1,119 @@
+/* PetCare Veteriner Ara — yalnızca bu sayfayı etkileyen stiller */
+.vet-page { width:100%; }
+.vet-topline {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.vet-breadcrumb {display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)}
+.vet-breadcrumb strong {color:var(--primary-dark)}
+.vet-home {font-size:12px;color:var(--primary-dark);font-weight:650}
+.vet-hero {position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;min-height:245px;border-radius:27px;padding:35px 42px;background:linear-gradient(110deg,#eee4ff 0%,#f5eaff 57%,#ffe9f1 100%);margin-bottom:22px}
+.vet-hero-copy {position:relative;z-index:1;max-width:620px}
+.vet-eyebrow,.vet-overline {font-size:11px;font-weight:800;letter-spacing:1.55px;color:var(--primary-dark)}
+.vet-hero h1 {font-size:clamp(26px,3vw,38px);line-height:1.2;color:#34254f;letter-spacing:-.8px;margin:12px 0}
+.vet-hero h1 span {color:var(--primary-dark)}
+.vet-hero p {font-size:14px;line-height:1.7;max-width:475px;color:#756b87;margin:0}
+.vet-hero-pills {display:flex;flex-wrap:wrap;gap:8px;margin-top:19px}
+.vet-hero-pills span {border:1px solid rgba(255,255,255,.82);background:rgba(255,255,255,.66);border-radius:999px;color:#66517f;padding:7px 12px;font-size:11px;font-weight:650}
+.vet-hero-art {position:relative;width:265px;height:180px;flex-shrink:0}
+.vet-hero-circle {position:absolute;width:230px;height:230px;right:-10px;bottom:-85px;border-radius:50%;background:rgba(255,255,255,.40)}
+.vet-hero-dog,.vet-hero-cat,.vet-hero-plus {position:absolute;line-height:1}
+.vet-hero-dog {right:84px;bottom:12px;font-size:107px;transform:rotate(-9deg)}
+.vet-hero-cat {right:-9px;bottom:9px;font-size:92px;transform:rotate(8deg)}
+.vet-hero-plus {right:12px;top:8px;color:#a77be8;font-size:36px}
+.vet-search-panel {display:flex;align-items:end;gap:14px;background:var(--white);border:1px solid var(--border);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:30px}
+.vet-field {display:flex;flex-direction:column;gap:9px;min-width:0}.vet-search-field {flex:1}.vet-district-field {width:205px}
+.vet-field-label {font-size:12px;font-weight:750;color:#51456c}
+.vet-field-control {display:flex;gap:9px;align-items:center;border:1px solid #e8e2f0;border-radius:11px;background:#fcfbff;padding:0 13px}
+.vet-field-control span {font-size:24px;color:#9474cd}
+.vet-field input,.vet-field select {height:46px;min-width:0;width:100%;border:1px solid #e8e2f0;border-radius:11px;padding:0 13px;outline:none;color:var(--text);background:#fcfbff;font-size:13px}
+.vet-field-control input {border:none;padding:0;background:transparent}
+.vet-field :is(input,select):focus {outline:2px solid #c5adf5;outline-offset:1px}
+.vet-reset {height:46px;border:0;border-radius:11px;background:#f0eaff;color:var(--primary-dark);font-size:13px;font-weight:700;padding:0 19px;white-space:nowrap}
+.vet-reset:hover,.vet-secondary-btn:hover {background:#e7daff}
+.vet-section-heading {display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 16px}
+.vet-section-heading h2 {font-size:23px;letter-spacing:-.35px;margin:7px 0 5px}
+.vet-section-heading p {color:var(--muted);font-size:12px;margin:0}
+.vet-directory-note {font-size:12px;color:#745d99;background:#f0eaff;border-radius:999px;padding:9px 13px;white-space:nowrap}
+.vet-content-grid {display:grid;grid-template-columns:minmax(0,1.05fr) minmax(310px,.95fr);gap:20px;align-items:start}
+.vet-list-column,.vet-map-column {min-width:0}
+.vet-list-toolbar {display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:750;margin:0 2px 12px}
+.vet-list-count {font-size:11px;color:var(--primary-dark);background:#f0eaff;padding:6px 10px;border-radius:999px}
+.vet-clinic-list {display:flex;flex-direction:column;gap:12px}
+.vet-clinic-card {display:flex;gap:15px;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:17px;padding:17px;box-shadow:0 4px 16px rgba(80,60,130,.045);transition:box-shadow .2s,transform .2s,border-color .2s}
+.vet-clinic-card:hover,.vet-clinic-card:focus-within {border-color:#dac9f8;box-shadow:0 10px 28px rgba(80,60,130,.10);transform:translateY(-1px)}
+.vet-card-icon {width:65px;height:70px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#eee5ff,#f8e6f0);font-size:28px;flex-shrink:0}
+.vet-card-main {min-width:0;flex:1}
+.vet-card-top {display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vet-card-top h3 {font-size:15px;line-height:1.4;color:#3b3051;margin:0 0 5px}
+.vet-card-tag {font-size:10px;line-height:1;white-space:nowrap;background:#f0eaff;color:#7653b5;border-radius:999px;padding:7px 9px;font-weight:700}
+.vet-card-tag--real {background:#ecf7f1;color:#488663}
+.vet-card-district {font-size:12px;color:var(--primary-dark);font-weight:700;margin:0 0 8px}
+.vet-card-address {font-size:12px;color:#887d95;line-height:1.55;margin:0 0 11px;overflow-wrap:anywhere}
+.vet-card-bottom {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.vet-card-phone {font-size:11px;color:#776c86}
+.vet-card-action {border:0;background:var(--primary-light);color:var(--primary-dark);border-radius:9px;padding:9px 11px;font-size:12px;font-weight:750}
+.vet-card-action:hover {background:#e4d6ff}
+.vet-status {padding:22px;border-radius:14px;background:#fff;border:1px dashed #e5d9f7;color:#776b8f;font-size:13px;line-height:1.7}
+.vet-status[hidden],.vet-more[hidden],.vet-dialog [hidden] {display:none!important}
+.vet-more {display:block;width:100%;margin-top:14px;padding:14px;border:1px solid #ded1f4;background:#fff;border-radius:12px;color:var(--primary-dark);font-weight:750}
+.vet-map-column {position:sticky;top:18px;overflow:hidden;border-radius:19px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow)}
+.vet-map-heading {display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 19px}
+.vet-map-heading strong {display:block;font-size:14px}.vet-map-heading small {display:block;margin-top:5px;color:var(--muted);font-size:11px}
+.vet-map-heading>span {font-size:10px;color:#8878a7;background:#f6f2ff;padding:7px;border-radius:8px}
+.vet-map {height:415px;background:#eee9f6;z-index:0}
+.vet-map-footer {display:flex;justify-content:space-between;gap:8px;padding:13px 17px;font-size:10px;color:#8a8195}
+.vet-map-footer a {color:var(--primary-dark);font-weight:750;white-space:nowrap}
+.vet-help-strip {display:flex;align-items:center;gap:16px;margin-top:24px;padding:19px 22px;border-radius:18px;border:1px solid #e4d8fa;background:linear-gradient(100deg,#f1eaff,#fff4fa)}
+.vet-help-icon {font-size:31px}.vet-help-strip>div:nth-child(2) {flex:1}.vet-help-strip strong {font-size:14px;color:#48345f}.vet-help-strip p {font-size:12px;color:#80728d;line-height:1.6;margin:6px 0 0}
+.vet-help-button {background:var(--primary);border:0;border-radius:11px;padding:12px 15px;color:white;font-size:12px;font-weight:750;white-space:nowrap}
+.vet-help-button:hover,.vet-primary-link:hover {background:var(--primary-dark)}
+.vet-dialog {width:min(520px,calc(100% - 32px));max-height:90vh;overflow:auto;padding:26px;border:0;border-radius:22px;box-shadow:0 30px 80px rgba(44,27,71,.24);color:var(--text)}
+.vet-dialog::backdrop {background:rgba(31,18,54,.5);backdrop-filter:blur(3px)}
+.vet-dialog-head {display:flex;align-items:center;justify-content:space-between}
+.vet-dialog-tag {color:var(--primary-dark);background:#f0eaff;border-radius:999px;padding:7px 12px;font-size:11px;font-weight:750}
+.vet-dialog-close {width:34px;height:34px;border-radius:50%;border:0;color:#775f9d;background:#f2edfb}
+.vet-dialog-icon {height:100px;display:grid;place-items:center;background:linear-gradient(100deg,#f1eaff,#ffebf2);border-radius:16px;margin:18px 0;font-size:47px}
+.vet-dialog h2 {font-size:23px;line-height:1.3;margin:0 0 7px}.vet-dialog-district {color:var(--primary-dark);font-size:13px;font-weight:750;margin:0 0 18px}
+.vet-dialog-details {display:grid;gap:12px}.vet-dialog-details>div {border:1px solid var(--border);padding:14px;border-radius:12px}
+.vet-dialog-details span {color:#786a90;font-size:12px;font-weight:750}.vet-dialog-details p {font-size:13px;line-height:1.6;margin:6px 0 0;overflow-wrap:anywhere}
+.vet-dialog-note {font-size:12px;line-height:1.6;color:#725d91;background:#f6f0ff;border-radius:10px;padding:12px}
+.vet-dialog-actions {display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.vet-primary-link,.vet-secondary-btn {display:inline-flex;justify-content:center;align-items:center;min-height:42px;padding:10px 13px;border-radius:11px;font-size:12px;font-weight:750;text-align:center}
+.vet-primary-link {background:var(--primary);color:white}.vet-secondary-btn {border:0;background:#f0eaff;color:var(--primary-dark)}
+@media(max-width:1250px){.vet-content-grid{grid-template-columns:minmax(0,1fr) minmax(290px,.85fr)}.vet-card-icon{width:54px;height:58px}}
+@media(max-width:1050px){.vet-content-grid{grid-template-columns:1fr}.vet-map-column{position:static}.vet-map{height:340px}.vet-hero-art{width:170px}.vet-hero-dog{font-size:90px;right:56px}.vet-hero-cat{font-size:74px}}
+@media(max-width:700px){.vet-topline{margin-bottom:16px}.vet-home{display:none}.vet-hero{padding:25px;min-height:220px}.vet-hero-art{display:none}.vet-hero h1{font-size:28px}.vet-search-panel{flex-wrap:wrap;padding:15px}.vet-search-field{flex-basis:100%}.vet-district-field{width:auto;flex:1}.vet-section-heading{align-items:start}.vet-directory-note{display:none}.vet-help-strip{flex-wrap:wrap}.vet-help-button{width:100%}}
+@media(max-width:420px){.vet-clinic-card{padding:13px;gap:10px}.vet-card-icon{width:48px;height:52px;font-size:25px}.vet-card-top{flex-wrap:wrap}.vet-card-bottom{align-items:flex-start}.vet-reset{padding:0 12px}.vet-dialog{padding:19px}.vet-dialog-actions>*{width:100%}}
+
+/* Düzeltme 01: arama kutusunda tek ve düzgün odak çerçevesi. */
+.vet-search-field .vet-field-control {
+    min-width: 0;
+    transition: border-color .16s ease, box-shadow .16s ease;
+}
+.vet-search-field .vet-field-control:focus-within {
+    border-color: #aa85ed;
+    box-shadow: 0 0 0 3px rgba(133,100,216,.15);
+}
+.vet-search-field .vet-field-control input,
+.vet-search-field .vet-field-control input:focus,
+.vet-search-field .vet-field-control input:focus-visible {
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    outline-offset: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+}
+.vet-map {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    isolation: isolate;
+}
+
+
+/* Google Maps bölge ve klinik arama görünümü */
+#clinic-google-map[hidden], #clinic-map-external[hidden] { display: none !important; }
+.vet-google-map { display:block; border:0; width:100%;  }
+.vet-map-external { display:block; padding:12px 16px; color:var(--primary-dark); background:#faf7ff; font-size:13px; font-weight:700; text-align:right; border-top:1px solid var(--border); }
+.vet-map-external:hover { text-decoration:underline; }
