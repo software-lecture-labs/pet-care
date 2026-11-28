@@ -27,7 +27,7 @@ public class HealthRecordService {
     private final HealthRecordRepository healthRecordRepository;
     private final PetService petService;
 
-    // Payara CDI için parametresiz constructor
+    // CDI'ın proxy oluşturabilmesi için gerekli parametresiz constructor.
     protected HealthRecordService() {
         this.healthRecordRepository = null;
         this.petService = null;
